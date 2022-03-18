@@ -16,9 +16,10 @@ function love.load()
     selected_piece_y = 0
 
     love.window.setMode(window_w, window_h)
-    w = 10;
+    w = 11;
     h = 10;
     size = 35;
+    turn_number = 0
 
     grid = hexagon.grid(w, h, size, false, false)
     piecesInvetory = init_pieces()
@@ -59,14 +60,13 @@ function love.mousepressed(x, y, button, istouch)
             if (active_player_id == 1) then
                 move_mode = 0
                 print("Player2's turn!")
-                tryAddPieceToMap(active_player_id, active_piece_id, map, resultX, resultY)
                 active_player_id = 2
             elseif (active_player_id == 2) then
                 move_mode = 0
                 print("Player1's turn!")
-                tryAddPieceToMap(active_player_id, active_piece_id, map, resultX, resultY)
                 active_player_id = 1
             end
+            turn_number = turn_number + 1
         end
     end
  end
