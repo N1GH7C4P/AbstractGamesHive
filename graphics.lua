@@ -3,15 +3,20 @@ require "map"
 
 function drawAddedPieces(map, canvas, grid)
     
+
     love.graphics.setCanvas(canvas)
     
     for i = 1, map.h do
         for j = 1, map.w do
-            if(map[i][j].piece) then
-                love.graphics.setColor(1,0,0,1)
+            if map[i][j].piece then
                 local hx, hy = hexagon.toPlanCoordinates(j, i, grid)
-                drawHexagon(hx, hy, grid.piecesize, grid.pointyTopped)
-                love.graphics.setColor(0,0,1,1)
+                if (map[i][j].player_id == 1) then
+                    love.graphics.setColor(1,1,0,1)
+                else
+                    love.graphics.setColor(0,1,1,1)
+                end
+                drawHexagon(hx, hy, grid.piecesize, grid.pointyTopped, map[i][j].player_id, 1)
+                love.graphics.setColor(0,0,0,1)
                 love.graphics.print(map[i][j].piece.initials, hx-8, hy-8)
                 love.graphics.setColor(0,1,0,1)
             end

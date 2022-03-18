@@ -30,7 +30,7 @@ end
 function love.keypressed(key)
     if key == "a" and active_piece_id < 5 then
         active_piece_id = active_piece_id + 1
-    elseif(key == "s") and active_piece_id > 1 then
+    elseif key == "s" and active_piece_id > 1 then
         active_piece_id = active_piece_id - 1
     end
  end
@@ -74,6 +74,7 @@ function love.draw()
     love.graphics.draw(canvas)
     love.graphics.draw(overlay)
     printPlayerStock(player, active_player_id, 600, 20)
+    --printMapPieces(map, w)
     -- Display the coordinates
     if resultX == -1 or resultY == -1 then
         love.graphics.print("Out of grid", 0, window_h - 20)
@@ -81,4 +82,3 @@ function love.draw()
         love.graphics.print("Hexagon coordinates: "..resultX.." "..resultY, 0, window_h - 20)
     end
 end
-
