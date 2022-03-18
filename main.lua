@@ -19,7 +19,7 @@ function love.load()
     w = 11;
     h = 10;
     size = 35;
-    turn_number = 0
+    turn_number = {1, 1}
 
     grid = hexagon.grid(w, h, size, false, false)
     piecesInvetory = init_pieces()
@@ -61,12 +61,13 @@ function love.mousepressed(x, y, button, istouch)
                 move_mode = 0
                 print("Player2's turn!")
                 active_player_id = 2
+                turn_number[1] = turn_number[1] + 1
             elseif (active_player_id == 2) then
                 move_mode = 0
                 print("Player1's turn!")
                 active_player_id = 1
+                turn_number[2] = turn_number[2] + 1
             end
-            turn_number = turn_number + 1
         end
     end
  end
