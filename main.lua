@@ -10,7 +10,6 @@ function love.load()
     move_mode = 0
     window_w = 1024
     window_h = 768
-    love.graphics.setColor(0,1,0,1)
     active_player_id = 1
     active_piece_id = 5
     selected_piece_x = 0
@@ -54,18 +53,18 @@ function love.mousepressed(x, y, button, istouch)
                 selected_piece_y = resultY
                 move_mode = 1
                 return
-            elseif (not addPieceToMap(active_player_id, active_piece_id, map, resultX, resultY)) then
+            elseif (not tryAddPieceToMap(active_player_id, active_piece_id, map, resultX, resultY)) then
                 return
             end
             if (active_player_id == 1) then
                 move_mode = 0
                 print("Player2's turn!")
-                addPieceToMap(active_player_id, active_piece_id, map, resultX, resultY)
+                tryAddPieceToMap(active_player_id, active_piece_id, map, resultX, resultY)
                 active_player_id = 2
             elseif (active_player_id == 2) then
                 move_mode = 0
                 print("Player1's turn!")
-                addPieceToMap(active_player_id, active_piece_id, map, resultX, resultY)
+                tryAddPieceToMap(active_player_id, active_piece_id, map, resultX, resultY)
                 active_player_id = 1
             end
         end
@@ -83,17 +82,22 @@ function love.update(dt)
 end
 
 function love.draw()
-    -- Draw the demonstration grid on the canvas
+    love.graphics.setCanvas(canvas)
+    love.graphics.clear(0,0,0,0)
+    love.graphics.setCanvas(overlay)
+    love.graphics.clear(0,0,0,0)
+    love.graphics.setCanvas()
+
+    love.graphics.setColor(0,1,0,1)
     drawBackground(canvas, window_w, window_h)
     hexagon.drawGrid(grid, canvas)
     drawAddedPieces(map, overlay, grid)
 
-    -- Draw the canvas on screen
     love.graphics.draw(canvas)
     love.graphics.draw(overlay)
     highlightNeighbours(map, w, h, grid)
     printPlayerStock(player, active_player_id, 600, 20)
-    printSelectedPieceInfo(map, selected_piece_x, selected_piece_y, move_mode, 600, 400)
+    -- printSelectedPieceInfo(map, selected_piece_x, selected_piece_y, move_mode, 600, 400)
     print_map_pieces(map, w, h, 600, 200)
 
     -- Display the coordinates
