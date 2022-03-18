@@ -107,8 +107,10 @@ function move_beetle(src_x, src_y, x, y, active_player_id)
     -- If the source hex has an underpice, store it in "underpiece"
     if (map[src_y][src_x].piece.under_piece) then
         local underpiece = map[src_y][src_x].piece.under_piece
+        map[src_y][src_x].piece.under_piece = nil
         map[src_y][src_x].player_id = underpiece.player_id
         map[src_y][src_x].piece = underpiece
+        underpiece = nil
     else
         map[src_y][src_x].piece = nil
         map[src_y][src_x].active_piece_id = nil
@@ -117,5 +119,6 @@ function move_beetle(src_x, src_y, x, y, active_player_id)
     if(tempPiece) then
         map[y][x].piece.under_piece = tempPiece
         map[y][x].piece.under_piece.player_id = tempPiece.player_id
+        tempPiece = nil
     end
 end

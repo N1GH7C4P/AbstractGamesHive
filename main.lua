@@ -47,7 +47,7 @@ function love.mousepressed(x, y, button, istouch)
         local mouseX, mouseY = love.mouse.getPosition()
         -- Calculate the coordinates of the mouse cursor in the hexagon grid
         local resultX, resultY = hexagon.toHexagonCoordinates(mouseX, mouseY, grid)
-        if move_mode == 1 and map[resultY][resultX].neighbour and (not map[resultY][resultX].piece or map[selected_piece_y][selected_piece_x].piece.id == 2) then
+        if move_mode == 1 and (not map[resultY][resultX].piece or map[selected_piece_y][selected_piece_x].piece.id == 2 and (selected_piece_x ~= resultX or selected_piece_y ~= resultY)) then
             print("Trying to move a piece.")
             move_piece_on_map(map, selected_piece_x, selected_piece_y, resultX, resultY)
             clear_all_neighbours(map, w, h)
@@ -99,7 +99,6 @@ function love.draw()
     drawBackground(canvas, window_w, window_h)
     hexagon.drawGrid(grid, canvas)
     drawAddedPieces(map, overlay, grid)
-
     love.graphics.draw(canvas)
     love.graphics.draw(overlay)
     if (highlight == 1 and move_mode == 1) then

@@ -131,7 +131,7 @@ end
 function clear_all_neighbours(map, w, h)
     for i = 1, h do
         for j = 1, w do
-                map[i][j].neighbour = nil
+            map[i][j].neighbour = nil
         end
     end
 end
@@ -147,7 +147,7 @@ function remove_piece_from_map(map, x, y)
 end
 
 function move_piece_on_map(map, src_x, src_y, dest_x, dest_y)
-    if (map[src_y][src_x].piece.id == 2) then
+    if ((src_x ~= dest_x or src_y ~= dest_y) and map[src_y][src_x].piece.id == 2) then
         print("Trying to move beetle.")
         move_beetle(src_x, src_y, dest_x, dest_y, active_player_id)
         print("moved piece: "..map[dest_y][dest_x].piece.name.." from ("..src_x..", "..src_y..") to ("..dest_x..", "..dest_y..").")
