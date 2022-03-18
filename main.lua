@@ -49,10 +49,12 @@ function love.mousepressed(x, y, button, istouch)
         local resultX, resultY = hexagon.toHexagonCoordinates(mouseX, mouseY, grid)
         if move_mode == 1 and (not map[resultY][resultX].piece or map[selected_piece_y][selected_piece_x].piece.id == 2 and (selected_piece_x ~= resultX or selected_piece_y ~= resultY)) then
             print("Trying to move a piece.")
-            move_piece_on_map(map, selected_piece_x, selected_piece_y, resultX, resultY)
+            local did_move = move_piece_on_map(map, selected_piece_x, selected_piece_y, resultX, resultY)
             clear_all_neighbours(map, w, h)
             move_mode = 0
-            pass_turn(active_player_id)
+            if did_move == true then
+                pass_turn(active_player_id)
+            end
             return
         elseif move_mode == 1 then
             move_mode = 0
@@ -68,7 +70,9 @@ function love.mousepressed(x, y, button, istouch)
                 print_neighbours(map, resultX, resultY, w, h)
                 selected_piece_x = resultX
                 selected_piece_y = resultY
-                move_mode = 1
+                if player[active_player_id].pieces[1].inStock == 0 then
+                    move_mode = 1
+                end
                 return
             elseif (not tryAddPieceToMap(active_player_id, active_piece_id, map, resultX, resultY)) then
                 return
@@ -104,8 +108,14 @@ function love.draw()
     if (highlight == 1 and move_mode == 1) then
         if(map[selected_piece_y][selected_piece_x].piece.id == 1) then
             highlight_queenbee_movement()
-        else
-            highlightNeighbours()
+        elseif(map[selected_piece_y][selected_piece_x].piece.id == 2) then
+            highlight_beetle_movement()
+        elseif(map[selected_piece_y][selected_piece_x].piece.id == 3) then
+            highlight_grasshopper_movement()
+        elseif(map[selected_piece_y][selected_piece_x].piece.id == 4) then
+            highlight_spider_movement()
+        elseif(map[selected_piece_y][selected_piece_x].piece.id == 5) then
+            highlight_soldier_ant_movement()
         end
     end
     printPlayerStock(player, active_player_id, menu_offset_x, 20)

@@ -63,6 +63,9 @@ function pass_turn(active_piece_id)
         active_player_id = 1
         turn_number[2] = turn_number[2] + 1
     end
+    if checkIfWin(map, w, h) then
+        print("win")
+    end
 end
 
 function highlight_queenbee_movement()
@@ -80,15 +83,69 @@ function highlight_beetle_movement(map, x, y, active_player_id)
 end
 
 function highlight_grasshopper_movement(map, x, y, active_player_id)
-
+    highlightNeighbours()
 end
 
 function highlight_spider_movement(map, x, y, active_player_id)
-
+    highlightNeighbours()
 end
 
 function highlight_soldier_ant_movement(map, x, y, active_player_id)
+    highlightNeighbours()
+end
 
+function make_move(src_x, src_y, x, y, active_player_id)
+    map[y][x].piece = map[src_y][src_x].piece
+    map[y][x].player_id = map[src_y][src_x].player_id
+    map[src_y][src_x].piece = nil
+    map[src_y][src_x].player_id = nil
+end
+
+function move_default(src_x, src_y, x, y, active_player_id)
+    mark_neighbours_on_map(map, src_x, src_y, map.w, map.h)
+    if not map[y][x].neighbour then
+        return false
+    end
+    make_move(src_x, src_y, x, y, active_player_id)
+    return true
+end
+
+function move_queen(src_x, src_y, x, y, active_player_id)
+    return move_default(src_x, src_y, x, y, active_player_id)
+end
+
+function move_spider(src_x, src_y, x, y, active_player_id)
+    map[y][x].neighbour = true
+    flood_neighbours_neighbours(map, x, y, w, h)
+    flood_neighbours_neighbours(map, x, y, w, h)
+    flood_neighbours_neighbours(map, x, y, w, h)
+    if not map[y][x].neighbour then
+        return false
+    end
+    clear_all_neighbours(map, map.w, map.h)
+    local firstx, firsty = firstPieceCoords(map)
+    flood_neighbours(map, firstx, firsty, w, h)
+    flood_neighbours_neighbours(map, x, y, w, h)
+    if not map[y][x].neighbour then
+        return false
+    end
+    make_move(src_x, src_y, x, y, active_player_id)
+    return true
+end
+
+function move_soldier_ant(src_x, src_y, x, y, active_player_id)
+    local firstx, firsty = firstPieceCoords(map)
+    flood_neighbours(map, firstx, firsty, w, h)
+    flood_neighbours_neighbours(map, x, y, w, h)
+    if not map[y][x].neighbour then
+        return false
+    end
+    make_move(src_x, src_y, x, y, active_player_id)
+    return true
+end
+
+function move_grasshopper(src_x, src_y, x, y, active_player_id)
+    return move_default(src_x, src_y, x, y, active_player_id)
 end
 
 function move_beetle(src_x, src_y, x, y, active_player_id)
@@ -121,4 +178,5 @@ function move_beetle(src_x, src_y, x, y, active_player_id)
         map[y][x].piece.under_piece.player_id = tempPiece.player_id
         tempPiece = nil
     end
+    return true
 end
