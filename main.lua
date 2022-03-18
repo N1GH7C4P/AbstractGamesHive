@@ -70,7 +70,9 @@ function love.mousepressed(x, y, button, istouch)
                 print_neighbours(map, resultX, resultY, w, h)
                 selected_piece_x = resultX
                 selected_piece_y = resultY
-                move_mode = 1
+                if player[active_player_id].pieces[1].inStock == 0 then
+                    move_mode = 1
+                end
                 return
             elseif (not tryAddPieceToMap(active_player_id, active_piece_id, map, resultX, resultY)) then
                 return
