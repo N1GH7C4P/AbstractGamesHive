@@ -81,14 +81,14 @@ function mark_neighbours_on_map(map, x, y, w, h)
     for i = 1, h do
         for j = 1, w do
             map[i][j].neighbour = false
-            if (i % 2 == 0) then
+            if (j % 2 == 0) then
                 -- Neigbours: (X,Y-1),(X+1,Y-1),(X-1,Y),(X+1,Y),(X,Y+1),(X+1,Y+1)
-                if (i == y - 1 and j == x) or (i == y - 1 and j == x + 1) or (i == y and j == x - 1) or (i == y and j == x + 1) or (i == y + 1 and j == x) or (i == y + 1 and j == x + 1) then
+                if (i == y - 1 and j == x) or (i == y - 1 and j == x + 1) or (i == y and j == x - 1) or (i == y and j == x + 1) or (i == y + 1 and j == x) or (i == y - 1 and j == x - 1) then
                     map[i][j].neighbour = true
                 end
             else
                 -- Neighbours: (X-1,Y-1),(X,Y-1),(X-1,Y),(X+1,Y),(X-1,Y+1),(X,Y+1)
-                if (i == y - 1 and j == x - 1) or (i == y - 1 and j == x) or (i == y - 1 and j == x) or (i == y and j == x + 1) or (i == y + 1 and j == x - 1) or (i == y + 1 and j == x) then
+                if (i == y + 1 and j == x + 1) or (i == y - 1 and j == x) or (i == y and j == x - 1) or (i == y and j == x + 1) or (i == y + 1 and j == x - 1) or (i == y + 1 and j == x) then
                     map[i][j].neighbour = true
                 end
             end

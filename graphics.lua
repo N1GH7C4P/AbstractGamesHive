@@ -35,7 +35,7 @@ function highlightNeighbours(map, w, h, grid)
             if map[i][j].neighbour then
                 local hX, hY = hexagon.toPlanCoordinates(j, i, grid)
                 local r, g, b, a = love.graphics.getColor()
-                love.graphics.setColor(1, 1, 1, 1)
+                love.graphics.setColor(1, 1, 1, 0.2)
                 drawHexagon(hX, hY, grid.piecesize, false, true)
                 love.graphics.setColor(r, g, b, a)
             end
@@ -44,7 +44,6 @@ function highlightNeighbours(map, w, h, grid)
 end
 
 function printPlayerStock(player, player_id, x, y)
-
     for i = 1, 5 do
         love.graphics.print("Player "..player_id.."'s remaining pieces", x, y)    
         love.graphics.print(player[player_id].pieces[i].template.name..": "..tostring(player[player_id].pieces[i].inStock), x, y + 10 + i*20)
