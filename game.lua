@@ -115,7 +115,22 @@ function move_queen(src_x, src_y, x, y, active_player_id)
 end
 
 function move_spider(src_x, src_y, x, y, active_player_id)
-    return move_default(src_x, src_y, x, y, active_player_id)
+    map[y][x].neighbour = true
+    flood_neighbours_neighbours(map, x, y, w, h)
+    flood_neighbours_neighbours(map, x, y, w, h)
+    flood_neighbours_neighbours(map, x, y, w, h)
+    if not map[y][x].neighbour then
+        return false
+    end
+    clear_all_neighbours(map, map.w, map.h)
+    local firstx, firsty = firstPieceCoords(map)
+    flood_neighbours(map, firstx, firsty, w, h)
+    flood_neighbours_neighbours(map, x, y, w, h)
+    if not map[y][x].neighbour then
+        return false
+    end
+    make_move(src_x, src_y, x, y, active_player_id)
+    return true
 end
 
 function move_soldier_ant(src_x, src_y, x, y, active_player_id)
