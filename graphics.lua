@@ -33,14 +33,18 @@ function highlightNeighbours()
     for i = 1, h do
         for j = 1, w do
             if map[i][j].neighbour then
-                local hX, hY = hexagon.toPlanCoordinates(j, i, grid)
-                local r, g, b, a = love.graphics.getColor()
-                love.graphics.setColor(1, 1, 1, 0.2)
-                drawHexagon(hX, hY, grid.piecesize, false, true)
-                love.graphics.setColor(r, g, b, a)
+                higlightHex(j,i)
             end
         end
     end
+end
+
+function higlightHex(x, y)
+    local hX, hY = hexagon.toPlanCoordinates(x, y, grid)
+    local r, g, b, a = love.graphics.getColor()
+    love.graphics.setColor(1, 1, 1, 0.2)
+    drawHexagon(hX, hY, grid.piecesize, false, true)
+    love.graphics.setColor(r, g, b, a)
 end
 
 function printPlayerStock(player, player_id, x, y)
