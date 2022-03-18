@@ -146,7 +146,73 @@ function remove_piece_from_map(map, x, y)
     return false
 end
 
+local function flood_neighbours(map, x, y, w, h)
+    for i = 1, h do
+        for j = 1, w do
+            if (j % 2 == 0) then
+                if (i == y - 1 and j == x) or (i == y - 1 and j == x + 1) or (i == y and j == x - 1) or (i == y and j == x + 1) or (i == y + 1 and j == x) or (i == y - 1 and j == x - 1) then
+                    if not map[i][j].neighbour then
+                        if map[i][j].piece then
+                            map[i][j].neighbour = true
+                            flood_neighbours(map, j, i, w, h)
+                        end
+                    end
+                    if map[i][j].piece then
+                        map[i][j].neighbour = true
+                    end
+                end
+            else
+                if (i == y + 1 and j == x + 1) or (i == y - 1 and j == x) or (i == y and j == x - 1) or (i == y and j == x + 1) or (i == y + 1 and j == x - 1) or (i == y + 1 and j == x) then
+                    if not map[i][j].neighbour  then
+                        if map[i][j].piece then
+                            map[i][j].neighbour = true
+                            flood_neighbours(map, j, i, w, h)
+                        end
+                    end
+                    if map[i][j].piece then
+                        map[i][j].neighbour = true
+                    end
+                end
+            end
+        end
+    end
+end
+
+local function firstPieceCoords(map)
+    for i = 1, h do
+        for j = 1, w do
+            if map[i][j].piece then
+                return j, i
+            end
+        end
+    end
+end
+
+local function pieceCanDetach(map, x, y)
+    local tmp = map[y][x].piece
+    map[y][x].piece = nil
+    clear_all_neighbours(map, w, h)
+    local firstx, firsty = firstPieceCoords(map)
+    flood_neighbours(map, firstx, firsty, w, h)
+    map[y][x].piece = tmp
+    map[y][x].neighbour = true
+    for i = 1, h do
+        for j = 1, w do
+            if map[i][j].piece and not map[i][j].neighbour then
+                clear_all_neighbours(map, w, h)
+                print("Cant detach there")
+                return false
+            end
+        end
+    end
+    clear_all_neighbours(map, w, h)
+    return true
+end
+
 function move_piece_on_map(map, src_x, src_y, dest_x, dest_y)
+    if (not pieceCanDetach(map, src_x, src_y)) then
+        return false
+    end
     if (map[src_y][src_x].piece.id == 2) then
         print("Trying to move beetle.")
         move_beetle(src_x, src_y, dest_x, dest_y, active_player_id)
@@ -158,4 +224,5 @@ function move_piece_on_map(map, src_x, src_y, dest_x, dest_y)
         map[src_y][src_x].player_id = nil
         print("moved piece: "..map[dest_y][dest_x].piece.name.." from ("..src_x..", "..src_y..") to ("..dest_x..", "..dest_y..").")
     end
+    return true
 end

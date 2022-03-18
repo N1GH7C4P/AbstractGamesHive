@@ -49,10 +49,12 @@ function love.mousepressed(x, y, button, istouch)
         local resultX, resultY = hexagon.toHexagonCoordinates(mouseX, mouseY, grid)
         if move_mode == 1 and map[resultY][resultX].neighbour and (not map[resultY][resultX].piece or map[selected_piece_y][selected_piece_x].piece.id == 2) then
             print("Trying to move a piece.")
-            move_piece_on_map(map, selected_piece_x, selected_piece_y, resultX, resultY)
+            local did_move = move_piece_on_map(map, selected_piece_x, selected_piece_y, resultX, resultY)
             clear_all_neighbours(map, w, h)
             move_mode = 0
-            pass_turn(active_player_id)
+            if did_move == true then
+                pass_turn(active_player_id)
+            end
             return
         elseif move_mode == 1 then
             move_mode = 0
