@@ -1,4 +1,4 @@
-require "hexagon/hexagon"
+require "hexagon"
 require "map"
 
 function drawAddedPieces(map, canvas, grid)

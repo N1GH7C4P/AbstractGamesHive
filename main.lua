@@ -1,6 +1,6 @@
 function love.load()
     -- Import the HEXAGÖN library
-    hexagon = require("hexagon/hexagon")
+    hexagon = require("hexagon")
     require "pieces"
     require "player"
     require "game"
