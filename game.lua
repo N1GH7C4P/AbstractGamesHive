@@ -1,3 +1,38 @@
+function countNearbyPlayer(map, x, y, w, h)
+    local enemy_count = 0
+    local friendly_count = 0
+
+    mark_neighbours_on_map(map, x, y, w, h)
+    for i = 1, map.h do
+        for j = 1, map.w do
+            if (map[i][j].neighbour) then
+                if (map[i][j].player_id == active_player_id) then
+                    friendly_count = friendly_count + 1
+                elseif (map[i][j].player_id) then
+                    enemy_count = enemy_count + 1
+                end
+            end
+        end
+    end
+    clear_all_neighbours(map, w, h)
+    return enemy_count, friendly_count
+end
+
+function checkIfWin(map, w, h)
+    local enemy
+    local friend
+
+    for i = 1, map.h do
+        for j = 1, map.w do
+            enemy, firend = countNearbyPlayer(map, j, i, w, h)
+            if enemy == 6 then
+                return true
+            end
+        end
+    end
+    return false
+end
+
 function selectPieceOnMap(map, x, y, active_player_id)
     if map[y][x].player_id == active_player_id then
         print("Clicked map tile matches belongs to active player.")
@@ -28,6 +63,7 @@ function pass_turn(active_piece_id)
         active_player_id = 1
         turn_number[2] = turn_number[2] + 1
     end
+<<<<<<< HEAD
 end
 
 function highlight_queenbee_movement()
@@ -74,3 +110,9 @@ function move_beetle(src_x, src_y, x, y, active_player_id)
         map[src_y][src_x].piece = nil
     end
 end
+=======
+    if checkIfWin(map, w, h) then
+        print("win")
+    end
+end
+>>>>>>> bd04f1fa2bf32046e33109713c23d0826241256f
