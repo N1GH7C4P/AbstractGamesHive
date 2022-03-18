@@ -22,6 +22,7 @@ function drawHexagon(x, y, piecesize, pointyTopped, fill)
             table.insert(vertices, y + piecesize * math.sin(i * math.pi / 3))
         end
     end
+    
     if fill then
         love.graphics.polygon("fill", vertices)
     else

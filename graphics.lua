@@ -30,6 +30,20 @@ function drawBackground(canvas, w, h)
     love.graphics.setColor(0,1,0,1)
 end
 
+function highlightNeighbours(map, w, h, grid)
+    for i = 1, h do
+        for j = 1, w do
+            if map[i][j].neighbour then
+                local hX, hY = hexagon.toPlanCoordinates(j, i, grid)
+                local r, g, b, a = love.graphics.getColor()
+                love.graphics.setColor(1, 1, 1, 1)
+                drawHexagon(hX, hY, grid.piecesize, false, true)
+                love.graphics.setColor(r, g, b, a)
+            end
+        end
+    end
+end
+
 function printPlayerStock(player, player_id, x, y)
 
     for i = 1, 5 do

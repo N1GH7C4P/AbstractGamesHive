@@ -47,6 +47,9 @@ function love.mousepressed(x, y, button, istouch)
         local resultX, resultY = hexagon.toHexagonCoordinates(mouseX, mouseY, grid)
         if (resultX > 0 and resultY > 0) then
             if selectPieceOnMap(map, resultX, resultY, active_player_id) then
+                print("Piece: "..map[resultY][resultX].piece.name.." ("..resultX..", "..resultY.." selected.")
+                mark_neighbours_on_map(map, resultX, resultY, w, h)
+                print_neighbours(map, resultX, resultY, w, h)
                 selected_piece_x = resultX
                 selected_piece_y = resultY
                 move_mode = 1
@@ -59,7 +62,7 @@ function love.mousepressed(x, y, button, istouch)
                 print("Player2's turn!")
                 addPieceToMap(active_player_id, active_piece_id, map, resultX, resultY)
                 active_player_id = 2
-            else
+            elseif (active_player_id == 2) then
                 move_mode = 0
                 print("Player1's turn!")
                 addPieceToMap(active_player_id, active_piece_id, map, resultX, resultY)
@@ -76,7 +79,7 @@ function love.update(dt)
     -- Calculate the coordinates of the mouse cursor in the hexagon grid
     resultX, resultY = hexagon.toHexagonCoordinates(mouseX, mouseY, grid)
 
-    hexagon.updateNeigbours(resultX, resultY, grid, hexagons)
+    --hexagon.updateNeigbours(resultX, resultY, grid, hexagons)
 end
 
 function love.draw()
@@ -88,10 +91,11 @@ function love.draw()
     -- Draw the canvas on screen
     love.graphics.draw(canvas)
     love.graphics.draw(overlay)
+    highlightNeighbours(map, w, h, grid)
     printPlayerStock(player, active_player_id, 600, 20)
     printSelectedPieceInfo(map, selected_piece_x, selected_piece_y, move_mode, 600, 400)
     print_map_pieces(map, w, h, 600, 200)
-    --printMapPieces(map, w)
+
     -- Display the coordinates
     if resultX == -1 or resultY == -1 then
         love.graphics.print("Out of grid", 0, window_h - 20)
