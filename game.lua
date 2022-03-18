@@ -94,28 +94,43 @@ function highlight_soldier_ant_movement(map, x, y, active_player_id)
     highlightNeighbours()
 end
 
-function move_default(src_x, src_y, x, y, active_player_id)
+function make_move(src_x, src_y, x, y, active_player_id)
     map[y][x].piece = map[src_y][src_x].piece
     map[y][x].player_id = map[src_y][src_x].player_id
     map[src_y][src_x].piece = nil
     map[src_y][src_x].player_id = nil
-    print("moved piece: "..map[y][x].piece.name.." from ("..src_x..", "..src_y..") to ("..x..", "..y..").")
+end
+
+function move_default(src_x, src_y, x, y, active_player_id)
+    mark_neighbours_on_map(map, src_x, src_y, map.w, map.h)
+    if not map[y][x].neighbour then
+        return false
+    end
+    make_move(src_x, src_y, x, y, active_player_id)
+    return true
 end
 
 function move_queen(src_x, src_y, x, y, active_player_id)
-    move_default(src_x, src_y, x, y, active_player_id)
+    return move_default(src_x, src_y, x, y, active_player_id)
 end
 
 function move_spider(src_x, src_y, x, y, active_player_id)
-    move_default(src_x, src_y, x, y, active_player_id)
+    return move_default(src_x, src_y, x, y, active_player_id)
 end
 
 function move_soldier_ant(src_x, src_y, x, y, active_player_id)
-    move_default(src_x, src_y, x, y, active_player_id)
+    local firstx, firsty = firstPieceCoords(map)
+    flood_neighbours(map, firstx, firsty, w, h)
+    flood_neighbours_neighbours(map, x, y, w, h)
+    if not map[y][x].neighbour then
+        return false
+    end
+    make_move(src_x, src_y, x, y, active_player_id)
+    return true
 end
 
 function move_grasshopper(src_x, src_y, x, y, active_player_id)
-    move_default(src_x, src_y, x, y, active_player_id)
+    return move_default(src_x, src_y, x, y, active_player_id)
 end
 
 function move_beetle(src_x, src_y, x, y, active_player_id)

@@ -146,7 +146,17 @@ function remove_piece_from_map(map, x, y)
     return false
 end
 
-local function flood_neighbours(map, x, y, w, h)
+function flood_neighbours_neighbours(map, x, y, w, h)
+    for i = 1, h do
+        for j = 1, w do
+            if map[i][j].neighbour then
+                mark_neighbours_on_map(map, j, i, w, h)
+            end
+        end
+    end
+end
+
+function flood_neighbours(map, x, y, w, h)
     for i = 1, h do
         for j = 1, w do
             if (j % 2 == 0) then
@@ -178,7 +188,7 @@ local function flood_neighbours(map, x, y, w, h)
     end
 end
 
-local function firstPieceCoords(map)
+function firstPieceCoords(map)
     for i = 1, h do
         for j = 1, w do
             if map[i][j].piece then
@@ -213,16 +223,27 @@ function move_piece_on_map(map, src_x, src_y, dest_x, dest_y)
     if (not pieceCanDetach(map, src_x, src_y)) then
         return false
     end
+    clear_all_neighbours(map, map.w, map.h)
     if (map[src_y][src_x].piece.id == 1) then
-        move_queen(src_x, src_y, dest_x, dest_y, active_player_id)
+        if not move_queen(src_x, src_y, dest_x, dest_y, active_player_id) then
+            return false
+        end
     elseif (map[src_y][src_x].piece.id == 2) then
-        move_beetle(src_x, src_y, dest_x, dest_y, active_player_id)
+        if not move_beetle(src_x, src_y, dest_x, dest_y, active_player_id) then
+            return false
+        end
     elseif (map[src_y][src_x].piece.id == 3) then
-        move_grasshopper(src_x, src_y, dest_x, dest_y, active_player_id)
+        if not move_grasshopper(src_x, src_y, dest_x, dest_y, active_player_id) then
+            return false
+        end
     elseif (map[src_y][src_x].piece.id == 4) then
-        move_spider(src_x, src_y, dest_x, dest_y, active_player_id)
+        if not move_spider(src_x, src_y, dest_x, dest_y, active_player_id) then
+            return false
+        end
     elseif (map[src_y][src_x].piece.id == 5) then
-        move_soldier_ant(src_x, src_y, dest_x, dest_y, active_player_id)
+        if not move_soldier_ant(src_x, src_y, dest_x, dest_y, active_player_id) then
+            return false
+        end
     end
     return true
 end
