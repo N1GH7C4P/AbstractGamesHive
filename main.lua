@@ -50,18 +50,18 @@ function love.mousepressed(x, y, button, istouch)
                 selected_piece_y = resultY
                 move_mode = 1
                 return
-            elseif (not addPieceToMap(active_player_id, active_piece_id, map, resultX, resultY)) then
+            elseif (not tryAddPieceToMap(active_player_id, active_piece_id, map, resultX, resultY)) then
                 return
             end
             if (active_player_id == 1) then
                 move_mode = 0
                 print("Player2's turn!")
-                addPieceToMap(active_player_id, active_piece_id, map, resultX, resultY)
+                tryAddPieceToMap(active_player_id, active_piece_id, map, resultX, resultY)
                 active_player_id = 2
             else
                 move_mode = 0
                 print("Player1's turn!")
-                addPieceToMap(active_player_id, active_piece_id, map, resultX, resultY)
+                tryAddPieceToMap(active_player_id, active_piece_id, map, resultX, resultY)
                 active_player_id = 1
             end
         end

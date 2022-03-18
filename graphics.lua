@@ -10,9 +10,9 @@ function drawAddedPieces(map, canvas, grid)
             if map[i][j].piece then
                 local hx, hy = hexagon.toPlanCoordinates(j, i, grid)
                 if (map[i][j].player_id == 1) then
-                    drawHexagon(hx, hy, grid.piecesize, grid.pointyTopped, true, 0, 0, 0)
+                    drawHexagon(hx, hy, grid.piecesize, grid.pointyTopped, true, 0.1, 0.1, 0.1)
                 else
-                    drawHexagon(hx, hy, grid.piecesize, grid.pointyTopped, true, 1, 1, 1)
+                    drawHexagon(hx, hy, grid.piecesize, grid.pointyTopped, true, 0.9, 0.9, 0.9)
                 end
                 love.graphics.setColor(map[i][j].piece.color)
                 love.graphics.print(map[i][j].piece.initials, hx-8, hy-8)

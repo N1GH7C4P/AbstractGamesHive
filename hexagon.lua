@@ -269,21 +269,21 @@ function hexagon.updateNeigbours(x, y, grid, pieces)
             if (i % 2 == 0) then
                 -- Neigbours: (X,Y-1),(X+1,Y-1),(X-1,Y),(X+1,Y),(X,Y+1),(X+1,Y+1)
                 if (i == y - 1 and j == x) or (i == y - 1 and j == x + 1) or (i == y and j == x - 1) or (i == y and j == x + 1) or (i == y + 1 and j == x) or (i == y + 1 and j == x + 1) then
-                    print("x: ",j,"y: ", i)
+                    -- print("x: ",j,"y: ", i)
                 else
 
                 end
             else
                 -- Neighbours: (X-1,Y-1),(X,Y-1),(X-1,Y),(X+1,Y),(X-1,Y+1),(X,Y+1)
                 if (i == y - 1 and j == x - 1) or (i == y - 1 and j == x) or (i == y - 1 and j == x) or (i == y and j == x + 1) or (i == y + 1 and j == x - 1) or (i == y + 1 and j == x) then
-                    print("x: ",j,"y: ", i)
+                    -- print("x: ",j,"y: ", i)
                 else
 
                 end
             end
         end
     end
-    print("###############################################")
+    -- print("###############################################")
 end
 
 return hexagon
