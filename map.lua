@@ -35,8 +35,11 @@ function tryAddPieceToMap(player_nb, id, map, x, y)
         addPieceToMap(player_nb, id, map, 6, 5)
         return true
     end
+    if (turn_number[player_nb] == 4 and player[player_nb].pieces[1].inStock == 1 and id ~= 1) then
+        print("Must place Queen bee")
+        return false
+    end
     -- then check if atlest one next to or first piece
-    -- check if 4th turn and force queen
     addPieceToMap(player_nb, id, map, x, y)
     return true
 end
