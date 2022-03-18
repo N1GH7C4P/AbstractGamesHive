@@ -200,7 +200,7 @@ local function pieceCanDetach(map, x, y)
         for j = 1, w do
             if map[i][j].piece and not map[i][j].neighbour then
                 clear_all_neighbours(map, w, h)
-                print("Cant detach there")
+                print("Cant detach from there")
                 return false
             end
         end
@@ -213,16 +213,16 @@ function move_piece_on_map(map, src_x, src_y, dest_x, dest_y)
     if (not pieceCanDetach(map, src_x, src_y)) then
         return false
     end
-    if (map[src_y][src_x].piece.id == 2) then
-        print("Trying to move beetle.")
+    if (map[src_y][src_x].piece.id == 1) then
+        move_queen(src_x, src_y, dest_x, dest_y, active_player_id)
+    elseif (map[src_y][src_x].piece.id == 2) then
         move_beetle(src_x, src_y, dest_x, dest_y, active_player_id)
-        print("moved piece: "..map[dest_y][dest_x].piece.name.." from ("..src_x..", "..src_y..") to ("..dest_x..", "..dest_y..").")
-    elseif(not map[dest_y][dest_x].piece) then
-        map[dest_y][dest_x].piece = map[src_y][src_x].piece
-        map[dest_y][dest_x].player_id = map[src_y][src_x].player_id
-        map[src_y][src_x].piece = nil
-        map[src_y][src_x].player_id = nil
-        print("moved piece: "..map[dest_y][dest_x].piece.name.." from ("..src_x..", "..src_y..") to ("..dest_x..", "..dest_y..").")
+    elseif (map[src_y][src_x].piece.id == 3) then
+        move_grasshopper(src_x, src_y, dest_x, dest_y, active_player_id)
+    elseif (map[src_y][src_x].piece.id == 4) then
+        move_spider(src_x, src_y, dest_x, dest_y, active_player_id)
+    elseif (map[src_y][src_x].piece.id == 5) then
+        move_soldier_ant(src_x, src_y, dest_x, dest_y, active_player_id)
     end
     return true
 end

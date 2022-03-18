@@ -109,8 +109,14 @@ function love.draw()
     if (highlight == 1 and move_mode == 1) then
         if(map[selected_piece_y][selected_piece_x].piece.id == 1) then
             highlight_queenbee_movement()
-        else
-            highlightNeighbours()
+        elseif(map[selected_piece_y][selected_piece_x].piece.id == 2) then
+            highlight_beetle_movement()
+        elseif(map[selected_piece_y][selected_piece_x].piece.id == 3) then
+            highlight_grasshopper_movement()
+        elseif(map[selected_piece_y][selected_piece_x].piece.id == 4) then
+            highlight_spider_movement()
+        elseif(map[selected_piece_y][selected_piece_x].piece.id == 5) then
+            highlight_soldier_ant_movement()
         end
     end
     printPlayerStock(player, active_player_id, menu_offset_x, 20)

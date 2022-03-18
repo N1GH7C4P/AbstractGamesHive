@@ -83,15 +83,39 @@ function highlight_beetle_movement(map, x, y, active_player_id)
 end
 
 function highlight_grasshopper_movement(map, x, y, active_player_id)
-
+    highlightNeighbours()
 end
 
 function highlight_spider_movement(map, x, y, active_player_id)
-
+    highlightNeighbours()
 end
 
 function highlight_soldier_ant_movement(map, x, y, active_player_id)
+    highlightNeighbours()
+end
 
+function move_default(src_x, src_y, x, y, active_player_id)
+    map[y][x].piece = map[src_y][src_x].piece
+    map[y][x].player_id = map[src_y][src_x].player_id
+    map[src_y][src_x].piece = nil
+    map[src_y][src_x].player_id = nil
+    print("moved piece: "..map[y][x].piece.name.." from ("..src_x..", "..src_y..") to ("..x..", "..y..").")
+end
+
+function move_queen(src_x, src_y, x, y, active_player_id)
+    move_default(src_x, src_y, x, y, active_player_id)
+end
+
+function move_spider(src_x, src_y, x, y, active_player_id)
+    move_default(src_x, src_y, x, y, active_player_id)
+end
+
+function move_soldier_ant(src_x, src_y, x, y, active_player_id)
+    move_default(src_x, src_y, x, y, active_player_id)
+end
+
+function move_grasshopper(src_x, src_y, x, y, active_player_id)
+    move_default(src_x, src_y, x, y, active_player_id)
 end
 
 function move_beetle(src_x, src_y, x, y, active_player_id)
