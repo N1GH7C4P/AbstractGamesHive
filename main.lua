@@ -10,7 +10,6 @@ function love.load()
     move_mode = 0
     window_w = 1024
     window_h = 768
-    love.graphics.setColor(0,1,0,1)
     active_player_id = 1
     active_piece_id = 5
     selected_piece_x = 0
@@ -80,16 +79,21 @@ function love.update(dt)
 end
 
 function love.draw()
-    -- Draw the demonstration grid on the canvas
+    love.graphics.setCanvas(canvas)
+    love.graphics.clear(0,0,0,0)
+    love.graphics.setCanvas(overlay)
+    love.graphics.clear(0,0,0,0)
+    love.graphics.setCanvas()
+
+    love.graphics.setColor(0,1,0,1)
     drawBackground(canvas, window_w, window_h)
     hexagon.drawGrid(grid, canvas)
     drawAddedPieces(map, overlay, grid)
 
-    -- Draw the canvas on screen
     love.graphics.draw(canvas)
     love.graphics.draw(overlay)
     printPlayerStock(player, active_player_id, 600, 20)
-    printSelectedPieceInfo(map, selected_piece_x, selected_piece_y, move_mode, 600, 400)
+    -- printSelectedPieceInfo(map, selected_piece_x, selected_piece_y, move_mode, 600, 400)
     print_map_pieces(map, w, h, 600, 200)
     --printMapPieces(map, w)
     -- Display the coordinates

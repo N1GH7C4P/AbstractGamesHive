@@ -4,7 +4,10 @@ local function distanceBetween(x1, y1, x2, y2)
     return math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1))
 end
 
-function drawHexagon(x, y, piecesize, pointyTopped, fill)
+function drawHexagon(x, y, piecesize, pointyTopped, fill, r, g ,b)
+    r = r or 1
+    g = g or 1
+    b = b or 1
     local vertices = {}
 
     if pointyTopped then
@@ -22,11 +25,13 @@ function drawHexagon(x, y, piecesize, pointyTopped, fill)
             table.insert(vertices, y + piecesize * math.sin(i * math.pi / 3))
         end
     end
+    love.graphics.setColor(r, g, b, 1)
     if fill then
         love.graphics.polygon("fill", vertices)
     else
         love.graphics.polygon("line", vertices)
     end
+    love.graphics.setColor(1, 1, 1)
 end
 
 local function toHexagonCoordinatesHorizontal(x, y, grid)
