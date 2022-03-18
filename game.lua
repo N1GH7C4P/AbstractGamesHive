@@ -115,10 +115,10 @@ function move_queen(src_x, src_y, x, y, active_player_id)
 end
 
 function move_spider(src_x, src_y, x, y, active_player_id)
-    map[y][x].neighbour = true
-    flood_neighbours_neighbours(map, x, y, w, h)
-    flood_neighbours_neighbours(map, x, y, w, h)
-    flood_neighbours_neighbours(map, x, y, w, h)
+    map[src_y][src_x].neighbour = true
+    flood_neighbours_neighbours_jump(map, x, y, w, h)
+    flood_neighbours_neighbours_jump(map, x, y, w, h)
+    flood_neighbours_neighbours_jump(map, x, y, w, h)
     if not map[y][x].neighbour then
         return false
     end

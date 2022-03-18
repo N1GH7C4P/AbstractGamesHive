@@ -100,6 +100,24 @@ function print_map_pieces(map, w, h, x, y)
     end
 end
 
+function mark_tmp_on_map(map, x, y, w, h)
+    for i = 1, h do
+        for j = 1, w do
+            if (j % 2 == 0) then
+                -- Neigbours: (X,Y-1),(X+1,Y-1),(X-1,Y),(X+1,Y),(X,Y+1),(X+1,Y+1)
+                if (i == y - 1 and j == x) or (i == y - 1 and j == x + 1) or (i == y and j == x - 1) or (i == y and j == x + 1) or (i == y + 1 and j == x) or (i == y - 1 and j == x - 1) then
+                    map[i][j].tmp = true
+                end
+            else
+                -- Neighbours: (X-1,Y-1),(X,Y-1),(X-1,Y),(X+1,Y),(X-1,Y+1),(X,Y+1)
+                if (i == y + 1 and j == x + 1) or (i == y - 1 and j == x) or (i == y and j == x - 1) or (i == y and j == x + 1) or (i == y + 1 and j == x - 1) or (i == y + 1 and j == x) then
+                    map[i][j].tmp = true
+                end
+            end
+        end
+    end
+end
+
 function mark_neighbours_on_map(map, x, y, w, h)
     for i = 1, h do
         for j = 1, w do
@@ -128,6 +146,14 @@ function print_neighbours(map, x, y, w, h)
     end
 end
 
+function clear_all_tmp(map, w, h)
+    for i = 1, h do
+        for j = 1, w do
+                map[i][j].tmp = nil
+        end
+    end
+end
+
 function clear_all_neighbours(map, w, h)
     for i = 1, h do
         for j = 1, w do
@@ -146,14 +172,41 @@ function remove_piece_from_map(map, x, y)
     return false
 end
 
-function flood_neighbours_neighbours(map, x, y, w, h)
-    for i = 1, h do
-        for j = 1, w do
-            if map[i][j].neighbour then
-                mark_neighbours_on_map(map, j, i, w, h)
+function tmp_to_neighbor()
+    for i = 1, map.h do
+        for j = 1, map.w do
+            if map[i][j].tmp then
+                map[i][j].neighbour = true
             end
         end
     end
+end
+
+function flood_neighbours_neighbours_jump(map, x, y, w, h)
+    clear_all_tmp(map, map.w, map.h)
+    for i = 1, h do
+        for j = 1, w do
+            if map[i][j].neighbour then
+                mark_tmp_on_map(map, j, i, w, h)
+            end
+        end
+    end
+    clear_all_neighbours(map, w, h)
+    tmp_to_neighbor()
+    clear_all_tmp(map, map.w, map.h)
+end
+
+function flood_neighbours_neighbours(map, x, y, w, h)
+    clear_all_tmp(map, map.w, map.h)
+    for i = 1, h do
+        for j = 1, w do
+            if map[i][j].neighbour then
+                mark_tmp_on_map(map, j, i, w, h)
+            end
+        end
+    end
+    tmp_to_neighbor()
+    clear_all_tmp(map, map.w, map.h)
 end
 
 function flood_neighbours(map, x, y, w, h)
