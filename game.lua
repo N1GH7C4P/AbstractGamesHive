@@ -63,7 +63,9 @@ function pass_turn(active_piece_id)
         active_player_id = 1
         turn_number[2] = turn_number[2] + 1
     end
-<<<<<<< HEAD
+    if checkIfWin(map, w, h) then
+        print("win")
+    end
 end
 
 function highlight_queenbee_movement()
@@ -110,9 +112,3 @@ function move_beetle(src_x, src_y, x, y, active_player_id)
         map[src_y][src_x].piece = nil
     end
 end
-=======
-    if checkIfWin(map, w, h) then
-        print("win")
-    end
-end
->>>>>>> bd04f1fa2bf32046e33109713c23d0826241256f
