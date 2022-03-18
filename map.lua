@@ -1,6 +1,7 @@
 require "player"
 
 local function addPieceToMap(player_nb, id, map, x, y)
+    highlight = 0
     removePieceFromStock(player_nb, id)
     print("Removed one "..getPieceFromInventoryById(id).name.." from player"..player_nb.."'s stock.")
     map[y][x].player_id = player_nb
@@ -152,7 +153,7 @@ end
 
 function highlight_beetle_movement(map, x, y, active_player_id)
     highlightNeighbours()
-    
+
 end
 
 function highlight_grasshopper_movement(map, x, y, active_player_id)
