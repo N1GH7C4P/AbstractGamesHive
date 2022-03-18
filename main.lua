@@ -7,11 +7,15 @@ function love.load()
     require "graphics"
     require "map"
 
+    move_mode = 0
     window_w = 1024
     window_h = 768
     love.graphics.setColor(0,1,0,1)
     active_player_id = 1
     active_piece_id = 5
+    selected_piece_x = 0
+    selected_piece_y = 0
+
     love.window.setMode(window_w, window_h)
     w = 10;
     h = 10;
@@ -42,12 +46,23 @@ function love.mousepressed(x, y, button, istouch)
         -- Calculate the coordinates of the mouse cursor in the hexagon grid
         local resultX, resultY = hexagon.toHexagonCoordinates(mouseX, mouseY, grid)
         if (resultX > 0 and resultY > 0) then
-            addPieceToMap(active_player_id, active_piece_id, map, resultX, resultY)
+            if selectPieceOnMap(map, resultX, resultY, active_player_id) then
+                selected_piece_x = resultX
+                selected_piece_y = resultY
+                move_mode = 1
+                return
+            elseif (not addPieceToMap(active_player_id, active_piece_id, map, resultX, resultY)) then
+                return
+            end
             if (active_player_id == 1) then
+                move_mode = 0
                 print("Player2's turn!")
+                addPieceToMap(active_player_id, active_piece_id, map, resultX, resultY)
                 active_player_id = 2
             else
+                move_mode = 0
                 print("Player1's turn!")
+                addPieceToMap(active_player_id, active_piece_id, map, resultX, resultY)
                 active_player_id = 1
             end
         end
@@ -74,6 +89,8 @@ function love.draw()
     love.graphics.draw(canvas)
     love.graphics.draw(overlay)
     printPlayerStock(player, active_player_id, 600, 20)
+    printSelectedPieceInfo(map, selected_piece_x, selected_piece_y, move_mode, 600, 400)
+    print_map_pieces(map, w, h, 600, 200)
     --printMapPieces(map, w)
     -- Display the coordinates
     if resultX == -1 or resultY == -1 then

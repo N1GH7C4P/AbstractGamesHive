@@ -2,10 +2,9 @@ require "hexagon"
 require "map"
 
 function drawAddedPieces(map, canvas, grid)
-    
 
     love.graphics.setCanvas(canvas)
-    
+
     for i = 1, map.h do
         for j = 1, map.w do
             if map[i][j].piece then

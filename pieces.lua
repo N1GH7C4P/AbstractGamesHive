@@ -25,12 +25,6 @@ function init_pieces()
     piecesInventory.spider.color = {1, 1, 0, 1}
     piecesInventory.soldierAnt.color = {0, 1, 1, 1}
 
-    piecesInventory.queenBee.color = {1, 0, 0, 1}
-    piecesInventory.beetle.color = {0, 1, 0, 1}
-    piecesInventory.grassHopper.color = {0, 0, 1, 1}
-    piecesInventory.spider.color = {1, 1, 0, 1}
-    piecesInventory.soldierAnt.color = {0, 1, 1, 1}
-
     piecesInventory.queenBee.id = 1
     piecesInventory.beetle.id = 2
     piecesInventory.grassHopper.id =3
