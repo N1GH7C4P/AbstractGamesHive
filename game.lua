@@ -1,3 +1,23 @@
+function countNearbyPlayer(map, x, y, w, h)
+    local enemy_count = 0
+    local friendly_count = 0
+
+    mark_neighbours_on_map(map, x, y, w, h)
+    for i = 1, map.h do
+        for j = 1, map.w do
+            if (map[i][j].neighbour) then
+                if (map[i][j].player_id == active_player_id) then
+                    friendly_count = friendly_count + 1
+                elseif (map[i][j].player_id) then
+                    enemy_count = enemy_count + 1
+                end
+            end
+        end
+    end
+    clear_all_neighbours(map, w, h)
+    return enemy_count, friendly_count
+end
+
 function selectPieceOnMap(map, x, y, active_player_id)
     if map[y][x].player_id == active_player_id then
         print("Clicked map tile matches belongs to active player.")

@@ -22,6 +22,21 @@ local function isMapEmpty(map)
     return false
 end
 
+local function isNextToFriendly(map, x, y, w, h)
+    local enemy_count = 0
+    local friendly_count = 0
+
+    enemy_count, friendly_count = countNearbyPlayer(map, x, y, w, h)
+    if (turn_number[active_player_id] == 1) then
+        -- check if other has placed
+        return true
+    end
+    if (friendly_count > 0 and enemy_count == 0) then
+        return true
+    end
+    return false
+end
+
 function tryAddPieceToMap(player_nb, id, map, x, y)
     if getPiecesInStock(player_nb, id) == 0 then
             print("Player ", player_nb, " has no piece nb ", id, " in stock.")
@@ -39,7 +54,9 @@ function tryAddPieceToMap(player_nb, id, map, x, y)
         print("Must place Queen bee")
         return false
     end
-    -- then check if atlest one next to or first piece
+    if not isNextToFriendly(map, x, y, w, h) then
+        return false
+    end
     addPieceToMap(player_nb, id, map, x, y)
     return true
 end
