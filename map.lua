@@ -98,4 +98,51 @@ function print_neighbours(map, x, y, w, h)
     end
 end
 
+function clear_all_neighbours(map, w, h)
+    for i = 1, h do
+        for j = 1, w do
+            map[i][j].neighbour = nil
+        end
+    end
+end
 
+function remove_piece_from_map(map, x, y)
+    if map[y][x].piece then
+        print("Removed piece from: "..tostring(x)..", "..tostring(y))
+        map[y][x].piece = nil
+        return true
+    end
+        print("Failed to remove piece from: "..tostring(x)..", "..tostring(y))
+    return false
+end
+
+function move_piece_on_map(map, src_x, src_y, dest_x, dest_y)
+    if(not map[dest_y][dest_x].piece) then
+        map[dest_y][dest_x].piece = map[src_y][src_x].piece
+        map[dest_y][dest_x].player_id = map[src_y][src_x].player_id
+        map[src_y][src_x].piece = nil
+        map[src_y][src_x].player_id = nil
+        print("moved piece: "..map[dest_y][dest_x].piece.name.." from ("..src_x..", "..src_y..") to ("..dest_x..", "..dest_y..").")
+    end
+end
+
+function highlight_queenbee_movement(map, x, y, active_player_id)
+    
+end
+
+function highlight_beetle_movement(map, x, y, active_player_id)
+    highlightNeighbours()
+    
+end
+
+function highlight_grasshopper_movement(map, x, y, active_player_id)
+
+end
+
+function highlight_spider_movement(map, x, y, active_player_id)
+
+end
+
+function highlight_soldier_ant_movement(map, x, y, active_player_id)
+
+end

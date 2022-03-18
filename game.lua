@@ -15,3 +15,17 @@ function printSelectedPieceInfo(map, selected_piece_x, selected_piece_y, move_mo
         end
     end
 end
+
+function pass_turn(active_piece_id)
+    if (active_player_id == 1) then
+        move_mode = 0
+        print("Player2's turn!")
+        active_player_id = 2
+        turn_number[1] = turn_number[1] + 1
+    elseif (active_player_id == 2) then
+        move_mode = 0
+        print("Player1's turn!")
+        active_player_id = 1
+        turn_number[2] = turn_number[2] + 1
+    end
+end

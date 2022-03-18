@@ -204,8 +204,8 @@ end
 
 function hexagon.drawGrid(grid, canvas)
     love.graphics.setCanvas(canvas)
-    for i = 1, grid.height do
-        for j = 1, grid.width do
+    for j = 1, grid.height do
+        for i = 1, grid.width do
             local hx, hy = hexagon.toPlanCoordinates(i, j, grid)
                 drawHexagon(hx, hy, grid.piecesize, grid.pointyTopped)
         end

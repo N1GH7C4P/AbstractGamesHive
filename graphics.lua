@@ -29,7 +29,7 @@ function drawBackground(canvas, w, h)
     love.graphics.setColor(0,1,0,1)
 end
 
-function highlightNeighbours(map, w, h, grid)
+function highlightNeighbours()
     for i = 1, h do
         for j = 1, w do
             if map[i][j].neighbour then
