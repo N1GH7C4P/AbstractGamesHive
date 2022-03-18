@@ -63,7 +63,6 @@ function pass_turn(active_piece_id)
         active_player_id = 1
         turn_number[2] = turn_number[2] + 1
     end
-<<<<<<< HEAD
 end
 
 function highlight_queenbee_movement()
@@ -93,26 +92,30 @@ function highlight_soldier_ant_movement(map, x, y, active_player_id)
 end
 
 function move_beetle(src_x, src_y, x, y, active_player_id)
+    -- If there is something, move on top of it ans store it as a tempPiece
+    local tempPiece = nil
     if (map[y][x].piece) then
         tempPiece = map[y][x].piece
-        map[y][x].piece = piecesInventory.beetle
-        map[y][x].piece.under_piece = tempPiece
-        map[y][x].piece.under_piece.player_id = map[y][x].player_id
-        tempPiece = nil
+        tempPiece.player_id = map[y][x].player_id
+        map[y][x].piece = map[src_y][src_x].piece
     else
-        map[y][x].piece = piecesInventory.beetle
+    -- Or just move your piece there if its empty
+        map[y][x].piece = map[src_y][src_x].piece
     end
+    -- Mark new space with current turn player_id
     map[y][x].player_id = active_player_id
+    -- If the source hex has an underpice, store it in "underpiece"
     if (map[src_y][src_x].piece.under_piece) then
-        map[src_y][src_x].player_id = map[src_y][src_x].piece.under_piece.player_id
-        map[src_y][src_x].piece = map[src_y][src_x].piece.under_piece
+        local underpiece = map[src_y][src_x].piece.under_piece
+        map[src_y][src_x].player_id = underpiece.player_id
+        map[src_y][src_x].piece = underpiece
     else
         map[src_y][src_x].piece = nil
+        map[src_y][src_x].active_piece_id = nil
+    end
+    --Temp piece becames the new underpiece
+    if(tempPiece) then
+        map[y][x].piece.under_piece = tempPiece
+        map[y][x].piece.under_piece.player_id = tempPiece.player_id
     end
 end
-=======
-    if checkIfWin(map, w, h) then
-        print("win")
-    end
-end
->>>>>>> bd04f1fa2bf32046e33109713c23d0826241256f
