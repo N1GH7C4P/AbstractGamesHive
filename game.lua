@@ -148,15 +148,6 @@ function move_grasshopper(src_x, src_y, x, y, active_player_id)
     return move_default(src_x, src_y, x, y, active_player_id)
 end
 
-function check_pieces_between(src_x, src_y, dest_x, dest_y)
-
-    dx = src_x - dest_x
-    dy = src_y - dest_y
-
-    if(dx == 0 and dy > 0) then
-    while()
-end
-
 function move_beetle(src_x, src_y, x, y, active_player_id)
     -- If there is something, move on top of it ans store it as a tempPiece
     local tempPiece = nil
