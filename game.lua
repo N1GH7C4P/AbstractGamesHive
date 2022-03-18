@@ -18,6 +18,21 @@ function countNearbyPlayer(map, x, y, w, h)
     return enemy_count, friendly_count
 end
 
+function checkIfWin(map, w, h)
+    local enemy
+    local friend
+
+    for i = 1, map.h do
+        for j = 1, map.w do
+            enemy, firend = countNearbyPlayer(map, j, i, w, h)
+            if enemy == 6 then
+                return true
+            end
+        end
+    end
+    return false
+end
+
 function selectPieceOnMap(map, x, y, active_player_id)
     if map[y][x].player_id == active_player_id then
         print("Clicked map tile matches belongs to active player.")
@@ -47,5 +62,8 @@ function pass_turn(active_piece_id)
         print("Player1's turn!")
         active_player_id = 1
         turn_number[2] = turn_number[2] + 1
+    end
+    if checkIfWin(map, w, h) then
+        print("win")
     end
 end
