@@ -22,29 +22,21 @@ local function isMapEmpty(map)
     return false
 end
 
-
-local function checkAddPiece(player_nb, id, map, x, y)
+function tryAddPieceToMap(player_nb, id, map, x, y)
+    if getPiecesInStock(player_nb, id) == 0 then
+            print("Player ", player_nb, " has no piece nb ", id, " in stock.")
+        return false
+    end
     if (map[y][x].piece) then
         print("Spot not empty")
         return false
     end
     if isMapEmpty(map) then
         addPieceToMap(player_nb, id, map, 6, 5)
-        return false
+        return true
     end
-    return true
     -- then check if atlest one next to or first piece
     -- check if 4th turn and force queen
-end
-
-function tryAddPieceToMap(player_nb, id, map, x, y)
-    if getPiecesInStock(player_nb, id) == 0 then
-            print("Player ", player_nb, " has no piece nb ", id, " in stock.")
-        return false
-    end
-    if (not checkAddPiece(player_nb, id, map, x, y)) then
-        return false
-    end
     addPieceToMap(player_nb, id, map, x, y)
     return true
 end
