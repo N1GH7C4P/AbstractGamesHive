@@ -28,8 +28,17 @@ local function isNextToFriendly(map, x, y, w, h)
     local friendly_count = 0
 
     enemy_count, friendly_count = countNearbyPlayer(map, x, y, w, h)
+    --check for first and second piece
     if (turn_number[active_player_id] == 1) then
-        -- check if other has placed
+        local not_active = 1
+        if active_player_id == 1 then
+            not_active = 2
+        end
+        if (turn_number[not_active] == 2) then
+            if (enemy_count ~= 1) then
+                return false
+            end
+        end
         return true
     end
     if (friendly_count > 0 and enemy_count == 0) then
