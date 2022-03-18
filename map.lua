@@ -76,7 +76,6 @@ end
 function mark_neighbours_on_map(map, x, y, w, h)
     for i = 1, h do
         for j = 1, w do
-            map[i][j].neighbour = false
             if (j % 2 == 0) then
                 -- Neigbours: (X,Y-1),(X+1,Y-1),(X-1,Y),(X+1,Y),(X,Y+1),(X+1,Y+1)
                 if (i == y - 1 and j == x) or (i == y - 1 and j == x + 1) or (i == y and j == x - 1) or (i == y and j == x + 1) or (i == y + 1 and j == x) or (i == y - 1 and j == x - 1) then
@@ -128,25 +127,4 @@ function move_piece_on_map(map, src_x, src_y, dest_x, dest_y)
         map[src_y][src_x].player_id = nil
         print("moved piece: "..map[dest_y][dest_x].piece.name.." from ("..src_x..", "..src_y..") to ("..dest_x..", "..dest_y..").")
     end
-end
-
-function highlight_queenbee_movement(map, x, y, active_player_id)
-    
-end
-
-function highlight_beetle_movement(map, x, y, active_player_id)
-    highlightNeighbours()
-
-end
-
-function highlight_grasshopper_movement(map, x, y, active_player_id)
-
-end
-
-function highlight_spider_movement(map, x, y, active_player_id)
-
-end
-
-function highlight_soldier_ant_movement(map, x, y, active_player_id)
-
 end

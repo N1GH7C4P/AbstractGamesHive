@@ -29,3 +29,29 @@ function pass_turn(active_piece_id)
         turn_number[2] = turn_number[2] + 1
     end
 end
+
+function highlight_queenbee_movement()
+    for i = 1, h do
+        for j = 1, w do
+            if map[i][j].neighbour and not map[i][j].piece then
+                higlightHex(j, i)
+            end
+        end
+    end
+end
+
+function highlight_beetle_movement(map, x, y, active_player_id)
+    highlightNeighbours()
+end
+
+function highlight_grasshopper_movement(map, x, y, active_player_id)
+
+end
+
+function highlight_spider_movement(map, x, y, active_player_id)
+
+end
+
+function highlight_soldier_ant_movement(map, x, y, active_player_id)
+
+end

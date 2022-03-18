@@ -14,7 +14,7 @@ function love.load()
     active_piece_id = 5
     selected_piece_x = 0
     selected_piece_y = 0
-    highlight = 1
+    highlight = 0
 
     love.window.setMode(window_w, window_h)
     w = 11;
@@ -62,6 +62,7 @@ function love.mousepressed(x, y, button, istouch)
             if selectPieceOnMap(map, resultX, resultY, active_player_id) then
                 highlight = 1
                 print("Piece: "..map[resultY][resultX].piece.name.." ("..resultX..", "..resultY.." selected.")
+                clear_all_neighbours(map, w, h)
                 mark_neighbours_on_map(map, resultX, resultY, w, h)
                 print_neighbours(map, resultX, resultY, w, h)
                 selected_piece_x = resultX
@@ -100,8 +101,12 @@ function love.draw()
 
     love.graphics.draw(canvas)
     love.graphics.draw(overlay)
-    if (highlight == 1) then
-        highlightNeighbours()
+    if (highlight == 1 and move_mode == 1) then
+        if(map[selected_piece_y][selected_piece_x].piece.id == 1) then
+            highlight_queenbee_movement()
+        else
+            highlightNeighbours()
+        end
     end
     printPlayerStock(player, active_player_id, 600, 20)
     -- printSelectedPieceInfo(map, selected_piece_x, selected_piece_y, move_mode, 600, 400)
