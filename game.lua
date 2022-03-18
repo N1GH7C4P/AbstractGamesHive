@@ -55,3 +55,22 @@ end
 function highlight_soldier_ant_movement(map, x, y, active_player_id)
 
 end
+
+function move_beetle(src_x, src_y, x, y, active_player_id)
+    if (map[y][x].piece) then
+        tempPiece = map[y][x].piece
+        map[y][x].piece = piecesInventory.beetle
+        map[y][x].piece.under_piece = tempPiece
+        map[y][x].piece.under_piece.player_id = map[y][x].player_id
+        tempPiece = nil
+    else
+        map[y][x].piece = piecesInventory.beetle
+    end
+    map[y][x].player_id = active_player_id
+    if (map[src_y][src_x].piece.under_piece) then
+        map[src_y][src_x].player_id = map[src_y][src_x].piece.under_piece.player_id
+        map[src_y][src_x].piece = map[src_y][src_x].piece.under_piece
+    else
+        map[src_y][src_x].piece = nil
+    end
+end

@@ -42,7 +42,7 @@ end
 function higlightHex(x, y)
     local hX, hY = hexagon.toPlanCoordinates(x, y, grid)
     local r, g, b, a = love.graphics.getColor()
-    love.graphics.setColor(1, 1, 1, 0.2)
+    love.graphics.setColor(1, 1, 1, 0.01)
     drawHexagon(hX, hY, grid.piecesize, false, true)
     love.graphics.setColor(r, g, b, a)
 end

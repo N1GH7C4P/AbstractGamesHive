@@ -7,6 +7,7 @@ function love.load()
     require "graphics"
     require "map"
 
+    menu_offset_x = 620
     move_mode = 0
     window_w = 1024
     window_h = 768
@@ -46,7 +47,7 @@ function love.mousepressed(x, y, button, istouch)
         local mouseX, mouseY = love.mouse.getPosition()
         -- Calculate the coordinates of the mouse cursor in the hexagon grid
         local resultX, resultY = hexagon.toHexagonCoordinates(mouseX, mouseY, grid)
-        if move_mode == 1 and map[resultY][resultX].neighbour then
+        if move_mode == 1 and map[resultY][resultX].neighbour and (not map[resultY][resultX].piece or map[selected_piece_y][selected_piece_x].piece.id == 2) then
             print("Trying to move a piece.")
             move_piece_on_map(map, selected_piece_x, selected_piece_y, resultX, resultY)
             clear_all_neighbours(map, w, h)
@@ -108,9 +109,8 @@ function love.draw()
             highlightNeighbours()
         end
     end
-    printPlayerStock(player, active_player_id, 600, 20)
-    -- printSelectedPieceInfo(map, selected_piece_x, selected_piece_y, move_mode, 600, 400)
-    print_map_pieces(map, w, h, 600, 200)
+    printPlayerStock(player, active_player_id, menu_offset_x, 20)
+    print_map_pieces(map, w, h, menu_offset_x, 200)
 
     -- Display the coordinates
     if resultX == -1 or resultY == -1 then

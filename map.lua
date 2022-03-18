@@ -1,4 +1,5 @@
 require "player"
+require "game"
 
 local function addPieceToMap(player_nb, id, map, x, y)
     highlight = 0
@@ -104,7 +105,7 @@ end
 function clear_all_neighbours(map, w, h)
     for i = 1, h do
         for j = 1, w do
-            map[i][j].neighbour = nil
+                map[i][j].neighbour = nil
         end
     end
 end
@@ -120,7 +121,11 @@ function remove_piece_from_map(map, x, y)
 end
 
 function move_piece_on_map(map, src_x, src_y, dest_x, dest_y)
-    if(not map[dest_y][dest_x].piece) then
+    if (map[src_y][src_x].piece.id == 2) then
+        print("Trying to move beetle.")
+        move_beetle(src_x, src_y, dest_x, dest_y, active_player_id)
+        print("moved piece: "..map[dest_y][dest_x].piece.name.." from ("..src_x..", "..src_y..") to ("..dest_x..", "..dest_y..").")
+    elseif(not map[dest_y][dest_x].piece) then
         map[dest_y][dest_x].piece = map[src_y][src_x].piece
         map[dest_y][dest_x].player_id = map[src_y][src_x].player_id
         map[src_y][src_x].piece = nil
