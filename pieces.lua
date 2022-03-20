@@ -45,7 +45,5 @@ function getPieceFromInventoryById(id)
         return (piecesInventory.spider)
     elseif id == 5 then
         return (piecesInventory.soldierAnt)
-    else
-        print ("piece id error!")
     end
 end

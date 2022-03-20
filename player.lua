@@ -33,6 +33,5 @@ function removePieceFromStock(player_nb, id)
 end
 
 function getPiecesInStock(player_nb, id)
-    print("player_nb: ",player_nb,"id: ",id)
     return (player[player_nb].pieces[id].inStock)
 end

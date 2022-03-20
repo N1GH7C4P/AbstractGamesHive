@@ -29,19 +29,17 @@ function drawBackground(canvas, w, h)
     love.graphics.setColor(0,1,0,1)
 end
 
-function highlightNeighbours()
+function drawSelected(x, y)
     for i = 1, h do
         for j = 1, w do
-            if map[i][j].neighbour then
-                higlightHex(j,i)
+            if try_move_piece_on_map(map, x, y, j, i) then
+                local hX, hY = hexagon.toPlanCoordinates(j, i, grid)
+                drawHexagon(hX, hY, grid.piecesize, false, true, 1, 0.5, 0.5, 0.3)
             end
         end
     end
-end
-
-function higlightHex(x, y)
     local hX, hY = hexagon.toPlanCoordinates(x, y, grid)
-    drawHexagon(hX, hY, grid.piecesize, false, true, 1, 0.5, 0.5)
+    drawHexagon(hX, hY, grid.piecesize - 5, false, false, 0, 1, 0, 1)
 end
 
 function printPlayerStock(player, player_id, x, y)

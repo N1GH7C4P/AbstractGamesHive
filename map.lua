@@ -4,7 +4,6 @@ require "game"
 local function addPieceToMap(player_nb, id, map, x, y)
     highlight = 0
     removePieceFromStock(player_nb, id)
-    print("Removed one "..getPieceFromInventoryById(id).name.." from player"..player_nb.."'s stock.")
     map[y][x].player_id = player_nb
     map[y][x].piece = getPieceFromInventoryById(id)
 end
@@ -136,16 +135,6 @@ function mark_neighbours_on_map(map, x, y, w, h)
     end
 end
 
-function print_neighbours(map, x, y, w, h)
-    for i = 1, h do
-        for j = 1, w do
-            if map[i][j].neighbour then
-                print("Neighbour: ("..j..", "..i..")")
-            end
-        end
-    end
-end
-
 function clear_all_tmp(map, w, h)
     for i = 1, h do
         for j = 1, w do
@@ -263,7 +252,6 @@ local function pieceCanDetach(map, x, y)
         for j = 1, w do
             if map[i][j].piece and not map[i][j].neighbour then
                 clear_all_neighbours(map, w, h)
-                print("Cant detach from there")
                 return false
             end
         end
@@ -272,31 +260,66 @@ local function pieceCanDetach(map, x, y)
     return true
 end
 
-function move_piece_on_map(map, src_x, src_y, dest_x, dest_y)
-    if (not pieceCanDetach(map, src_x, src_y)) then
+function try_self_detach(map, src_x, src_y, dest_x, dest_y)
+    clear_all_neighbours(map, w, h)
+    local tmp = map[src_y][src_x].player_id
+    map[src_y][src_x].player_id = nil
+    local enemy, friend = countNearbyPlayer(map, dest_x, dest_y, w, h)
+    if (enemy + friend == 0) then
+        map[src_y][src_x].player_id = tmp
         return false
     end
+    map[src_y][src_x].player_id = tmp
+    return true
+end
+
+function try_move_piece_on_map(map, src_x, src_y, dest_x, dest_y)
+    if (not pieceCanDetach(map, src_x, src_y, dest_x, dest_y)) then
+        return false
+    end
+    if not try_self_detach(map, src_x, src_y, dest_x, dest_y) then
+        return false
+    end
+
     clear_all_neighbours(map, map.w, map.h)
+    if (map[dest_y][dest_x].piece and map[src_y][src_x].piece.id ~= 2) then
+        return false
+    end
     if (map[src_y][src_x].piece.id == 1) then
-        if not move_queen(src_x, src_y, dest_x, dest_y, active_player_id) then
+        if not try_move_queen(src_x, src_y, dest_x, dest_y, active_player_id) then
             return false
         end
     elseif (map[src_y][src_x].piece.id == 2) then
-        if not move_beetle(src_x, src_y, dest_x, dest_y, active_player_id) then
+        if not try_move_beetle(src_x, src_y, dest_x, dest_y, active_player_id) then
             return false
         end
     elseif (map[src_y][src_x].piece.id == 3) then
-        if not move_grasshopper(src_x, src_y, dest_x, dest_y, active_player_id) then
+        if not try_move_grasshopper(src_x, src_y, dest_x, dest_y, active_player_id) then
             return false
         end
     elseif (map[src_y][src_x].piece.id == 4) then
-        if not move_spider(src_x, src_y, dest_x, dest_y, active_player_id) then
+        if not try_move_spider(src_x, src_y, dest_x, dest_y, active_player_id) then
             return false
         end
     elseif (map[src_y][src_x].piece.id == 5) then
-        if not move_soldier_ant(src_x, src_y, dest_x, dest_y, active_player_id) then
+        if not try_move_soldier_ant(src_x, src_y, dest_x, dest_y, active_player_id) then
             return false
         end
+    end
+    return true
+end
+
+function move_piece_on_map(map, src_x, src_y, dest_x, dest_y)
+    if not try_move_piece_on_map(map, src_x, src_y, dest_x, dest_y) then
+        return false
+    end
+    if (map[src_y][src_x].piece.id == 2) then
+        move_beetle(src_x, src_y, dest_x, dest_y, active_player_id)
+    else
+        map[dest_y][dest_x].piece = map[src_y][src_x].piece
+        map[dest_y][dest_x].player_id = map[src_y][src_x].player_id
+        map[src_y][src_x].piece = nil
+        map[src_y][src_x].player_id = nil
     end
     return true
 end
