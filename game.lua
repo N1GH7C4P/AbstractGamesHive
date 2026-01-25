@@ -63,7 +63,12 @@ function pass_turn(active_piece_id)
     checkIfWin(map, w, h)
 end
 
+-- Legacy movement functions - now delegated to piece objects
 function try_move_queen(src_x, src_y, x, y, active_player_id)
+    if map[src_y][src_x].piece and map[src_y][src_x].piece.try_to_move then
+        return map[src_y][src_x].piece:try_to_move(map, src_x, src_y, x, y, map.w, map.h)
+    end
+    -- Fallback to old behavior
     mark_neighbours_on_map(map, src_x, src_y, map.w, map.h)
     if not map[y][x].neighbour then
         return false
@@ -72,6 +77,10 @@ function try_move_queen(src_x, src_y, x, y, active_player_id)
 end
 
 function try_move_spider(src_x, src_y, x, y, active_player_id)
+    if map[src_y][src_x].piece and map[src_y][src_x].piece.try_to_move then
+        return map[src_y][src_x].piece:try_to_move(map, src_x, src_y, x, y, map.w, map.h)
+    end
+    -- Fallback to old behavior
     clear_all_neighbours(map, map.w, map.h)
     map[src_y][src_x].neighbour = true
     flood_neighbours_neighbours_jump(map, x, y, w, h)
@@ -84,14 +93,24 @@ function try_move_spider(src_x, src_y, x, y, active_player_id)
 end
 
 function try_move_soldier_ant(src_x, src_y, x, y, active_player_id)
+    if map[src_y][src_x].piece and map[src_y][src_x].piece.try_to_move then
+        return map[src_y][src_x].piece:try_to_move(map, src_x, src_y, x, y, map.w, map.h)
+    end
     return true
 end
 
 function try_move_grasshopper(src_x, src_y, x, y, active_player_id)
+    if map[src_y][src_x].piece and map[src_y][src_x].piece.try_to_move then
+        return map[src_y][src_x].piece:try_to_move(map, src_x, src_y, x, y, map.w, map.h)
+    end
     return true
 end
 
 function try_move_beetle(src_x, src_y, x, y, active_player_id)
+    if map[src_y][src_x].piece and map[src_y][src_x].piece.try_to_move then
+        return map[src_y][src_x].piece:try_to_move(map, src_x, src_y, x, y, map.w, map.h)
+    end
+    -- Fallback to old behavior
     mark_neighbours_on_map(map, src_x, src_y, map.w, map.h)
     if not map[y][x].neighbour then
         return false
@@ -100,6 +119,12 @@ function try_move_beetle(src_x, src_y, x, y, active_player_id)
 end
 
 function move_beetle(src_x, src_y, x, y, active_player_id)
+    -- Use the Beetle's move method if available
+    if map[src_y][src_x].piece and map[src_y][src_x].piece.move then
+        return map[src_y][src_x].piece:move(map, src_x, src_y, x, y, active_player_id)
+    end
+    
+    -- Fallback to legacy behavior
     -- If there is something, move on top of it ans store it as a tempPiece
     local tempPiece = nil
     if (map[y][x].piece) then

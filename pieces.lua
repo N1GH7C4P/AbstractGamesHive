@@ -1,3 +1,12 @@
+-- Require all piece classes
+Piece = require("pieces.piece")
+QueenBee = require("pieces.queenbee")
+Beetle = require("pieces.beetle")
+Grasshopper = require("pieces.grasshopper")
+Spider = require("pieces.spider")
+SoldierAnt = require("pieces.soldierant")
+
+-- Legacy functions for compatibility
 function init_pieces()
     piecesInventory = {}
 
@@ -27,7 +36,7 @@ function init_pieces()
 
     piecesInventory.queenBee.id = 1
     piecesInventory.beetle.id = 2
-    piecesInventory.grassHopper.id =3
+    piecesInventory.grassHopper.id = 3
     piecesInventory.spider.id = 4
     piecesInventory.soldierAnt.id = 5
 
@@ -45,5 +54,20 @@ function getPieceFromInventoryById(id)
         return (piecesInventory.spider)
     elseif id == 5 then
         return (piecesInventory.soldierAnt)
+    end
+end
+
+-- Create a new piece instance by type
+function createPieceByType(pieceType, owner)
+    if pieceType == "queenBee" or pieceType == 1 then
+        return QueenBee:new(owner)
+    elseif pieceType == "beetle" or pieceType == 2 then
+        return Beetle:new(owner)
+    elseif pieceType == "grasshopper" or pieceType == 3 then
+        return Grasshopper:new(owner)
+    elseif pieceType == "spider" or pieceType == 4 then
+        return Spider:new(owner)
+    elseif pieceType == "soldierAnt" or pieceType == 5 then
+        return SoldierAnt:new(owner)
     end
 end
