@@ -5,6 +5,11 @@ function love.load()
     require "game"
     require "graphics"
     require "map"
+    console = require "console"
+    gamestate = require "gamestate"
+    
+    -- Initialize console to capture print statements
+    console.init()
 
     menu_offset_x = 620
     move_mode = 0
@@ -39,6 +44,16 @@ function love.keypressed(key)
         active_piece_id = active_piece_id + 1
     elseif key == "s" and active_piece_id > 1 then
         active_piece_id = active_piece_id - 1
+    elseif key == "c" then
+        console.toggle()
+    elseif key == "x" then
+        console.clear()
+    elseif key == "d" then
+        -- Export game state to file
+        gamestate.export_to_file(map, w, h, "gamestate.txt")
+    elseif key == "l" then
+        -- Load game state from file
+        gamestate.load_from_file(map, w, h, "gamestate.txt")
     end
  end
 
@@ -66,7 +81,7 @@ function love.mousepressed(x, y, button, istouch)
             if selectPieceOnMap(map, resultX, resultY, active_player_id) then
                 highlight = 1
                 clear_all_neighbours(map, w, h)
-                mark_neighbours_on_map(map, resultX, resultY, w, h)
+                mark_legal_moves_for_piece(map, resultX, resultY, w, h)
                 selected_piece_x = resultX
                 selected_piece_y = resultY
                 if player[active_player_id].pieces[1].inStock == 0 then
@@ -123,4 +138,7 @@ function love.draw()
             love.graphics.print("Player 1 Wins", window_w / 2, window_h / 2 + 20)
         end
     end
+    
+    -- Draw console on top of everything
+    console.draw(10, 400, 600, 350)
 end

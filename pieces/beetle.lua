@@ -15,15 +15,14 @@ end
 
 function Beetle:try_to_move(map, src_x, src_y, dest_x, dest_y, w, h)
     -- Beetle can move one space and can climb on top of pieces
-    local map_module = require("map")
-    map_module.mark_neighbours_on_map(map, src_x, src_y, w, h)
+    mark_neighbours_on_map(map, src_x, src_y, w, h)
     if not map[dest_y][dest_x].neighbour then
         return false
     end
     return true
 end
 
-function Beetle:move(map, src_x, src_y, dest_x, dest_y, active_player_id)
+function Beetle:move_piece(map, src_x, src_y, dest_x, dest_y, active_player_id)
     -- If there is something, move on top of it and store it as under_piece
     local tempPiece = nil
     if map[dest_y][dest_x].piece then

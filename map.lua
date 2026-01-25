@@ -151,6 +151,118 @@ function clear_all_neighbours(map, w, h)
     end
 end
 
+function mark_legal_moves_for_piece(map, src_x, src_y, w, h)
+    print("=== mark_legal_moves_for_piece called ===")
+    print("Source: (" .. src_x .. ", " .. src_y .. ")")
+    
+    -- Clear all previous neighbour markings
+    clear_all_neighbours(map, w, h)
+    
+    -- Get the piece at the source position
+    local piece = map[src_y][src_x].piece
+    if not piece then
+        print("ERROR: No piece at source!")
+        return
+    end
+    
+    print("Piece: " .. piece.name)
+    
+    -- For Queen, let's specifically test adjacent positions
+    if piece.id == 1 then
+        print("Testing Queen moves - checking adjacent hexes only")
+        mark_neighbours_on_map(map, src_x, src_y, w, h)
+        local adjacent_positions = {}
+        for i = 1, h do
+            for j = 1, w do
+                if map[i][j].neighbour and not (i == src_y and j == src_x) then
+                    table.insert(adjacent_positions, {x = j, y = i})
+                end
+            end
+        end
+        clear_all_neighbours(map, w, h)
+        
+        print("Found " .. #adjacent_positions .. " adjacent hexes")
+        local legal_moves = {}
+        
+        for _, pos in ipairs(adjacent_positions) do
+            print("Testing adjacent hex (" .. pos.x .. ", " .. pos.y .. ")")
+            
+            -- Check if destination is occupied
+            if map[pos.y][pos.x].piece then
+                print("  BLOCKED: hex occupied")
+            else
+                -- Test the move
+                local can_detach = pieceCanDetach(map, src_x, src_y, pos.x, pos.y)
+                print("  pieceCanDetach: " .. tostring(can_detach))
+                
+                if can_detach then
+                    local can_self_detach = try_self_detach(map, src_x, src_y, pos.x, pos.y)
+                    print("  try_self_detach: " .. tostring(can_self_detach))
+                    
+                    if can_self_detach then
+                        table.insert(legal_moves, {x = pos.x, y = pos.y})
+                        print("  LEGAL MOVE!")
+                    end
+                end
+            end
+        end
+        
+        print("Total legal moves: " .. #legal_moves)
+        for _, move in ipairs(legal_moves) do
+            map[move.y][move.x].neighbour = true
+        end
+        
+        print("=== Complete ===")
+        return
+    end
+    
+    -- Original logic for other pieces
+    local legal_moves = {}
+    local tests_run = 0
+    local max_tests = 200
+    
+    for i = 1, h do
+        for j = 1, w do
+            if not (i == src_y and j == src_x) then
+                tests_run = tests_run + 1
+                
+                if tests_run > max_tests then
+                    print("WARNING: Hit test limit!")
+                    break
+                end
+                
+                local has_nearby = false
+                mark_neighbours_on_map(map, j, i, w, h)
+                for ii = 1, h do
+                    for jj = 1, w do
+                        if map[ii][jj].neighbour and map[ii][jj].piece then
+                            has_nearby = true
+                            break
+                        end
+                    end
+                    if has_nearby then break end
+                end
+                clear_all_neighbours(map, w, h)
+                
+                if has_nearby or not map[i][j].piece then
+                    if try_move_piece_on_map(map, src_x, src_y, j, i) then
+                        table.insert(legal_moves, {x = j, y = i})
+                    end
+                end
+            end
+        end
+        if tests_run > max_tests then break end
+    end
+    
+    print("Tests: " .. tests_run .. ", Legal moves: " .. #legal_moves)
+    
+    for _, move in ipairs(legal_moves) do
+        map[move.y][move.x].neighbour = true
+    end
+    
+    print("=== Complete ===")
+end
+
 function remove_piece_from_map(map, x, y)
     if map[y][x].piece then
         print("Removed piece from: "..tostring(x)..", "..tostring(y))
@@ -240,7 +352,7 @@ function firstPieceCoords(map)
     end
 end
 
-local function pieceCanDetach(map, x, y)
+function pieceCanDetach(map, x, y)
     local tmp = map[y][x].piece
     map[y][x].piece = nil
     clear_all_neighbours(map, w, h)
@@ -285,41 +397,24 @@ function try_move_piece_on_map(map, src_x, src_y, dest_x, dest_y)
     if (map[dest_y][dest_x].piece and map[src_y][src_x].piece.id ~= 2) then
         return false
     end
-    if (map[src_y][src_x].piece.id == 1) then
-        if not try_move_queen(src_x, src_y, dest_x, dest_y, active_player_id) then
-            return false
-        end
-    elseif (map[src_y][src_x].piece.id == 2) then
-        if not try_move_beetle(src_x, src_y, dest_x, dest_y, active_player_id) then
-            return false
-        end
-    elseif (map[src_y][src_x].piece.id == 3) then
-        if not try_move_grasshopper(src_x, src_y, dest_x, dest_y, active_player_id) then
-            return false
-        end
-    elseif (map[src_y][src_x].piece.id == 4) then
-        if not try_move_spider(src_x, src_y, dest_x, dest_y, active_player_id) then
-            return false
-        end
-    elseif (map[src_y][src_x].piece.id == 5) then
-        if not try_move_soldier_ant(src_x, src_y, dest_x, dest_y, active_player_id) then
-            return false
-        end
+    
+    -- Call the piece's try_to_move method
+    if map[src_y][src_x].piece and map[src_y][src_x].piece.try_to_move then
+        return map[src_y][src_x].piece:try_to_move(map, src_x, src_y, dest_x, dest_y, map.w, map.h)
     end
-    return true
+    
+    return false
 end
 
 function move_piece_on_map(map, src_x, src_y, dest_x, dest_y)
     if not try_move_piece_on_map(map, src_x, src_y, dest_x, dest_y) then
         return false
     end
-    if (map[src_y][src_x].piece.id == 2) then
-        move_beetle(src_x, src_y, dest_x, dest_y, active_player_id)
-    else
-        map[dest_y][dest_x].piece = map[src_y][src_x].piece
-        map[dest_y][dest_x].player_id = map[src_y][src_x].player_id
-        map[src_y][src_x].piece = nil
-        map[src_y][src_x].player_id = nil
+    
+    -- Call the piece's move_piece method if available
+    if map[src_y][src_x].piece and map[src_y][src_x].piece.move_piece then
+        return map[src_y][src_x].piece:move_piece(map, src_x, src_y, dest_x, dest_y, active_player_id)
     end
-    return true
+    
+    return false
 end
