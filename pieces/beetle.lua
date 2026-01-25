@@ -13,45 +13,52 @@ function Beetle:new(owner)
     return instance
 end
 
-function Beetle:try_to_move(map, src_x, src_y, dest_x, dest_y, w, h)
+function Beetle:try_to_move(map, src_cube, dest_cube)
     -- Beetle can move one space and can climb on top of pieces
-    mark_neighbours_on_map(map, src_x, src_y, w, h)
-    if not map[dest_y][dest_x].neighbour then
+    local distance = cubecoords.distance(src_cube, dest_cube)
+    if distance ~= 1 then
         return false
     end
     return true
 end
 
-function Beetle:move_piece(map, src_x, src_y, dest_x, dest_y, active_player_id)
-    -- If there is something, move on top of it and store it as under_piece
+function Beetle:move_piece(map, src_cube, dest_cube, active_player_id)
+    -- Beetle can move on top of other pieces
+    local src_hex = map_get_hex(map, src_cube)
+    local dest_hex = map_get_hex(map, dest_cube)
+    
+    if not src_hex or not dest_hex then return false end
+    
     local tempPiece = nil
-    if map[dest_y][dest_x].piece then
-        tempPiece = map[dest_y][dest_x].piece
-        tempPiece.player_id = map[dest_y][dest_x].player_id
-        map[dest_y][dest_x].piece = map[src_y][src_x].piece
+    if dest_hex.piece then
+        tempPiece = dest_hex.piece
+        tempPiece.player_id = dest_hex.player_id
+        dest_hex.piece = src_hex.piece
     else
-        -- Or just move your piece there if its empty
-        map[dest_y][dest_x].piece = map[src_y][src_x].piece
+        dest_hex.piece = src_hex.piece
     end
-    -- Mark new space with current turn player_id
-    map[dest_y][dest_x].player_id = active_player_id
+    
+    dest_hex.player_id = active_player_id
+    
     -- If the source hex has an under_piece, restore it
-    if map[src_y][src_x].piece.under_piece then
-        local underpiece = map[src_y][src_x].piece.under_piece
-        map[src_y][src_x].piece.under_piece = nil
-        map[src_y][src_x].player_id = underpiece.player_id
-        map[src_y][src_x].piece = underpiece
+    if src_hex.piece.under_piece then
+        local underpiece = src_hex.piece.under_piece
+        src_hex.piece.under_piece = nil
+        src_hex.player_id = underpiece.player_id
+        src_hex.piece = underpiece
         underpiece = nil
     else
-        map[src_y][src_x].piece = nil
-        map[src_y][src_x].player_id = nil
+        src_hex.piece = nil
+        src_hex.player_id = nil
     end
+    
     -- Temp piece becomes the new under_piece
     if tempPiece then
-        map[dest_y][dest_x].piece.under_piece = tempPiece
-        map[dest_y][dest_x].piece.under_piece.player_id = tempPiece.player_id
+        dest_hex.piece.under_piece = tempPiece
+        dest_hex.piece.under_piece.player_id = tempPiece.player_id
         tempPiece = nil
     end
+    
     return true
 end
 

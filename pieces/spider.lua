@@ -13,25 +13,26 @@ function Spider:new(owner)
     return instance
 end
 
-function Spider:try_to_move(map, src_x, src_y, dest_x, dest_y, w, h)
+function Spider:try_to_move(map, src_cube, dest_cube)
     -- Spider moves exactly 3 spaces around the edge
-    clear_all_neighbours(map, w, h)
-    map[src_y][src_x].neighbour = true
-    flood_neighbours_neighbours_jump(map, dest_x, dest_y, w, h)
-    flood_neighbours_neighbours_jump(map, dest_x, dest_y, w, h)
-    flood_neighbours_neighbours_jump(map, dest_x, dest_y, w, h)
-    if not map[dest_y][dest_x].neighbour then
+    local distance = cubecoords.distance(src_cube, dest_cube)
+    if distance ~= 3 then
         return false
     end
+    -- TODO: Implement proper spider path validation (must move along edge)
     return true
 end
 
-function Spider:move_piece(map, src_x, src_y, dest_x, dest_y, active_player_id)
-    -- Simple move: transfer piece to destination
-    map[dest_y][dest_x].piece = map[src_y][src_x].piece
-    map[dest_y][dest_x].player_id = map[src_y][src_x].player_id
-    map[src_y][src_x].piece = nil
-    map[src_y][src_x].player_id = nil
+function Spider:move_piece(map, src_cube, dest_cube, active_player_id)
+    local src_hex = map_get_hex(map, src_cube)
+    local dest_hex = map_get_hex(map, dest_cube)
+    
+    if not src_hex or not dest_hex then return false end
+    
+    dest_hex.piece = src_hex.piece
+    dest_hex.player_id = src_hex.player_id
+    src_hex.piece = nil
+    src_hex.player_id = nil
     return true
 end
 

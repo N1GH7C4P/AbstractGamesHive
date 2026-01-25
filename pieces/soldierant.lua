@@ -13,22 +13,24 @@ function SoldierAnt:new(owner)
     return instance
 end
 
-function SoldierAnt:try_to_move(map, src_x, src_y, dest_x, dest_y, w, h)
+function SoldierAnt:try_to_move(map, src_cube, dest_cube)
     -- Soldier ant can move any number of spaces around the edge of the hive
     -- Must stay adjacent to at least one piece at all times
     -- Cannot move through tight spaces (Freedom to Move rule)
-    
-    -- TODO: Implement proper soldier ant path-finding logic
-    -- For now, return true to allow basic movement
+    -- TODO: Implement proper path-finding
     return true
 end
 
-function SoldierAnt:move_piece(map, src_x, src_y, dest_x, dest_y, active_player_id)
-    -- Simple move: transfer piece to destination
-    map[dest_y][dest_x].piece = map[src_y][src_x].piece
-    map[dest_y][dest_x].player_id = map[src_y][src_x].player_id
-    map[src_y][src_x].piece = nil
-    map[src_y][src_x].player_id = nil
+function SoldierAnt:move_piece(map, src_cube, dest_cube, active_player_id)
+    local src_hex = map_get_hex(map, src_cube)
+    local dest_hex = map_get_hex(map, dest_cube)
+    
+    if not src_hex or not dest_hex then return false end
+    
+    dest_hex.piece = src_hex.piece
+    dest_hex.player_id = src_hex.player_id
+    src_hex.piece = nil
+    src_hex.player_id = nil
     return true
 end
 

@@ -44,17 +44,17 @@ function GameState.export_to_file(map, w, h, filename)
     local piece_count = 0
     local pieces_list = {}
     
-    for i = 1, h do
-        for j = 1, w do
-            if map[i][j].piece then
-                piece_count = piece_count + 1
-                table.insert(pieces_list, {
-                    x = j,
-                    y = i,
-                    piece = map[i][j].piece,
-                    player_id = map[i][j].player_id
-                })
-            end
+    for _, hex in pairs(map.hexes) do
+        if hex.piece then
+            piece_count = piece_count + 1
+            local col, row = cubecoords.to_offset(hex.cube)
+            table.insert(pieces_list, {
+                col = col,
+                row = row,
+                cube = hex.cube,
+                piece = hex.piece,
+                player_id = hex.player_id
+            })
         end
     end
     
@@ -63,17 +63,18 @@ function GameState.export_to_file(map, w, h, filename)
     -- Sort by player then by position
     table.sort(pieces_list, function(a, b)
         if a.player_id == b.player_id then
-            if a.y == b.y then
-                return a.x < b.x
+            if a.row == b.row then
+                return a.col < b.col
             end
-            return a.y < b.y
+            return a.row < b.row
         end
         return a.player_id < b.player_id
     end)
     
     for _, p in ipairs(pieces_list) do
-        file:write(string.format("(%2d, %2d) - Player %d - %s (id:%d)", 
-            p.x, p.y, p.player_id, p.piece.name, p.piece.id))
+        file:write(string.format("(%2d, %2d) - Player %d - %s (id:%d) [cube: %d,%d,%d]", 
+            p.col, p.row, p.player_id, p.piece.name, p.piece.id,
+            p.cube.x, p.cube.y, p.cube.z))
         
         if p.piece.under_piece then
             file:write(" [STACKED on " .. p.piece.under_piece.name .. "]")
@@ -81,16 +82,15 @@ function GameState.export_to_file(map, w, h, filename)
         file:write("\n")
         
         -- Show neighbors
-        mark_neighbours_on_map(map, p.x, p.y, w, h)
+        local neighbors = cubecoords.all_neighbors(p.cube)
         local neighbor_pieces = {}
-        for i = 1, h do
-            for j = 1, w do
-                if map[i][j].neighbour and map[i][j].piece and not (i == p.y and j == p.x) then
-                    table.insert(neighbor_pieces, "(" .. j .. "," .. i .. ")")
-                end
+        for _, ncube in ipairs(neighbors) do
+            local nhex = map_get_hex(map, ncube)
+            if nhex and nhex.piece then
+                local ncol, nrow = cubecoords.to_offset(nhex.cube)
+                table.insert(neighbor_pieces, "(" .. ncol .. "," .. nrow .. ")")
             end
         end
-        clear_all_neighbours(map, w, h)
         
         if #neighbor_pieces > 0 then
             file:write("  Adjacent pieces at: " .. table.concat(neighbor_pieces, ", ") .. "\n")
@@ -104,8 +104,9 @@ function GameState.export_to_file(map, w, h, filename)
             line = "  "  -- Indent even rows for hex grid
         end
         for j = 1, w do
-            if map[i][j].piece then
-                line = line .. string.format("[%s%d]", map[i][j].piece.initials, map[i][j].player_id)
+            local hex = map_get_hex_offset(map, j, i)
+            if hex and hex.piece then
+                line = line .. string.format("[%s%d]", hex.piece.initials, hex.player_id)
             else
                 line = line .. " .. "
             end
@@ -131,12 +132,10 @@ function GameState.load_from_file(map, w, h, filename)
     print("Loading game state from: " .. filename)
     
     -- Clear current board
-    for i = 1, h do
-        for j = 1, w do
-            map[i][j].piece = nil
-            map[i][j].player_id = nil
-            map[i][j].neighbour = nil
-        end
+    for _, hex in pairs(map.hexes) do
+        hex.piece = nil
+        hex.player_id = nil
+        hex.neighbour = nil
     end
     
     -- Reset player inventories to full
@@ -159,11 +158,11 @@ function GameState.load_from_file(map, w, h, filename)
             in_pieces_section = false
         elseif in_pieces_section then
             -- Parse piece lines: ( 6,  5) - Player 1 - Soldier ant (id:5)
-            local x, y, player_id, piece_name, piece_id = line:match("^%s*%(%s*(%d+),%s*(%d+)%)%s*%-%s*Player%s*(%d+)%s*%-%s*(.-)%s*%(id:(%d+)%)")
+            local col, row, player_id, piece_name, piece_id = line:match("^%s*%(%s*(%d+),%s*(%d+)%)%s*%-%s*Player%s*(%d+)%s*%-%s*(.-)%s*%(id:(%d+)%)")
             
-            if x and y and player_id and piece_id then
-                x = tonumber(x)
-                y = tonumber(y)
+            if col and row and player_id and piece_id then
+                col = tonumber(col)
+                row = tonumber(row)
                 player_id = tonumber(player_id)
                 piece_id = tonumber(piece_id)
                 
@@ -182,16 +181,22 @@ function GameState.load_from_file(map, w, h, filename)
                 end
                 
                 if piece then
-                    -- Place piece on map
-                    map[y][x].piece = piece
-                    map[y][x].player_id = player_id
-                    piece:place(x, y)
+                    -- Get cube coordinates
+                    local cube = cubecoords.from_offset(col, row)
+                    local hex = map_get_hex(map, cube)
                     
-                    -- Decrease from stock
-                    player[player_id].pieces[piece_id].inStock = player[player_id].pieces[piece_id].inStock - 1
-                    
-                    pieces_loaded = pieces_loaded + 1
-                    print("Loaded: " .. piece.name .. " at (" .. x .. ", " .. y .. ") for Player " .. player_id)
+                    if hex then
+                        -- Place piece on map
+                        hex.piece = piece
+                        hex.player_id = player_id
+                        piece:place(cube)
+                        
+                        -- Decrease from stock
+                        player[player_id].pieces[piece_id].inStock = player[player_id].pieces[piece_id].inStock - 1
+                        
+                        pieces_loaded = pieces_loaded + 1
+                        print("Loaded: " .. piece.name .. " at (" .. col .. ", " .. row .. ") for Player " .. player_id)
+                    end
                 end
             end
         end

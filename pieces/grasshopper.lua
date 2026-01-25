@@ -13,103 +13,56 @@ function Grasshopper:new(owner)
     return instance
 end
 
-function Grasshopper:try_to_move(map, src_x, src_y, dest_x, dest_y, w, h)
-    -- Grasshopper jumps over pieces in a straight line
-    -- It must jump in the direction of one of its faces (6 directions)
-    -- and lands in the first empty space after jumping over one or more pieces
+function Grasshopper:try_to_move(map, src_cube, dest_cube)
+    -- Grasshopper jumps in a straight line over one or more pieces
+    -- Must land in first empty space after jumping
     
-    -- Get the 6 possible hexagonal directions from source
-    local directions = {}
-    if src_x % 2 == 0 then
-        -- Even column neighbors: (0,-1), (1,-1), (-1,0), (1,0), (0,1), (1,1)
-        directions = {
-            {0, -1}, {1, -1}, {-1, 0}, {1, 0}, {0, 1}, {1, 1}
-        }
-    else
-        -- Odd column neighbors: (-1,-1), (0,-1), (-1,0), (1,0), (-1,1), (0,1)
-        directions = {
-            {-1, -1}, {0, -1}, {-1, 0}, {1, 0}, {-1, 1}, {0, 1}
-        }
+    -- Get direction from source to destination
+    local dir = cubecoords.direction(src_cube, dest_cube)
+    
+    -- Check if direction is aligned with hex grid axes
+    if not cubecoords.is_aligned(dir) then
+        return false
     end
     
-    -- Check each direction to see if destination is in that straight line
-    for _, dir in ipairs(directions) do
-        local dx, dy = dir[1], dir[2]
-        local current_x, current_y = src_x, src_y
-        local jumped_pieces = 0
+    -- Normalize the direction
+    local unit_dir = cubecoords.normalize_direction(dir)
+    if not unit_dir then
+        return false
+    end
+    
+    -- Walk along the direction, counting pieces jumped
+    local current = src_cube
+    local jumped_count = 0
+    local found_empty = false
+    
+    for i = 1, 20 do  -- Max distance check
+        current = cubecoords.add(current, unit_dir)
+        local hex = map_get_hex(map, current)
         
-        -- Move in this direction until we reach the destination or run out of bounds
-        while true do
-            -- Calculate next position in this direction
-            -- Need to handle hex grid direction properly
-            local next_x = current_x + dx
-            local next_y = current_y + dy
-            
-            -- Adjust for hex grid alternating columns
-            if current_x % 2 == 0 then
-                -- Coming from even column
-                if dx == 1 and dy == -1 then next_x, next_y = current_x + 1, current_y - 1
-                elseif dx == 0 and dy == -1 then next_x, next_y = current_x, current_y - 1
-                elseif dx == -1 and dy == 0 then next_x, next_y = current_x - 1, current_y
-                elseif dx == 1 and dy == 0 then next_x, next_y = current_x + 1, current_y
-                elseif dx == 0 and dy == 1 then next_x, next_y = current_x, current_y + 1
-                elseif dx == 1 and dy == 1 then next_x, next_y = current_x + 1, current_y + 1
+        if not hex then
+            -- Out of bounds
+            break
+        end
+        
+        if hex.piece then
+            -- Jumping over a piece
+            jumped_count = jumped_count + 1
+        else
+            -- Found empty space - this is where grasshopper must land
+            if cubecoords.equals(current, dest_cube) and jumped_count > 0 then
+                -- Destination must be adjacent to at least one piece (to maintain hive)
+                local neighbors = cubecoords.all_neighbors(dest_cube)
+                for _, ncube in ipairs(neighbors) do
+                    local nhex = map_get_hex(map, ncube)
+                    if nhex and nhex.piece and not cubecoords.equals(ncube, src_cube) then
+                        return true
+                    end
                 end
+                return false
             else
-                -- Coming from odd column
-                if dx == -1 and dy == -1 then next_x, next_y = current_x - 1, current_y - 1
-                elseif dx == 0 and dy == -1 then next_x, next_y = current_x, current_y - 1
-                elseif dx == -1 and dy == 0 then next_x, next_y = current_x - 1, current_y
-                elseif dx == 1 and dy == 0 then next_x, next_y = current_x + 1, current_y
-                elseif dx == -1 and dy == 1 then next_x, next_y = current_x - 1, current_y + 1
-                elseif dx == 0 and dy == 1 then next_x, next_y = current_x, current_y + 1
-                end
-            end
-            
-            -- Check bounds
-            if next_x < 1 or next_x > w or next_y < 1 or next_y > h then
-                break
-            end
-            
-            -- If there's a piece here, we're jumping over it
-            if map[next_y][next_x].piece then
-                jumped_pieces = jumped_pieces + 1
-                current_x, current_y = next_x, next_y
-                
-                -- Update direction based on new column parity
-                if next_x % 2 == 0 then
-                    if dx == -1 and dy == -1 then dx, dy = 0, -1
-                    elseif dx == 1 and dy == -1 then dx, dy = 1, -1
-                    elseif dx == -1 and dy == 1 then dx, dy = 0, 1
-                    elseif dx == 1 and dy == 1 then dx, dy = 1, 1
-                    end
-                else
-                    if dx == 0 and dy == -1 then dx, dy = -1, -1
-                    elseif dx == 1 and dy == -1 then dx, dy = 0, -1
-                    elseif dx == 0 and dy == 1 then dx, dy = -1, 1
-                    elseif dx == 1 and dy == 1 then dx, dy = 0, 1
-                    end
-                end
-            else
-                -- Found empty space - this is where grasshopper must land
-                if next_x == dest_x and next_y == dest_y and jumped_pieces > 0 then
-                    -- Destination must be adjacent to at least one piece (excluding source)
-                    mark_neighbours_on_map(map, dest_x, dest_y, w, h)
-                    local has_neighbor = false
-                    for i = 1, h do
-                        for j = 1, w do
-                            if map[i][j].neighbour and map[i][j].piece and not (i == src_y and j == src_x) then
-                                has_neighbor = true
-                                break
-                            end
-                        end
-                        if has_neighbor then break end
-                    end
-                    clear_all_neighbours(map, w, h)
-                    return has_neighbor
-                end
-                -- If we hit an empty space but it's not our destination, this direction doesn't work
-                break
+                -- Hit empty space but it's not our destination
+                return false
             end
         end
     end
@@ -117,12 +70,16 @@ function Grasshopper:try_to_move(map, src_x, src_y, dest_x, dest_y, w, h)
     return false
 end
 
-function Grasshopper:move_piece(map, src_x, src_y, dest_x, dest_y, active_player_id)
-    -- Simple move: transfer piece to destination
-    map[dest_y][dest_x].piece = map[src_y][src_x].piece
-    map[dest_y][dest_x].player_id = map[src_y][src_x].player_id
-    map[src_y][src_x].piece = nil
-    map[src_y][src_x].player_id = nil
+function Grasshopper:move_piece(map, src_cube, dest_cube, active_player_id)
+    local src_hex = map_get_hex(map, src_cube)
+    local dest_hex = map_get_hex(map, dest_cube)
+    
+    if not src_hex or not dest_hex then return false end
+    
+    dest_hex.piece = src_hex.piece
+    dest_hex.player_id = src_hex.player_id
+    src_hex.piece = nil
+    src_hex.player_id = nil
     return true
 end
 

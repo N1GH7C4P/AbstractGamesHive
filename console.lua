@@ -4,9 +4,17 @@ Console.messages = {}
 Console.max_messages = 30
 Console.visible = true
 Console.original_print = print
+Console.log_file = nil
 
 -- Override print to capture messages
 function Console.init()
+    -- Open log file
+    Console.log_file = io.open("debug.log", "w")
+    if Console.log_file then
+        Console.log_file:write("=== Debug Log Started ===\n")
+        Console.log_file:flush()
+    end
+    
     print = function(...)
         local args = {...}
         local message = ""
@@ -23,6 +31,12 @@ function Console.init()
         -- Keep only last max_messages
         if #Console.messages > Console.max_messages then
             table.remove(Console.messages, 1)
+        end
+        
+        -- Write to log file
+        if Console.log_file then
+            Console.log_file:write(message .. "\n")
+            Console.log_file:flush()  -- Flush immediately so we can see logs even if game crashes
         end
         
         -- Also call original print for terminal output
@@ -70,6 +84,10 @@ end
 
 function Console.clear()
     Console.messages = {}
+    if Console.log_file then
+        Console.log_file:write("=== Console Cleared ===\n")
+        Console.log_file:flush()
+    end
 end
 
 return Console

@@ -1,5 +1,6 @@
 function love.load()
     hexagon = require("hexagon")
+    cubecoords = require("cubecoords")
     require "pieces"
     require "player"
     require "game"
@@ -22,6 +23,7 @@ function love.load()
     highlight = 0
     game_over = false
     who_won = {0, 0}
+    show_cube_coords = false
 
     love.window.setMode(window_w, window_h)
 	love.window.setTitle("hive")
@@ -54,6 +56,10 @@ function love.keypressed(key)
     elseif key == "l" then
         -- Load game state from file
         gamestate.load_from_file(map, w, h, "gamestate.txt")
+    elseif key == "h" then
+        -- Toggle cube coordinate display
+        show_cube_coords = not show_cube_coords
+        print("Cube coordinates display: " .. (show_cube_coords and "ON" or "OFF"))
     end
  end
 
@@ -64,18 +70,28 @@ function love.mousepressed(x, y, button, istouch)
     if button == 1 then
         local mouseX, mouseY = love.mouse.getPosition()
         local resultX, resultY = hexagon.toHexagonCoordinates(mouseX, mouseY, grid)
-        if move_mode == 1 and (not map[resultY][resultX].piece or map[selected_piece_y][selected_piece_x].piece.id == 2 and (selected_piece_x ~= resultX or selected_piece_y ~= resultY)) then
-            local did_move = move_piece_on_map(map, selected_piece_x, selected_piece_y, resultX, resultY)
-            clear_all_neighbours(map, w, h)
-            move_mode = 0
-            if did_move == true then
-                pass_turn(active_player_id)
+        if move_mode == 1 then
+            local result_cube = cubecoords.from_offset(resultX, resultY)
+            local result_hex = map_get_hex(map, result_cube)
+            local selected_cube = cubecoords.from_offset(selected_piece_x, selected_piece_y)
+            local selected_hex = map_get_hex(map, selected_cube)
+            
+            -- If clicking on a legal move hex (marked with can_move), try to move
+            if result_hex and result_hex.can_move then
+                local did_move = move_piece_on_map(map, selected_piece_x, selected_piece_y, resultX, resultY)
+                clear_all_neighbours(map, w, h)
+                move_mode = 0
+                if did_move == true then
+                    pass_turn(active_player_id)
+                end
+                return
+            else
+                -- Clicking elsewhere cancels the selection
+                move_mode = 0
+                highlight = 0
+                clear_all_neighbours(map, w, h)
+                return
             end
-            return
-        elseif move_mode == 1 then
-            move_mode = 0
-            highlight = 0
-            return
         end
         if (resultX > 0 and resultY > 0) then
             if selectPieceOnMap(map, resultX, resultY, active_player_id) then
@@ -116,15 +132,28 @@ function love.draw()
     love.graphics.draw(canvas)
     love.graphics.draw(overlay)
     if (highlight == 1 and move_mode == 1) then
-        drawSelected(selected_piece_x, selected_piece_y)
+        drawSelected(map, selected_piece_x, selected_piece_y, grid)
     end
     printPlayerStock(player, active_player_id, menu_offset_x, 20)
     print_map_pieces(map, w, h, menu_offset_x, 200)
+    
+    -- Draw cube coordinates if enabled
+    if show_cube_coords then
+        love.graphics.setColor(1, 1, 1, 0.8)
+        for _, hex in pairs(map.hexes) do
+            local col, row = cubecoords.to_offset(hex.cube)
+            local hx, hy = hexagon.toPlanCoordinates(col, row, grid)
+            local coord_text = hex.cube.x .. "," .. hex.cube.y .. "," .. hex.cube.z
+            love.graphics.print(coord_text, hx - 25, hy - 8, 0, 0.8, 0.8)
+        end
+        love.graphics.setColor(1, 1, 1, 1)
+    end
 
     if resultX == -1 or resultY == -1 then
         love.graphics.print("Out of grid", 0, window_h - 20)
     else
-        love.graphics.print("Hexagon coordinates: "..resultX.." "..resultY, 0, window_h - 20)
+        local hover_cube = cubecoords.from_offset(resultX, resultY)
+        love.graphics.print("Hexagon coordinates: ["..hover_cube.x..","..hover_cube.y..","..hover_cube.z.."]", 0, window_h - 20)
     end
 
     if game_over == true then

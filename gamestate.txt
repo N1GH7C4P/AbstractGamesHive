@@ -1,14 +1,10 @@
 === HIVE GAME STATE ===
-Date: 2026-01-25 17:54:54
+Date: 2026-01-25 18:22:44
 
 Active Player: 1
-Turn Numbers: Player 1: 4, Player 2: 4
-Move Mode: 1
+Turn Numbers: Player 1: 3, Player 2: 3
+Move Mode: 0
 Game Over: false
-
-Selected Piece: (5, 6)
-  Type: Queen bee
-  Owner: Player 1
 
 === PLAYER INVENTORY ===
 Player 1:
@@ -16,38 +12,34 @@ Player 1:
   Beetle: 2 in stock
   Grasshopper: 3 in stock
   Spider: 2 in stock
-  Soldier ant: 1 in stock
+  Soldier ant: 2 in stock
 
 Player 2:
   Queen bee: 0 in stock
   Beetle: 2 in stock
   Grasshopper: 3 in stock
   Spider: 2 in stock
-  Soldier ant: 1 in stock
+  Soldier ant: 2 in stock
 
 === PIECES ON BOARD ===
-Total pieces on board: 6
+Total pieces on board: 4
 
-( 6,  5) - Player 1 - Soldier ant (id:5)
-  Adjacent pieces at: (7,5), (5,6), (6,6)
-( 5,  6) - Player 1 - Queen bee (id:1)
-  Adjacent pieces at: (6,5), (6,6)
-( 6,  6) - Player 1 - Soldier ant (id:5)
-  Adjacent pieces at: (6,5), (5,6)
-( 8,  4) - Player 2 - Soldier ant (id:5)
-  Adjacent pieces at: (7,5), (8,5)
-( 7,  5) - Player 2 - Queen bee (id:1)
-  Adjacent pieces at: (8,4), (6,5), (8,5)
-( 8,  5) - Player 2 - Soldier ant (id:5)
-  Adjacent pieces at: (8,4), (7,5)
+( 6,  5) - Player 1 - Soldier ant (id:5) [cube: 3,-8,5]
+  Adjacent pieces at: (7,5), (5,6)
+( 5,  6) - Player 1 - Queen bee (id:1) [cube: 2,-8,6]
+  Adjacent pieces at: (6,5)
+( 7,  5) - Player 2 - Soldier ant (id:5) [cube: 4,-9,5]
+  Adjacent pieces at: (8,5), (6,5)
+( 8,  5) - Player 2 - Queen bee (id:1) [cube: 5,-10,5]
+  Adjacent pieces at: (7,5)
 
 === BOARD MAP (visual) ===
  ..   ..   ..   ..   ..   ..   ..   ..   ..   ..   ..  
    ..   ..   ..   ..   ..   ..   ..   ..   ..   ..   ..  
  ..   ..   ..   ..   ..   ..   ..   ..   ..   ..   ..  
-   ..   ..   ..   ..   ..   ..   ..  [SA2]  ..   ..   ..  
- ..   ..   ..   ..   ..  [SA1] [QB2] [SA2]  ..   ..   ..  
-   ..   ..   ..   ..  [QB1] [SA1]  ..   ..   ..   ..   ..  
+   ..   ..   ..   ..   ..   ..   ..   ..   ..   ..   ..  
+ ..   ..   ..   ..   ..  [SA1] [SA2] [QB2]  ..   ..   ..  
+   ..   ..   ..   ..  [QB1]  ..   ..   ..   ..   ..   ..  
  ..   ..   ..   ..   ..   ..   ..   ..   ..   ..   ..  
    ..   ..   ..   ..   ..   ..   ..   ..   ..   ..   ..  
  ..   ..   ..   ..   ..   ..   ..   ..   ..   ..   ..  

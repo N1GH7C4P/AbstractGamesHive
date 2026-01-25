@@ -1,182 +1,241 @@
 require "player"
 require "game"
 
-local function addPieceToMap(player_nb, id, map, x, y)
+-- Map using cube coordinates
+-- The map stores hexes using cube coordinate keys
+-- Maintains backward compatibility through wrapper functions
+
+local function addPieceToMap(player_nb, id, map, col, row)
     highlight = 0
     removePieceFromStock(player_nb, id)
-    map[y][x].player_id = player_nb
-    map[y][x].piece = getPieceFromInventoryById(id)
+    local cube = cubecoords.from_offset(col, row)
+    local hex = map_get_hex(map, cube)
+    if hex then
+        hex.player_id = player_nb
+        hex.piece = getPieceFromInventoryById(id)
+    end
 end
 
 local function isMapEmpty(map)
-    local count = 0
-    for i = 1, map.h do
-        for j = 1, map.w do
-            if (map[i][j].piece) then
-                count = count + 1
-            end
+    for _, hex in pairs(map.hexes) do
+        if hex.piece then
+            return false
         end
     end
-    if count == 0 then
-        return true
-    end
-    return false
+    return true
 end
 
-local function isNextToFriendly(map, x, y, w, h)
+local function isNextToFriendly(map, col, row)
     local enemy_count = 0
     local friendly_count = 0
+    
+    local cube = cubecoords.from_offset(col, row)
+    print("isNextToFriendly: checking cube [" .. cube.x .. "," .. cube.y .. "," .. cube.z .. "]")
+    print("  active_player_id=" .. active_player_id .. ", turn_number[" .. active_player_id .. "]=" .. turn_number[active_player_id])
 
-    enemy_count, friendly_count = countNearbyPlayer(map, x, y, w, h)
-    --check for first and second piece
+    enemy_count, friendly_count = countNearbyPlayer(map, col, row, map.w, map.h)
+    print("  Neighbors: enemy=" .. enemy_count .. ", friendly=" .. friendly_count)
+    
+    -- Check for first and second piece
     if (turn_number[active_player_id] == 1) then
+        print("  First turn for player " .. active_player_id)
         local not_active = 1
         if active_player_id == 1 then
             not_active = 2
         end
+        print("  Other player turn_number[" .. not_active .. "]=" .. turn_number[not_active])
         if (turn_number[not_active] == 2) then
+            print("  Second piece placement - must have exactly 1 enemy neighbor")
             if (enemy_count ~= 1) then
+                print("  REJECTED: enemy_count=" .. enemy_count .. " != 1")
                 return false
             end
+            print("  APPROVED: enemy_count=1")
         end
         return true
     end
+    
+    print("  Normal placement - must have friendly neighbors and no enemies")
     if (friendly_count > 0 and enemy_count == 0) then
+        print("  APPROVED")
         return true
     end
+    print("  REJECTED: friendly=" .. friendly_count .. ", enemy=" .. enemy_count)
     return false
 end
 
-function tryAddPieceToMap(player_nb, id, map, x, y)
+function tryAddPieceToMap(player_nb, id, map, col, row)
     if getPiecesInStock(player_nb, id) == 0 then
-            print("Player ", player_nb, " has no piece nb ", id, " in stock.")
+        print("Player ", player_nb, " has no piece nb ", id, " in stock.")
         return false
     end
-    if (map[y][x].piece) then
+    
+    local cube = cubecoords.from_offset(col, row)
+    local hex = map_get_hex(map, cube)
+    
+    if not hex then
+        print("Hex out of bounds")
+        return false
+    end
+    
+    if hex.piece then
         print("Spot not empty")
         return false
     end
+    
     if isMapEmpty(map) then
-        addPieceToMap(player_nb, id, map, 6, 5)
+        -- Place first piece at default position
+        local first_cube = cubecoords.from_offset(6, 5)
+        local first_hex = map_get_hex(map, first_cube)
+        if first_hex then
+            highlight = 0
+            removePieceFromStock(player_nb, id)
+            first_hex.player_id = player_nb
+            first_hex.piece = getPieceFromInventoryById(id)
+        end
         return true
     end
+    
     if (turn_number[player_nb] == 4 and player[player_nb].pieces[1].inStock == 1 and id ~= 1) then
         print("Must place Queen bee")
         return false
     end
-    if not isNextToFriendly(map, x, y, w, h) then
+    
+    if not isNextToFriendly(map, col, row) then
         return false
     end
-    addPieceToMap(player_nb, id, map, x, y)
+    
+    addPieceToMap(player_nb, id, map, col, row)
     return true
 end
 
 function init_map(w, h)
-
-    map = {}
+    local map = {}
     map.w = w
     map.h = h
-
-    for i = 1, h do
-        map[i] = {}
-        for j = 1, w do
-            map[i][j] = {}
+    map.hexes = {}
+    map.offset_to_key = {}
+    
+    -- Build all hexes
+    for row = 1, h do
+        map.offset_to_key[row] = {}
+        for col = 1, w do
+            local cube = cubecoords.from_offset(col, row)
+            local key = cubecoords.to_key(cube)
+            
+            map.offset_to_key[row][col] = key
+            map.hexes[key] = {
+                cube = cube,
+                piece = nil,
+                player_id = nil,
+                neighbour = nil,
+                tmp = nil
+            }
         end
     end
-
+    
     return map
 end
 
+-- Helper to get hex by cube coordinates
+function map_get_hex(map, cube)
+    local key = cubecoords.to_key(cube)
+    return map.hexes[key]
+end
+
+-- Helper to get hex by offset coordinates (backward compat)
+function map_get_hex_offset(map, col, row)
+    if not map.offset_to_key[row] or not map.offset_to_key[row][col] then
+        return nil
+    end
+    local key = map.offset_to_key[row][col]
+    return map.hexes[key]
+end
+
 function print_map_pieces(map, w, h, x, y)
-    count = 0
-    for i = 1, h do
-        for j = 1, w do
-            if (map[i][j].piece) then
-                love.graphics.print( map[i][j].piece.name.." ("..j..", "..i..") - placed by: player"..map[i][j].player_id, x, y + count*20)
-                count = count + 1
-            end
+    local count = 0
+    for _, hex in pairs(map.hexes) do
+        if hex.piece then
+            love.graphics.print(hex.piece.name.." ["..hex.cube.x..","..hex.cube.y..","..hex.cube.z.."] - placed by: player"..hex.player_id, x, y + count*20)
+            count = count + 1
         end
     end
 end
 
-function mark_tmp_on_map(map, x, y, w, h)
-    for i = 1, h do
-        for j = 1, w do
-            if (j % 2 == 0) then
-                -- Neigbours: (X,Y-1),(X+1,Y-1),(X-1,Y),(X+1,Y),(X,Y+1),(X+1,Y+1)
-                if (i == y - 1 and j == x) or (i == y - 1 and j == x + 1) or (i == y and j == x - 1) or (i == y and j == x + 1) or (i == y + 1 and j == x) or (i == y - 1 and j == x - 1) then
-                    map[i][j].tmp = true
-                end
-            else
-                -- Neighbours: (X-1,Y-1),(X,Y-1),(X-1,Y),(X+1,Y),(X-1,Y+1),(X,Y+1)
-                if (i == y + 1 and j == x + 1) or (i == y - 1 and j == x) or (i == y and j == x - 1) or (i == y and j == x + 1) or (i == y + 1 and j == x - 1) or (i == y + 1 and j == x) then
-                    map[i][j].tmp = true
-                end
-            end
+function mark_neighbours_on_map_cube(map, cube)
+    local neighbors = cubecoords.all_neighbors(cube)
+    print("mark_neighbours_on_map_cube for [" .. cube.x .. "," .. cube.y .. "," .. cube.z .. "]")
+    for i, ncube in ipairs(neighbors) do
+        print("  Neighbor " .. i .. ": [" .. ncube.x .. "," .. ncube.y .. "," .. ncube.z .. "]")
+        local hex = map_get_hex(map, ncube)
+        if hex then
+            hex.neighbour = true
+        else
+            print("    (hex not found in map)")
         end
     end
 end
 
-function mark_neighbours_on_map(map, x, y, w, h)
-    for i = 1, h do
-        for j = 1, w do
-            if (j % 2 == 0) then
-                -- Neigbours: (X,Y-1),(X+1,Y-1),(X-1,Y),(X+1,Y),(X,Y+1),(X+1,Y+1)
-                if (i == y - 1 and j == x) or (i == y - 1 and j == x + 1) or (i == y and j == x - 1) or (i == y and j == x + 1) or (i == y + 1 and j == x) or (i == y - 1 and j == x - 1) then
-                    map[i][j].neighbour = true
-                end
-            else
-                -- Neighbours: (X-1,Y-1),(X,Y-1),(X-1,Y),(X+1,Y),(X-1,Y+1),(X,Y+1)
-                if (i == y + 1 and j == x + 1) or (i == y - 1 and j == x) or (i == y and j == x - 1) or (i == y and j == x + 1) or (i == y + 1 and j == x - 1) or (i == y + 1 and j == x) then
-                    map[i][j].neighbour = true
-                end
-            end
+-- Backward compat wrapper
+function mark_neighbours_on_map(map, col, row, w, h)
+    local cube = cubecoords.from_offset(col, row)
+    mark_neighbours_on_map_cube(map, cube)
+end
+
+function mark_tmp_on_map(map, col, row, w, h)
+    local cube = cubecoords.from_offset(col, row)
+    local neighbors = cubecoords.all_neighbors(cube)
+    for _, ncube in ipairs(neighbors) do
+        local hex = map_get_hex(map, ncube)
+        if hex then
+            hex.tmp = true
         end
     end
 end
 
 function clear_all_tmp(map, w, h)
-    for i = 1, h do
-        for j = 1, w do
-                map[i][j].tmp = nil
-        end
+    for _, hex in pairs(map.hexes) do
+        hex.tmp = nil
     end
 end
 
 function clear_all_neighbours(map, w, h)
-    for i = 1, h do
-        for j = 1, w do
-            map[i][j].neighbour = nil
-        end
+    for _, hex in pairs(map.hexes) do
+        hex.neighbour = nil
+        hex.can_move = nil
     end
 end
 
-function mark_legal_moves_for_piece(map, src_x, src_y, w, h)
+function mark_legal_moves_for_piece(map, src_col, src_row, w, h)
     print("=== mark_legal_moves_for_piece called ===")
-    print("Source: (" .. src_x .. ", " .. src_y .. ")")
+    print("Source: (" .. src_col .. ", " .. src_row .. ")")
     
-    -- Clear all previous neighbour markings
     clear_all_neighbours(map, w, h)
     
-    -- Get the piece at the source position
-    local piece = map[src_y][src_x].piece
-    if not piece then
+    local src_cube = cubecoords.from_offset(src_col, src_row)
+    local src_hex = map_get_hex(map, src_cube)
+    
+    if not src_hex or not src_hex.piece then
         print("ERROR: No piece at source!")
         return
     end
     
-    print("Piece: " .. piece.name)
+    print("Piece: " .. src_hex.piece.name)
     
-    -- For Queen, let's specifically test adjacent positions
-    if piece.id == 1 then
+    -- For Queen, test adjacent positions only
+    if src_hex.piece.id == 1 then
         print("Testing Queen moves - checking adjacent hexes only")
-        mark_neighbours_on_map(map, src_x, src_y, w, h)
+        print("Source cube: " .. cubecoords.to_key(src_cube))
+        print("Source offset: (" .. src_col .. ", " .. src_row .. ")")
+        
+        mark_neighbours_on_map_cube(map, src_cube)
         local adjacent_positions = {}
-        for i = 1, h do
-            for j = 1, w do
-                if map[i][j].neighbour and not (i == src_y and j == src_x) then
-                    table.insert(adjacent_positions, {x = j, y = i})
-                end
+        
+        for _, hex in pairs(map.hexes) do
+            if hex.neighbour and not cubecoords.equals(hex.cube, src_cube) then
+                local col, row = cubecoords.to_offset(hex.cube)
+                print("  Adjacent: (" .. col .. ", " .. row .. ") cube=" .. cubecoords.to_key(hex.cube))
+                table.insert(adjacent_positions, hex)
             end
         end
         clear_all_neighbours(map, w, h)
@@ -184,23 +243,22 @@ function mark_legal_moves_for_piece(map, src_x, src_y, w, h)
         print("Found " .. #adjacent_positions .. " adjacent hexes")
         local legal_moves = {}
         
-        for _, pos in ipairs(adjacent_positions) do
-            print("Testing adjacent hex (" .. pos.x .. ", " .. pos.y .. ")")
+        for _, hex in ipairs(adjacent_positions) do
+            local col, row = cubecoords.to_offset(hex.cube)
+            print("Testing adjacent hex (" .. col .. ", " .. row .. ")")
             
-            -- Check if destination is occupied
-            if map[pos.y][pos.x].piece then
+            if hex.piece then
                 print("  BLOCKED: hex occupied")
             else
-                -- Test the move
-                local can_detach = pieceCanDetach(map, src_x, src_y, pos.x, pos.y)
+                local can_detach = pieceCanDetach(map, src_cube)
                 print("  pieceCanDetach: " .. tostring(can_detach))
                 
                 if can_detach then
-                    local can_self_detach = try_self_detach(map, src_x, src_y, pos.x, pos.y)
+                    local can_self_detach = try_self_detach(map, src_cube, hex.cube)
                     print("  try_self_detach: " .. tostring(can_self_detach))
                     
                     if can_self_detach then
-                        table.insert(legal_moves, {x = pos.x, y = pos.y})
+                        table.insert(legal_moves, hex)
                         print("  LEGAL MOVE!")
                     end
                 end
@@ -208,212 +266,236 @@ function mark_legal_moves_for_piece(map, src_x, src_y, w, h)
         end
         
         print("Total legal moves: " .. #legal_moves)
-        for _, move in ipairs(legal_moves) do
-            map[move.y][move.x].neighbour = true
+        for _, hex in ipairs(legal_moves) do
+            hex.can_move = true
         end
         
         print("=== Complete ===")
         return
     end
     
-    -- Original logic for other pieces
+    -- For other pieces, test nearby hexes
     local legal_moves = {}
     local tests_run = 0
     local max_tests = 200
     
-    for i = 1, h do
-        for j = 1, w do
-            if not (i == src_y and j == src_x) then
-                tests_run = tests_run + 1
-                
-                if tests_run > max_tests then
-                    print("WARNING: Hit test limit!")
+    for _, hex in pairs(map.hexes) do
+        if not cubecoords.equals(hex.cube, src_cube) then
+            tests_run = tests_run + 1
+            
+            if tests_run > max_tests then
+                print("WARNING: Hit test limit!")
+                break
+            end
+            
+            -- Only test if destination is near other pieces
+            local has_nearby = false
+            mark_neighbours_on_map_cube(map, hex.cube)
+            for _, nhex in pairs(map.hexes) do
+                if nhex.neighbour and nhex.piece then
+                    has_nearby = true
                     break
                 end
-                
-                local has_nearby = false
-                mark_neighbours_on_map(map, j, i, w, h)
-                for ii = 1, h do
-                    for jj = 1, w do
-                        if map[ii][jj].neighbour and map[ii][jj].piece then
-                            has_nearby = true
-                            break
-                        end
-                    end
-                    if has_nearby then break end
-                end
-                clear_all_neighbours(map, w, h)
-                
-                if has_nearby or not map[i][j].piece then
-                    if try_move_piece_on_map(map, src_x, src_y, j, i) then
-                        table.insert(legal_moves, {x = j, y = i})
-                    end
+            end
+            clear_all_neighbours(map, w, h)
+            
+            if has_nearby or not hex.piece then
+                if try_move_piece_on_map(map, src_cube, hex.cube) then
+                    table.insert(legal_moves, hex)
                 end
             end
         end
-        if tests_run > max_tests then break end
     end
     
     print("Tests: " .. tests_run .. ", Legal moves: " .. #legal_moves)
     
-    for _, move in ipairs(legal_moves) do
-        map[move.y][move.x].neighbour = true
+    for _, hex in ipairs(legal_moves) do
+        hex.can_move = true
     end
     
     print("=== Complete ===")
 end
 
-function remove_piece_from_map(map, x, y)
-    if map[y][x].piece then
-        print("Removed piece from: "..tostring(x)..", "..tostring(y))
-        map[y][x].piece = nil
+function remove_piece_from_map(map, col, row)
+    local cube = cubecoords.from_offset(col, row)
+    local hex = map_get_hex(map, cube)
+    if hex and hex.piece then
+        print("Removed piece from: "..tostring(col)..", "..tostring(row))
+        hex.piece = nil
         return true
     end
-        print("Failed to remove piece from: "..tostring(x)..", "..tostring(y))
+    print("Failed to remove piece from: "..tostring(col)..", "..tostring(row))
     return false
 end
 
-function tmp_to_neighbor()
-    for i = 1, map.h do
-        for j = 1, map.w do
-            if map[i][j].tmp then
-                map[i][j].neighbour = true
-            end
+function tmp_to_neighbor(map)
+    for _, hex in pairs(map.hexes) do
+        if hex.tmp then
+            hex.neighbour = true
         end
     end
 end
 
-function flood_neighbours_neighbours_jump(map, x, y, w, h)
-    clear_all_tmp(map, map.w, map.h)
-    for i = 1, h do
-        for j = 1, w do
-            if map[i][j].neighbour then
-                mark_tmp_on_map(map, j, i, w, h)
-            end
+function flood_neighbours_neighbours_jump(map, col, row, w, h)
+    clear_all_tmp(map, w, h)
+    for _, hex in pairs(map.hexes) do
+        if hex.neighbour then
+            local hcol, hrow = cubecoords.to_offset(hex.cube)
+            mark_tmp_on_map(map, hcol, hrow, w, h)
         end
     end
     clear_all_neighbours(map, w, h)
-    tmp_to_neighbor()
-    clear_all_tmp(map, map.w, map.h)
+    tmp_to_neighbor(map)
+    clear_all_tmp(map, w, h)
 end
 
-function flood_neighbours_neighbours(map, x, y, w, h)
-    clear_all_tmp(map, map.w, map.h)
-    for i = 1, h do
-        for j = 1, w do
-            if map[i][j].neighbour then
-                mark_tmp_on_map(map, j, i, w, h)
-            end
+function flood_neighbours_neighbours(map, col, row, w, h)
+    clear_all_tmp(map, w, h)
+    for _, hex in pairs(map.hexes) do
+        if hex.neighbour then
+            local hcol, hrow = cubecoords.to_offset(hex.cube)
+            mark_tmp_on_map(map, hcol, hrow, w, h)
         end
     end
-    tmp_to_neighbor()
-    clear_all_tmp(map, map.w, map.h)
+    tmp_to_neighbor(map)
+    clear_all_tmp(map, w, h)
 end
 
-function flood_neighbours(map, x, y, w, h)
-    for i = 1, h do
-        for j = 1, w do
-            if (j % 2 == 0) then
-                if (i == y - 1 and j == x) or (i == y - 1 and j == x + 1) or (i == y and j == x - 1) or (i == y and j == x + 1) or (i == y + 1 and j == x) or (i == y - 1 and j == x - 1) then
-                    if not map[i][j].neighbour then
-                        if map[i][j].piece then
-                            map[i][j].neighbour = true
-                            flood_neighbours(map, j, i, w, h)
-                        end
-                    end
-                    if map[i][j].piece then
-                        map[i][j].neighbour = true
-                    end
-                end
-            else
-                if (i == y + 1 and j == x + 1) or (i == y - 1 and j == x) or (i == y and j == x - 1) or (i == y and j == x + 1) or (i == y + 1 and j == x - 1) or (i == y + 1 and j == x) then
-                    if not map[i][j].neighbour  then
-                        if map[i][j].piece then
-                            map[i][j].neighbour = true
-                            flood_neighbours(map, j, i, w, h)
-                        end
-                    end
-                    if map[i][j].piece then
-                        map[i][j].neighbour = true
-                    end
-                end
+-- Global counter for debugging
+local flood_call_count = 0
+local MAX_FLOOD_CALLS = 100
+
+function flood_neighbours(map, cube)
+    flood_call_count = flood_call_count + 1
+    if flood_call_count > MAX_FLOOD_CALLS then
+        print("ERROR: flood_neighbours called too many times! Infinite loop detected!")
+        print("Current cube: " .. cubecoords.to_key(cube))
+        flood_call_count = 0  -- Reset to prevent spam
+        return
+    end
+    
+    local hex = map_get_hex(map, cube)
+    if not hex then 
+        flood_call_count = flood_call_count - 1
+        return 
+    end
+    
+    local neighbors = cubecoords.all_neighbors(cube)
+    for _, ncube in ipairs(neighbors) do
+        local nhex = map_get_hex(map, ncube)
+        if nhex and not nhex.neighbour then
+            if nhex.piece then
+                nhex.neighbour = true
+                flood_neighbours(map, ncube)
             end
         end
+        if nhex and nhex.piece then
+            nhex.neighbour = true
+        end
     end
+    
+    flood_call_count = flood_call_count - 1
 end
 
 function firstPieceCoords(map)
-    for i = 1, h do
-        for j = 1, w do
-            if map[i][j].piece then
-                return j, i
-            end
+    for _, hex in pairs(map.hexes) do
+        if hex.piece then
+            return hex.cube
         end
     end
+    return nil
 end
 
-function pieceCanDetach(map, x, y)
-    local tmp = map[y][x].piece
-    map[y][x].piece = nil
-    clear_all_neighbours(map, w, h)
-    local firstx, firsty = firstPieceCoords(map)
-    flood_neighbours(map, firstx, firsty, w, h)
-    map[y][x].piece = tmp
-    map[y][x].neighbour = true
-    for i = 1, h do
-        for j = 1, w do
-            if map[i][j].piece and not map[i][j].neighbour then
-                clear_all_neighbours(map, w, h)
-                return false
-            end
+function pieceCanDetach(map, cube)
+    local hex = map_get_hex(map, cube)
+    if not hex then return false end
+    
+    local tmp = hex.piece
+    hex.piece = nil
+    clear_all_neighbours(map, map.w, map.h)
+    
+    local first_cube = firstPieceCoords(map)
+    if not first_cube then
+        hex.piece = tmp
+        return true
+    end
+    
+    flood_neighbours(map, first_cube)
+    hex.piece = tmp
+    hex.neighbour = true
+    
+    for _, check_hex in pairs(map.hexes) do
+        if check_hex.piece and not check_hex.neighbour then
+            clear_all_neighbours(map, map.w, map.h)
+            return false
         end
     end
-    clear_all_neighbours(map, w, h)
+    
+    clear_all_neighbours(map, map.w, map.h)
     return true
 end
 
-function try_self_detach(map, src_x, src_y, dest_x, dest_y)
-    clear_all_neighbours(map, w, h)
-    local tmp = map[src_y][src_x].player_id
-    map[src_y][src_x].player_id = nil
-    local enemy, friend = countNearbyPlayer(map, dest_x, dest_y, w, h)
+function try_self_detach(map, src_cube, dest_cube)
+    clear_all_neighbours(map, map.w, map.h)
+    
+    local src_hex = map_get_hex(map, src_cube)
+    if not src_hex then return false end
+    
+    local tmp = src_hex.player_id
+    src_hex.player_id = nil
+    
+    -- Convert cube to offset coordinates for countNearbyPlayer
+    local dest_col, dest_row = cubecoords.to_offset(dest_cube)
+    local enemy, friend = countNearbyPlayer(map, dest_col, dest_row, map.w, map.h)
     if (enemy + friend == 0) then
-        map[src_y][src_x].player_id = tmp
+        src_hex.player_id = tmp
         return false
     end
-    map[src_y][src_x].player_id = tmp
+    
+    src_hex.player_id = tmp
     return true
 end
 
-function try_move_piece_on_map(map, src_x, src_y, dest_x, dest_y)
-    if (not pieceCanDetach(map, src_x, src_y, dest_x, dest_y)) then
+function try_move_piece_on_map(map, src_cube, dest_cube)
+    if not pieceCanDetach(map, src_cube) then
         return false
     end
-    if not try_self_detach(map, src_x, src_y, dest_x, dest_y) then
+    if not try_self_detach(map, src_cube, dest_cube) then
         return false
     end
 
     clear_all_neighbours(map, map.w, map.h)
-    if (map[dest_y][dest_x].piece and map[src_y][src_x].piece.id ~= 2) then
+    
+    local src_hex = map_get_hex(map, src_cube)
+    local dest_hex = map_get_hex(map, dest_cube)
+    
+    if not src_hex or not dest_hex then return false end
+    if dest_hex.piece and src_hex.piece.id ~= 2 then
         return false
     end
     
     -- Call the piece's try_to_move method
-    if map[src_y][src_x].piece and map[src_y][src_x].piece.try_to_move then
-        return map[src_y][src_x].piece:try_to_move(map, src_x, src_y, dest_x, dest_y, map.w, map.h)
+    if src_hex.piece and src_hex.piece.try_to_move then
+        return src_hex.piece:try_to_move(map, src_cube, dest_cube)
     end
     
     return false
 end
 
-function move_piece_on_map(map, src_x, src_y, dest_x, dest_y)
-    if not try_move_piece_on_map(map, src_x, src_y, dest_x, dest_y) then
+function move_piece_on_map(map, src_col, src_row, dest_col, dest_row)
+    local src_cube = cubecoords.from_offset(src_col, src_row)
+    local dest_cube = cubecoords.from_offset(dest_col, dest_row)
+    
+    if not try_move_piece_on_map(map, src_cube, dest_cube) then
         return false
     end
     
+    local src_hex = map_get_hex(map, src_cube)
+    local dest_hex = map_get_hex(map, dest_cube)
+    
     -- Call the piece's move_piece method if available
-    if map[src_y][src_x].piece and map[src_y][src_x].piece.move_piece then
-        return map[src_y][src_x].piece:move_piece(map, src_x, src_y, dest_x, dest_y, active_player_id)
+    if src_hex.piece and src_hex.piece.move_piece then
+        return src_hex.piece:move_piece(map, src_cube, dest_cube, active_player_id)
     end
     
     return false
