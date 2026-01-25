@@ -17,57 +17,97 @@ function Grasshopper:try_to_move(map, src_cube, dest_cube)
     -- Grasshopper jumps in a straight line over one or more pieces
     -- Must land in first empty space after jumping
     
-    -- Get direction from source to destination
-    local dir = cubecoords.direction(src_cube, dest_cube)
-    
-    -- Check if direction is aligned with hex grid axes
-    if not cubecoords.is_aligned(dir) then
+    -- Check if they're aligned along a cube axis
+    if not cubecoords.is_aligned(cubecoords.subtract(dest_cube, src_cube)) then
         return false
     end
     
-    -- Normalize the direction
+    -- Get unit direction from source to destination
+    local dir = cubecoords.direction(src_cube, dest_cube)
     local unit_dir = cubecoords.normalize_direction(dir)
     if not unit_dir then
         return false
     end
     
-    -- Walk along the direction, counting pieces jumped
-    local current = src_cube
-    local jumped_count = 0
-    local found_empty = false
+    -- Walk along the direction, must jump over at least one piece
+    local current = cubecoords.add(src_cube, unit_dir)
+    local jumped_pieces = 0
     
-    for i = 1, 20 do  -- Max distance check
-        current = cubecoords.add(current, unit_dir)
+    -- Count pieces we're jumping over
+    while true do
         local hex = map_get_hex(map, current)
-        
         if not hex then
-            -- Out of bounds
-            break
+            return false -- Out of bounds before finding empty space
         end
         
         if hex.piece then
-            -- Jumping over a piece
-            jumped_count = jumped_count + 1
+            jumped_pieces = jumped_pieces + 1
+            current = cubecoords.add(current, unit_dir)
         else
-            -- Found empty space - this is where grasshopper must land
-            if cubecoords.equals(current, dest_cube) and jumped_count > 0 then
-                -- Destination must be adjacent to at least one piece (to maintain hive)
-                local neighbors = cubecoords.all_neighbors(dest_cube)
-                for _, ncube in ipairs(neighbors) do
-                    local nhex = map_get_hex(map, ncube)
-                    if nhex and nhex.piece and not cubecoords.equals(ncube, src_cube) then
-                        return true
-                    end
-                end
-                return false
+            -- Found first empty space after jumping
+            if jumped_pieces > 0 and cubecoords.equals(current, dest_cube) then
+                return true
             else
-                -- Hit empty space but it's not our destination
-                return false
+                return false -- Either no pieces jumped or wrong destination
             end
+        end
+        
+        -- Safety check to prevent infinite loop
+        if jumped_pieces > 20 then
+            return false
         end
     end
     
     return false
+end
+
+-- Helper function to get all legal moves for grasshopper
+function Grasshopper:get_legal_moves(map, src_cube)
+    local legal_moves = {}
+    local directions = cubecoords.directions()
+    
+    print("Grasshopper get_legal_moves from [" .. src_cube.x .. "," .. src_cube.y .. "," .. src_cube.z .. "]")
+    
+    -- Check each of the 6 directions
+    for i, dir in ipairs(directions) do
+        print("  Direction " .. i .. ": [" .. dir.x .. "," .. dir.y .. "," .. dir.z .. "]")
+        local current = cubecoords.add(src_cube, dir)
+        local jumped_pieces = 0
+        
+        -- Walk in this direction
+        while true do
+            local hex = map_get_hex(map, current)
+            if not hex then
+                print("    Out of bounds at [" .. current.x .. "," .. current.y .. "," .. current.z .. "]")
+                break -- Out of bounds
+            end
+            
+            if hex.piece then
+                -- Jumping over a piece
+                jumped_pieces = jumped_pieces + 1
+                print("    Jumped over piece #" .. jumped_pieces .. " at [" .. current.x .. "," .. current.y .. "," .. current.z .. "]")
+                current = cubecoords.add(current, dir)
+            else
+                -- Found empty space - this is a valid landing spot if we jumped at least 1 piece
+                if jumped_pieces > 0 then
+                    print("    LEGAL MOVE: [" .. current.x .. "," .. current.y .. "," .. current.z .. "] after jumping " .. jumped_pieces .. " pieces")
+                    table.insert(legal_moves, current)
+                else
+                    print("    Empty space at [" .. current.x .. "," .. current.y .. "," .. current.z .. "] but no pieces jumped")
+                end
+                break -- Only the first empty space in this direction is valid
+            end
+            
+            -- Safety check
+            if jumped_pieces > 20 then
+                print("    Safety limit reached!")
+                break
+            end
+        end
+    end
+    
+    print("  Total legal moves found: " .. #legal_moves)
+    return legal_moves
 end
 
 function Grasshopper:move_piece(map, src_cube, dest_cube, active_player_id)

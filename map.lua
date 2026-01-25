@@ -164,14 +164,10 @@ end
 
 function mark_neighbours_on_map_cube(map, cube)
     local neighbors = cubecoords.all_neighbors(cube)
-    print("mark_neighbours_on_map_cube for [" .. cube.x .. "," .. cube.y .. "," .. cube.z .. "]")
     for i, ncube in ipairs(neighbors) do
-        print("  Neighbor " .. i .. ": [" .. ncube.x .. "," .. ncube.y .. "," .. ncube.z .. "]")
         local hex = map_get_hex(map, ncube)
         if hex then
             hex.neighbour = true
-        else
-            print("    (hex not found in map)")
         end
     end
 end
@@ -206,13 +202,12 @@ function clear_all_neighbours(map, w, h)
     end
 end
 
-function mark_legal_moves_for_piece(map, src_col, src_row, w, h)
+function mark_legal_moves_for_piece(map, src_cube, w, h)
     print("=== mark_legal_moves_for_piece called ===")
-    print("Source: (" .. src_col .. ", " .. src_row .. ")")
+    print("Source cube: [" .. src_cube.x .. "," .. src_cube.y .. "," .. src_cube.z .. "]")
     
     clear_all_neighbours(map, w, h)
     
-    local src_cube = cubecoords.from_offset(src_col, src_row)
     local src_hex = map_get_hex(map, src_cube)
     
     if not src_hex or not src_hex.piece then
@@ -225,8 +220,6 @@ function mark_legal_moves_for_piece(map, src_col, src_row, w, h)
     -- For Queen, test adjacent positions only
     if src_hex.piece.id == 1 then
         print("Testing Queen moves - checking adjacent hexes only")
-        print("Source cube: " .. cubecoords.to_key(src_cube))
-        print("Source offset: (" .. src_col .. ", " .. src_row .. ")")
         
         mark_neighbours_on_map_cube(map, src_cube)
         local adjacent_positions = {}
@@ -261,6 +254,35 @@ function mark_legal_moves_for_piece(map, src_col, src_row, w, h)
                         table.insert(legal_moves, hex)
                         print("  LEGAL MOVE!")
                     end
+                end
+            end
+        end
+        
+        print("Total legal moves: " .. #legal_moves)
+        for _, hex in ipairs(legal_moves) do
+            hex.can_move = true
+        end
+        
+        print("=== Complete ===")
+        return
+    end
+    
+    -- For Grasshopper (id == 3), use specialized method
+    if src_hex.piece.id == 3 and src_hex.piece.get_legal_moves then
+        print("Testing Grasshopper moves - checking 6 directions")
+        
+        local grasshopper_moves = src_hex.piece:get_legal_moves(map, src_cube)
+        print("Found " .. #grasshopper_moves .. " potential moves")
+        
+        local legal_moves = {}
+        for _, dest_cube in ipairs(grasshopper_moves) do
+            -- Verify the piece can detach and the hive won't break
+            if pieceCanDetach(map, src_cube) and try_self_detach(map, src_cube, dest_cube) then
+                local hex = map_get_hex(map, dest_cube)
+                if hex then
+                    table.insert(legal_moves, hex)
+                    local col, row = cubecoords.to_offset(dest_cube)
+                    print("  Legal: (" .. col .. ", " .. row .. ")")
                 end
             end
         end

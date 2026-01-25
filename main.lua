@@ -97,7 +97,8 @@ function love.mousepressed(x, y, button, istouch)
             if selectPieceOnMap(map, resultX, resultY, active_player_id) then
                 highlight = 1
                 clear_all_neighbours(map, w, h)
-                mark_legal_moves_for_piece(map, resultX, resultY, w, h)
+                local selected_cube = cubecoords.from_offset(resultX, resultY)
+                mark_legal_moves_for_piece(map, selected_cube, w, h)
                 selected_piece_x = resultX
                 selected_piece_y = resultY
                 if player[active_player_id].pieces[1].inStock == 0 then
