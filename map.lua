@@ -333,6 +333,40 @@ function mark_legal_moves_for_piece(map, src_cube, w, h)
         return
     end
     
+    -- For Soldier Ant (id == 5), use specialized method
+    if src_hex.piece.id == 5 and src_hex.piece.get_legal_moves then
+        print("Testing Soldier Ant moves - unlimited movement with BFS")
+        
+        -- Check if piece can detach first
+        if not pieceCanDetach(map, src_cube) then
+            print("Soldier Ant cannot detach - would break hive")
+            print("=== Complete ===")
+            return
+        end
+        
+        local ant_moves = src_hex.piece:get_legal_moves(map, src_cube)
+        print("Found " .. #ant_moves .. " potential moves")
+        
+        local legal_moves = {}
+        for _, dest_cube in ipairs(ant_moves) do
+            -- Verify the hive won't break when moving here
+            if try_self_detach(map, src_cube, dest_cube) then
+                local hex = map_get_hex(map, dest_cube)
+                if hex then
+                    table.insert(legal_moves, hex)
+                end
+            end
+        end
+        
+        print("Total legal moves: " .. #legal_moves)
+        for _, hex in ipairs(legal_moves) do
+            hex.can_move = true
+        end
+        
+        print("=== Complete ===")
+        return
+    end
+    
     -- For other pieces, test nearby hexes
     local legal_moves = {}
     local tests_run = 0

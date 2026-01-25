@@ -44,16 +44,18 @@ function init_pieces()
 end
 
 function getPieceFromInventoryById(id)
+    -- Return a new instance of the appropriate piece class
+    -- This ensures each placed piece has all the methods available
     if id == 1 then
-        return (piecesInventory.queenBee)
+        return QueenBee:new(active_player_id)
     elseif id == 2 then
-        return (piecesInventory.beetle)
+        return Beetle:new(active_player_id)
     elseif id == 3 then
-        return (piecesInventory.grassHopper)
+        return Grasshopper:new(active_player_id)
     elseif id == 4 then
-        return (piecesInventory.spider)
+        return Spider:new(active_player_id)
     elseif id == 5 then
-        return (piecesInventory.soldierAnt)
+        return SoldierAnt:new(active_player_id)
     end
 end
 

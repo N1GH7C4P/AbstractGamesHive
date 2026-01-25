@@ -17,8 +17,125 @@ function SoldierAnt:try_to_move(map, src_cube, dest_cube)
     -- Soldier ant can move any number of spaces around the edge of the hive
     -- Must stay adjacent to at least one piece at all times
     -- Cannot move through tight spaces (Freedom to Move rule)
-    -- TODO: Implement proper path-finding
+    
+    -- Use BFS to find if destination is reachable
+    local visited = {}
+    local queue = {src_cube}
+    visited[cubecoords.to_key(src_cube)] = true
+    
+    while #queue > 0 do
+        local current = table.remove(queue, 1)
+        
+        if cubecoords.equals(current, dest_cube) then
+            return true
+        end
+        
+        -- Try each neighbor
+        local neighbors = cubecoords.all_neighbors(current)
+        for _, next_cube in ipairs(neighbors) do
+            local next_hex = map_get_hex(map, next_cube)
+            local next_key = cubecoords.to_key(next_cube)
+            
+            if next_hex and not next_hex.piece and not visited[next_key] then
+                -- Check if has adjacent pieces (stays connected)
+                local has_adjacent_piece = false
+                local next_neighbors = cubecoords.all_neighbors(next_cube)
+                for _, nn in ipairs(next_neighbors) do
+                    local nn_hex = map_get_hex(map, nn)
+                    if nn_hex and nn_hex.piece then
+                        has_adjacent_piece = true
+                        break
+                    end
+                end
+                
+                if has_adjacent_piece and self:can_move_through_gap(map, current, next_cube) then
+                    visited[next_key] = true
+                    table.insert(queue, next_cube)
+                end
+            end
+        end
+    end
+    
+    return false
+end
+
+-- Helper to check if a move through a gap is allowed (freedom to move)
+function SoldierAnt:can_move_through_gap(map, from_cube, to_cube)
+    -- Get the two hexes that are common neighbors of both from and to
+    local from_neighbors = cubecoords.all_neighbors(from_cube)
+    local to_neighbors = cubecoords.all_neighbors(to_cube)
+    
+    local common_neighbors = {}
+    for _, fn in ipairs(from_neighbors) do
+        for _, tn in ipairs(to_neighbors) do
+            if cubecoords.equals(fn, tn) then
+                table.insert(common_neighbors, fn)
+            end
+        end
+    end
+    
+    -- Need exactly 2 common neighbors (the ones on either side of the gap)
+    if #common_neighbors ~= 2 then
+        return false
+    end
+    
+    -- Check if both sides are blocked (if so, cannot move through)
+    local hex1 = map_get_hex(map, common_neighbors[1])
+    local hex2 = map_get_hex(map, common_neighbors[2])
+    
+    local blocked1 = hex1 and hex1.piece ~= nil
+    local blocked2 = hex2 and hex2.piece ~= nil
+    
+    -- If both sides are blocked, cannot move through
+    if blocked1 and blocked2 then
+        return false
+    end
+    
+    -- At least one side is open, can move through
     return true
+end
+
+-- Helper function to get all legal moves for soldier ant
+function SoldierAnt:get_legal_moves(map, src_cube)
+    local legal_moves = {}
+    local visited = {}
+    local queue = {src_cube}
+    visited[cubecoords.to_key(src_cube)] = true
+    
+    while #queue > 0 do
+        local current = table.remove(queue, 1)
+        
+        -- Try each neighbor
+        local neighbors = cubecoords.all_neighbors(current)
+        for _, next_cube in ipairs(neighbors) do
+            local next_hex = map_get_hex(map, next_cube)
+            local next_key = cubecoords.to_key(next_cube)
+            
+            if next_hex and not next_hex.piece and not visited[next_key] then
+                -- Check if has adjacent pieces
+                local has_adjacent_piece = false
+                local next_neighbors = cubecoords.all_neighbors(next_cube)
+                for _, nn in ipairs(next_neighbors) do
+                    local nn_hex = map_get_hex(map, nn)
+                    if nn_hex and nn_hex.piece then
+                        has_adjacent_piece = true
+                        break
+                    end
+                end
+                
+                if has_adjacent_piece and self:can_move_through_gap(map, current, next_cube) then
+                    visited[next_key] = true
+                    table.insert(queue, next_cube)
+                    -- Add to legal moves (excluding starting position)
+                    if not cubecoords.equals(next_cube, src_cube) then
+                        table.insert(legal_moves, next_cube)
+                    end
+                end
+            end
+        end
+    end
+    
+    return legal_moves
 end
 
 function SoldierAnt:move_piece(map, src_cube, dest_cube, active_player_id)
