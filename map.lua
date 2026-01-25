@@ -296,6 +296,43 @@ function mark_legal_moves_for_piece(map, src_cube, w, h)
         return
     end
     
+    -- For Spider (id == 4), use specialized method
+    print("Checking Spider: piece.id=" .. tostring(src_hex.piece.id) .. ", has get_legal_moves=" .. tostring(src_hex.piece.get_legal_moves ~= nil))
+    if src_hex.piece.id == 4 and src_hex.piece.get_legal_moves then
+        print("Testing Spider moves - finding paths of exactly 3 steps")
+        
+        -- Check if piece can detach first
+        if not pieceCanDetach(map, src_cube) then
+            print("Spider cannot detach - would break hive")
+            print("=== Complete ===")
+            return
+        end
+        
+        local spider_moves = src_hex.piece:get_legal_moves(map, src_cube)
+        print("Found " .. #spider_moves .. " potential moves")
+        
+        local legal_moves = {}
+        for _, dest_cube in ipairs(spider_moves) do
+            -- Verify the hive won't break when moving here
+            if try_self_detach(map, src_cube, dest_cube) then
+                local hex = map_get_hex(map, dest_cube)
+                if hex then
+                    table.insert(legal_moves, hex)
+                    local col, row = cubecoords.to_offset(dest_cube)
+                    print("  Legal: (" .. col .. ", " .. row .. ")")
+                end
+            end
+        end
+        
+        print("Total legal moves: " .. #legal_moves)
+        for _, hex in ipairs(legal_moves) do
+            hex.can_move = true
+        end
+        
+        print("=== Complete ===")
+        return
+    end
+    
     -- For other pieces, test nearby hexes
     local legal_moves = {}
     local tests_run = 0

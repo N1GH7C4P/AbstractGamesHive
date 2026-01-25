@@ -2,278 +2,246 @@
 Loading game state from: gamestate.txt
 Set active player: 1
 Set turn numbers: P1=4, P2=4
+Loaded: Spider at (4, 5) for Player 1
 Loaded: Soldier ant at (6, 5) for Player 1
-Loaded: Queen bee at (7, 6) for Player 1
-Loaded: Grasshopper at (8, 6) for Player 1
-Loaded: Grasshopper at (4, 4) for Player 2
-Loaded: Queen bee at (5, 4) for Player 2
-Loaded: Soldier ant at (5, 5) for Player 2
+Loaded: Queen bee at (5, 6) for Player 1
+Loaded: Soldier ant at (7, 5) for Player 2
+Loaded: Queen bee at (8, 5) for Player 2
+Loaded: Spider at (9, 6) for Player 2
 Game state loaded successfully!
 Pieces on board: 6
+Spot not empty
 === mark_legal_moves_for_piece called ===
-Source cube: [8,-10,2]
-Piece: Grasshopper
-Testing Grasshopper moves - checking 6 directions
-Grasshopper get_legal_moves from [8,-10,2]
-  Direction 1: [1,-1,0]
-    Empty space at [9,-11,2] but no pieces jumped
-  Direction 2: [1,0,-1]
-    Empty space at [9,-10,1] but no pieces jumped
-  Direction 3: [0,1,-1]
-    Empty space at [8,-9,1] but no pieces jumped
-  Direction 4: [-1,1,0]
-    Jumped over piece #1 at [7,-9,2]
-    Jumped over piece #2 at [6,-8,2]
-    Jumped over piece #3 at [5,-7,2]
-    Jumped over piece #4 at [4,-6,2]
-    LEGAL MOVE: [3,-5,2] after jumping 4 pieces
-  Direction 5: [-1,0,1]
-    Empty space at [7,-10,3] but no pieces jumped
-  Direction 6: [0,-1,1]
-    Empty space at [8,-11,3] but no pieces jumped
-  Total legal moves found: 1
-Found 1 potential moves
-  Legal: (3, 4)
-Total legal moves: 1
+Source cube: [4,-7,3]
+Piece: Spider
+Checking Spider: piece.id=4, has get_legal_moves=true
+Testing Spider moves - finding paths of exactly 3 steps
+Found 10 potential moves
+  Legal: (7, 4)
+  Legal: (6, 4)
+  Legal: (5, 5)
+  Legal: (4, 6)
+  Legal: (5, 7)
+  Legal: (6, 6)
+Total legal moves: 6
 === Complete ===
 === mark_legal_moves_for_piece called ===
-Source cube: [4,-6,2]
-Piece: Grasshopper
-Testing Grasshopper moves - checking 6 directions
-Grasshopper get_legal_moves from [4,-6,2]
-  Direction 1: [1,-1,0]
-    Jumped over piece #1 at [5,-7,2]
-    Jumped over piece #2 at [6,-8,2]
-    Jumped over piece #3 at [7,-9,2]
-    LEGAL MOVE: [8,-10,2] after jumping 3 pieces
-  Direction 2: [1,0,-1]
-    Jumped over piece #1 at [5,-6,1]
-    LEGAL MOVE: [6,-6,0] after jumping 1 pieces
-  Direction 3: [0,1,-1]
-    Empty space at [4,-5,1] but no pieces jumped
-  Direction 4: [-1,1,0]
-    Jumped over piece #1 at [3,-5,2]
-    LEGAL MOVE: [2,-4,2] after jumping 1 pieces
-  Direction 5: [-1,0,1]
-    Empty space at [3,-6,3] but no pieces jumped
-  Direction 6: [0,-1,1]
-    Empty space at [4,-7,3] but no pieces jumped
-  Total legal moves found: 3
-Found 3 potential moves
-Total legal moves: 0
+Source cube: [9,-10,1]
+Piece: Spider
+Checking Spider: piece.id=4, has get_legal_moves=true
+Testing Spider moves - finding paths of exactly 3 steps
+Found 13 potential moves
+  Legal: (9, 5)
+  Legal: (8, 6)
+  Legal: (8, 4)
+  Legal: (7, 4)
+  Legal: (7, 7)
+  Legal: (7, 6)
+  Legal: (6, 7)
+  Legal: (7, 6)
+  Legal: (7, 7)
+Total legal moves: 9
+=== Complete ===
+isNextToFriendly: checking cube [8,-10,2]
+  active_player_id=2, turn_number[2]=4
+  Neighbors: enemy=0, friendly=2
+  Normal placement - must have friendly neighbors and no enemies
+  APPROVED
+isNextToFriendly: checking cube [5,-7,2]
+  active_player_id=1, turn_number[1]=5
+  Neighbors: enemy=0, friendly=2
+  Normal placement - must have friendly neighbors and no enemies
+  APPROVED
+=== mark_legal_moves_for_piece called ===
+Source cube: [9,-10,1]
+Piece: Spider
+Checking Spider: piece.id=4, has get_legal_moves=true
+Testing Spider moves - finding paths of exactly 3 steps
+Found 8 potential moves
+  Legal: (9, 5)
+  Legal: (8, 7)
+  Legal: (8, 4)
+  Legal: (9, 7)
+  Legal: (7, 4)
+  Legal: (7, 7)
+Total legal moves: 6
 === Complete ===
 === mark_legal_moves_for_piece called ===
-Source cube: [5,-6,1]
+Source cube: [6,-9,3]
+Piece: Spider
+Checking Spider: piece.id=4, has get_legal_moves=true
+Testing Spider moves - finding paths of exactly 3 steps
+Found 6 potential moves
+  Legal: (9, 8)
+  Legal: (5, 7)
+  Legal: (7, 7)
+  Legal: (4, 5)
+  Legal: (8, 7)
+  Legal: (4, 6)
+Total legal moves: 6
+=== Complete ===
+=== mark_legal_moves_for_piece called ===
+Source cube: [5,-7,2]
+Piece: Soldier ant
+Checking Spider: piece.id=5, has get_legal_moves=false
+Tests: 109, Legal moves: 0
+=== Complete ===
+=== mark_legal_moves_for_piece called ===
+Source cube: [5,-8,3]
 Piece: Queen bee
 Testing Queen moves - checking adjacent hexes only
-  Adjacent: (4, 3) cube=4,-5,1
-  Adjacent: (5, 3) cube=5,-5,0
-  Adjacent: (6, 3) cube=6,-6,0
-  Adjacent: (4, 4) cube=4,-6,2
-  Adjacent: (6, 4) cube=6,-7,1
+  Adjacent: (4, 5) cube=4,-7,3
   Adjacent: (5, 5) cube=5,-7,2
+  Adjacent: (6, 5) cube=6,-8,2
+  Adjacent: (4, 6) cube=4,-8,4
+  Adjacent: (6, 6) cube=6,-9,3
+  Adjacent: (5, 7) cube=5,-9,4
 Found 6 adjacent hexes
-Testing adjacent hex (4, 3)
-  pieceCanDetach: true
-  try_self_detach: true
-  LEGAL MOVE!
-Testing adjacent hex (5, 3)
-  pieceCanDetach: true
-  try_self_detach: false
-Testing adjacent hex (6, 3)
-  pieceCanDetach: true
-  try_self_detach: false
-Testing adjacent hex (4, 4)
-  BLOCKED: hex occupied
-Testing adjacent hex (6, 4)
+Testing adjacent hex (4, 5)
   pieceCanDetach: true
   try_self_detach: true
   LEGAL MOVE!
 Testing adjacent hex (5, 5)
   BLOCKED: hex occupied
+Testing adjacent hex (6, 5)
+  BLOCKED: hex occupied
+Testing adjacent hex (4, 6)
+  pieceCanDetach: true
+  try_self_detach: false
+Testing adjacent hex (6, 6)
+  BLOCKED: hex occupied
+Testing adjacent hex (5, 7)
+  pieceCanDetach: true
+  try_self_detach: true
+  LEGAL MOVE!
 Total legal moves: 2
 === Complete ===
-=== mark_legal_moves_for_piece called ===
-Source cube: [3,-5,2]
-Piece: Grasshopper
-Testing Grasshopper moves - checking 6 directions
-Grasshopper get_legal_moves from [3,-5,2]
-  Direction 1: [1,-1,0]
-    Jumped over piece #1 at [4,-6,2]
-    Jumped over piece #2 at [5,-7,2]
-    Jumped over piece #3 at [6,-8,2]
-    Jumped over piece #4 at [7,-9,2]
-    LEGAL MOVE: [8,-10,2] after jumping 4 pieces
-  Direction 2: [1,0,-1]
-    Jumped over piece #1 at [4,-5,1]
-    LEGAL MOVE: [5,-5,0] after jumping 1 pieces
-  Direction 3: [0,1,-1]
-    Empty space at [3,-4,1] but no pieces jumped
-  Direction 4: [-1,1,0]
-    Empty space at [2,-4,2] but no pieces jumped
-  Direction 5: [-1,0,1]
-    Empty space at [2,-5,3] but no pieces jumped
-  Direction 6: [0,-1,1]
-    Empty space at [3,-6,3] but no pieces jumped
-  Total legal moves found: 2
-Found 2 potential moves
-  Legal: (8, 6)
-  Legal: (5, 3)
-Total legal moves: 2
-=== Complete ===
-Spot not empty
-Spot not empty
-Spot not empty
 === mark_legal_moves_for_piece called ===
 Source cube: [5,-7,2]
 Piece: Soldier ant
+Checking Spider: piece.id=5, has get_legal_moves=false
 Tests: 109, Legal moves: 0
 === Complete ===
 === mark_legal_moves_for_piece called ===
-Source cube: [4,-6,2]
-Piece: Grasshopper
-Testing Grasshopper moves - checking 6 directions
-Grasshopper get_legal_moves from [4,-6,2]
-  Direction 1: [1,-1,0]
-    Jumped over piece #1 at [5,-7,2]
-    Jumped over piece #2 at [6,-8,2]
-    Jumped over piece #3 at [7,-9,2]
-    LEGAL MOVE: [8,-10,2] after jumping 3 pieces
-  Direction 2: [1,0,-1]
-    Empty space at [5,-6,1] but no pieces jumped
-  Direction 3: [0,1,-1]
-    Jumped over piece #1 at [4,-5,1]
-    LEGAL MOVE: [4,-4,0] after jumping 1 pieces
-  Direction 4: [-1,1,0]
-    Empty space at [3,-5,2] but no pieces jumped
-  Direction 5: [-1,0,1]
-    Empty space at [3,-6,3] but no pieces jumped
-  Direction 6: [0,-1,1]
-    Empty space at [4,-7,3] but no pieces jumped
-  Total legal moves found: 2
-Found 2 potential moves
-Total legal moves: 0
-=== Complete ===
-=== mark_legal_moves_for_piece called ===
-Source cube: [4,-5,1]
+Source cube: [5,-8,3]
 Piece: Queen bee
 Testing Queen moves - checking adjacent hexes only
-  Adjacent: (4, 2) cube=4,-4,0
-  Adjacent: (3, 3) cube=3,-4,1
-  Adjacent: (5, 3) cube=5,-5,0
-  Adjacent: (3, 4) cube=3,-5,2
-  Adjacent: (4, 4) cube=4,-6,2
-  Adjacent: (5, 4) cube=5,-6,1
-Found 6 adjacent hexes
-Testing adjacent hex (4, 2)
-  pieceCanDetach: false
-Testing adjacent hex (3, 3)
-  pieceCanDetach: false
-Testing adjacent hex (5, 3)
-  BLOCKED: hex occupied
-Testing adjacent hex (3, 4)
-  pieceCanDetach: false
-Testing adjacent hex (4, 4)
-  BLOCKED: hex occupied
-Testing adjacent hex (5, 4)
-  pieceCanDetach: false
-Total legal moves: 0
-=== Complete ===
-Spot not empty
-isNextToFriendly: checking cube [5,-6,1]
-  active_player_id=2, turn_number[2]=5
-  Neighbors: enemy=1, friendly=3
-  Normal placement - must have friendly neighbors and no enemies
-  REJECTED: friendly=3, enemy=1
-isNextToFriendly: checking cube [3,-4,1]
-  active_player_id=2, turn_number[2]=5
-  Neighbors: enemy=0, friendly=1
-  Normal placement - must have friendly neighbors and no enemies
-  APPROVED
-=== mark_legal_moves_for_piece called ===
-Source cube: [5,-5,0]
-Piece: Grasshopper
-Testing Grasshopper moves - checking 6 directions
-Grasshopper get_legal_moves from [5,-5,0]
-  Direction 1: [1,-1,0]
-    Empty space at [6,-6,0] but no pieces jumped
-  Direction 2: [1,0,-1]
-    Empty space at [6,-5,-1] but no pieces jumped
-  Direction 3: [0,1,-1]
-    Empty space at [5,-4,-1] but no pieces jumped
-  Direction 4: [-1,1,0]
-    Empty space at [4,-4,0] but no pieces jumped
-  Direction 5: [-1,0,1]
-    Jumped over piece #1 at [4,-5,1]
-    LEGAL MOVE: [3,-5,2] after jumping 1 pieces
-  Direction 6: [0,-1,1]
-    Empty space at [5,-6,1] but no pieces jumped
-  Total legal moves found: 1
-Found 1 potential moves
-  Legal: (3, 4)
-Total legal moves: 1
-=== Complete ===
-=== mark_legal_moves_for_piece called ===
-Source cube: [6,-8,2]
-Piece: Soldier ant
-Tests: 109, Legal moves: 0
-=== Complete ===
-=== mark_legal_moves_for_piece called ===
-Source cube: [7,-9,2]
-Piece: Queen bee
-Testing Queen moves - checking adjacent hexes only
-  Adjacent: (6, 6) cube=6,-9,3
-  Adjacent: (8, 6) cube=8,-10,2
-  Adjacent: (7, 7) cube=7,-10,3
+  Adjacent: (4, 5) cube=4,-7,3
+  Adjacent: (5, 5) cube=5,-7,2
   Adjacent: (6, 5) cube=6,-8,2
-  Adjacent: (7, 5) cube=7,-8,1
-  Adjacent: (8, 5) cube=8,-9,1
+  Adjacent: (4, 6) cube=4,-8,4
+  Adjacent: (6, 6) cube=6,-9,3
+  Adjacent: (5, 7) cube=5,-9,4
 Found 6 adjacent hexes
-Testing adjacent hex (6, 6)
+Testing adjacent hex (4, 5)
   pieceCanDetach: true
   try_self_detach: true
   LEGAL MOVE!
-Testing adjacent hex (8, 6)
-  pieceCanDetach: true
-  try_self_detach: false
-Testing adjacent hex (7, 7)
-  pieceCanDetach: true
-  try_self_detach: false
+Testing adjacent hex (5, 5)
+  BLOCKED: hex occupied
 Testing adjacent hex (6, 5)
   BLOCKED: hex occupied
-Testing adjacent hex (7, 5)
+Testing adjacent hex (4, 6)
+  pieceCanDetach: true
+  try_self_detach: false
+Testing adjacent hex (6, 6)
+  BLOCKED: hex occupied
+Testing adjacent hex (5, 7)
   pieceCanDetach: true
   try_self_detach: true
   LEGAL MOVE!
-Testing adjacent hex (8, 5)
-  pieceCanDetach: true
-  try_self_detach: false
 Total legal moves: 2
 === Complete ===
 Spot not empty
-Spot not empty
-Spot not empty
-Spot not empty
 === mark_legal_moves_for_piece called ===
-Source cube: [5,-5,0]
-Piece: Grasshopper
-Testing Grasshopper moves - checking 6 directions
-Grasshopper get_legal_moves from [5,-5,0]
-  Direction 1: [1,-1,0]
-    Empty space at [6,-6,0] but no pieces jumped
-  Direction 2: [1,0,-1]
-    Empty space at [6,-5,-1] but no pieces jumped
-  Direction 3: [0,1,-1]
-    Empty space at [5,-4,-1] but no pieces jumped
-  Direction 4: [-1,1,0]
-    Empty space at [4,-4,0] but no pieces jumped
-  Direction 5: [-1,0,1]
-    Jumped over piece #1 at [4,-5,1]
-    LEGAL MOVE: [3,-5,2] after jumping 1 pieces
-  Direction 6: [0,-1,1]
-    Empty space at [5,-6,1] but no pieces jumped
-  Total legal moves found: 1
-Found 1 potential moves
-  Legal: (3, 4)
-Total legal moves: 1
+Source cube: [8,-10,2]
+Piece: Soldier ant
+Checking Spider: piece.id=5, has get_legal_moves=false
+Tests: 109, Legal moves: 0
 === Complete ===
+=== mark_legal_moves_for_piece called ===
+Source cube: [9,-11,2]
+Piece: Spider
+Checking Spider: piece.id=4, has get_legal_moves=true
+Testing Spider moves - finding paths of exactly 3 steps
+Found 10 potential moves
+  Legal: (9, 6)
+  Legal: (8, 7)
+  Legal: (9, 5)
+  Legal: (8, 4)
+  Legal: (6, 7)
+  Legal: (7, 7)
+Total legal moves: 6
+=== Complete ===
+=== mark_legal_moves_for_piece called ===
+Source cube: [7,-8,1]
+Piece: Soldier ant
+Checking Spider: piece.id=5, has get_legal_moves=false
+Tests: 109, Legal moves: 0
+=== Complete ===
+isNextToFriendly: checking cube [9,-10,1]
+  active_player_id=2, turn_number[2]=6
+  Neighbors: enemy=0, friendly=3
+  Normal placement - must have friendly neighbors and no enemies
+  APPROVED
+=== mark_legal_moves_for_piece called ===
+Source cube: [5,-7,2]
+Piece: Soldier ant
+Checking Spider: piece.id=5, has get_legal_moves=false
+Tests: 109, Legal moves: 0
+=== Complete ===
+=== mark_legal_moves_for_piece called ===
+Source cube: [4,-7,3]
+Piece: Queen bee
+Testing Queen moves - checking adjacent hexes only
+  Adjacent: (4, 4) cube=4,-6,2
+  Adjacent: (3, 5) cube=3,-6,3
+  Adjacent: (5, 5) cube=5,-7,2
+  Adjacent: (3, 6) cube=3,-7,4
+  Adjacent: (4, 6) cube=4,-8,4
+  Adjacent: (5, 6) cube=5,-8,3
+Found 6 adjacent hexes
+Testing adjacent hex (4, 4)
+  pieceCanDetach: true
+  try_self_detach: true
+  LEGAL MOVE!
+Testing adjacent hex (3, 5)
+  pieceCanDetach: true
+  try_self_detach: false
+Testing adjacent hex (5, 5)
+  BLOCKED: hex occupied
+Testing adjacent hex (3, 6)
+  pieceCanDetach: true
+  try_self_detach: false
+Testing adjacent hex (4, 6)
+  pieceCanDetach: true
+  try_self_detach: false
+Testing adjacent hex (5, 6)
+  pieceCanDetach: true
+  try_self_detach: true
+  LEGAL MOVE!
+Total legal moves: 2
+=== Complete ===
+=== mark_legal_moves_for_piece called ===
+Source cube: [9,-10,1]
+Piece: Soldier ant
+Checking Spider: piece.id=5, has get_legal_moves=false
+Tests: 109, Legal moves: 0
+=== Complete ===
+=== mark_legal_moves_for_piece called ===
+Source cube: [9,-10,1]
+Piece: Soldier ant
+Checking Spider: piece.id=5, has get_legal_moves=false
+Tests: 109, Legal moves: 0
+=== Complete ===
+Game state exported to: gamestate.txt
+Cube coordinates display: ON
+Cube coordinates display: OFF
+Cube coordinates display: ON
+Cube coordinates display: OFF
+Cube coordinates display: ON
+Cube coordinates display: OFF
+Cube coordinates display: ON
+Cube coordinates display: OFF
+Cube coordinates display: ON
+Cube coordinates display: OFF
