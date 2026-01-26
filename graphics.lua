@@ -24,6 +24,22 @@ function drawAddedPieces(map, canvas, grid)
             -- Draw piece initials
             love.graphics.setColor(hex.piece.color)
             love.graphics.print(hex.piece.initials, hx-8, hy-8)
+            
+            -- Draw stack height indicator for beetles or stacked pieces
+            if hex.piece.under_piece then
+                -- Calculate stack height
+                local height = 1
+                local current = hex.piece.under_piece
+                while current do
+                    height = height + 1
+                    current = current.under_piece
+                end
+                
+                -- Draw height number below piece initials
+                love.graphics.setColor(1, 1, 0, 1)  -- Yellow color for visibility
+                love.graphics.print(tostring(height), hx-3, hy+5)
+            end
+            
             love.graphics.setColor(1, 1, 1, 1)
         end
     end

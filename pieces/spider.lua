@@ -117,16 +117,41 @@ function Spider:get_legal_moves(map, src_cube)
     local initial_visited = {}
     initial_visited[cubecoords.to_key(src_cube)] = true
     
-    -- Find all positions reachable in exactly 3 steps
-    self:find_all_paths(map, src_cube, 0, initial_visited, legal_moves)
+    print("Spider:get_legal_moves starting from [" .. src_cube.x .. "," .. src_cube.y .. "," .. src_cube.z .. "]")
     
+    -- Find all positions reachable in exactly 3 steps
+    -- Pass src_cube so we can ignore it when checking for adjacent pieces
+    self:find_all_paths(map, src_cube, 0, initial_visited, legal_moves, {}, src_cube)
+    
+    print("Total destinations found: " .. #legal_moves)
     return legal_moves
 end
 
 -- Collect all destinations reachable in exactly 3 steps
-function Spider:find_all_paths(map, current_cube, steps, visited, destinations)
+-- path parameter tracks the sequence of positions visited
+-- src_cube is the starting position to ignore when checking for adjacent pieces
+function Spider:find_all_paths(map, current_cube, steps, visited, destinations, path, src_cube)
+    -- Add current position to path
+    local current_path = {}
+    for i, cube in ipairs(path) do
+        current_path[i] = cube
+    end
+    table.insert(current_path, {x = current_cube.x, y = current_cube.y, z = current_cube.z})
+    
     -- If we've taken 3 steps, this is a valid destination
     if steps == 3 then
+        -- Log the complete path
+        local path_str = "Path: "
+        for i, cube in ipairs(current_path) do
+            local col, row = cubecoords.to_offset(cube)
+            path_str = path_str .. "[" .. cube.x .. "," .. cube.y .. "," .. cube.z .. "]"
+            path_str = path_str .. "=(" .. col .. "," .. row .. ")"
+            if i < #current_path then
+                path_str = path_str .. " -> "
+            end
+        end
+        print("  " .. path_str)
+        
         table.insert(destinations, current_cube)
         return
     end
@@ -138,20 +163,23 @@ function Spider:find_all_paths(map, current_cube, steps, visited, destinations)
         local next_key = cubecoords.to_key(next_cube)
         
         if next_hex and not next_hex.piece and not visited[next_key] then
-            -- Check if has adjacent pieces
+            -- Check if has adjacent pieces (excluding the spider's starting position)
             local has_adjacent_piece = false
             local next_neighbors = cubecoords.all_neighbors(next_cube)
             for _, nn in ipairs(next_neighbors) do
-                local nn_hex = map_get_hex(map, nn)
-                if nn_hex and nn_hex.piece then
-                    has_adjacent_piece = true
-                    break
+                -- Skip the starting position when checking for adjacent pieces
+                if not cubecoords.equals(nn, src_cube) then
+                    local nn_hex = map_get_hex(map, nn)
+                    if nn_hex and nn_hex.piece then
+                        has_adjacent_piece = true
+                        break
+                    end
                 end
             end
             
             if has_adjacent_piece and self:can_move_through_gap(map, current_cube, next_cube) then
                 visited[next_key] = true
-                self:find_all_paths(map, next_cube, steps + 1, visited, destinations)
+                self:find_all_paths(map, next_cube, steps + 1, visited, destinations, current_path, src_cube)
                 visited[next_key] = nil
             end
         end

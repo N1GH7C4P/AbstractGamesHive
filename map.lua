@@ -311,6 +311,11 @@ function mark_legal_moves_for_piece(map, src_cube, w, h)
         local spider_moves = src_hex.piece:get_legal_moves(map, src_cube)
         print("Found " .. #spider_moves .. " potential moves")
         
+        for i, dest_cube in ipairs(spider_moves) do
+            local col, row = cubecoords.to_offset(dest_cube)
+            print("  Move " .. i .. ": (" .. col .. ", " .. row .. ") cube=[" .. dest_cube.x .. "," .. dest_cube.y .. "," .. dest_cube.z .. "]")
+        end
+        
         local legal_moves = {}
         for _, dest_cube in ipairs(spider_moves) do
             -- Verify the hive won't break when moving here
@@ -319,8 +324,11 @@ function mark_legal_moves_for_piece(map, src_cube, w, h)
                 if hex then
                     table.insert(legal_moves, hex)
                     local col, row = cubecoords.to_offset(dest_cube)
-                    print("  Legal: (" .. col .. ", " .. row .. ")")
+                    print("  LEGAL: (" .. col .. ", " .. row .. ") cube=[" .. dest_cube.x .. "," .. dest_cube.y .. "," .. dest_cube.z .. "]")
                 end
+            else
+                local col, row = cubecoords.to_offset(dest_cube)
+                print("  REJECTED (breaks hive): (" .. col .. ", " .. row .. ")")
             end
         end
         
@@ -371,6 +379,18 @@ function mark_legal_moves_for_piece(map, src_cube, w, h)
     local legal_moves = {}
     local tests_run = 0
     local max_tests = 200
+    
+    -- For beetles, also check immediate neighbors
+    if src_hex.piece.id == 2 then
+        print("Testing Beetle adjacent moves:")
+        local neighbors = cubecoords.all_neighbors(src_cube)
+        for i, neighbor_cube in ipairs(neighbors) do
+            local col, row = cubecoords.to_offset(neighbor_cube)
+            local can_move = try_move_piece_on_map(map, src_cube, neighbor_cube)
+            print("  Neighbor " .. i .. ": [" .. neighbor_cube.x .. "," .. neighbor_cube.y .. "," .. neighbor_cube.z .. "]" .. 
+                  "=(" .. col .. "," .. row .. ") -> " .. tostring(can_move))
+        end
+    end
     
     for _, hex in pairs(map.hexes) do
         if not cubecoords.equals(hex.cube, src_cube) then
@@ -502,6 +522,12 @@ end
 function pieceCanDetach(map, cube)
     local hex = map_get_hex(map, cube)
     if not hex then return false end
+    
+    -- If this piece has something underneath it (beetle stacking),
+    -- it can always detach because the under_piece maintains hive cohesion
+    if hex.piece and hex.piece.under_piece then
+        return true
+    end
     
     local tmp = hex.piece
     hex.piece = nil
