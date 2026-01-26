@@ -9,14 +9,15 @@ Config.pieceInventory = {
     {id = 4, name = "Spider", initials = "Sp", count = 2},
     {id = 5, name = "Soldier ant", initials = "SA", count = 3},
     {id = 6, name = "Ladybug", initials = "LB", count = 1},
+    {id = 7, name = "Mosquito", initials = "Mo", count = 1},
 }
 
 -- Game settings
 Config.game = {
     windowWidth = 1024,
     windowHeight = 768,
-    mapWidth = 11,
-    mapHeight = 10,
+    mapWidth = 100,
+    mapHeight = 100,
     hexSize = 35,
     menuOffsetX = 620,
 }

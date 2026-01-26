@@ -6,6 +6,7 @@ Grasshopper = require("pieces.grasshopper")
 Spider = require("pieces.spider")
 SoldierAnt = require("pieces.soldierant")
 Ladybug = require("pieces.ladybug")
+Mosquito = require("pieces.mosquito")
 
 -- Legacy functions for compatibility
 function init_pieces()
@@ -18,6 +19,7 @@ function init_pieces()
     piecesInventory[4] = {name = "Spider", initials = "Sp", id = 4}
     piecesInventory[5] = {name = "Soldier ant", initials = "SA", id = 5}
     piecesInventory[6] = {name = "Ladybug", initials = "LB", id = 6}
+    piecesInventory[7] = {name = "Mosquito", initials = "Mo", id = 7}
     
     -- Old named access for backward compatibility
     piecesInventory.queenBee = piecesInventory[1]
@@ -26,6 +28,7 @@ function init_pieces()
     piecesInventory.spider = piecesInventory[4]
     piecesInventory.soldierAnt = piecesInventory[5]
     piecesInventory.ladybug = piecesInventory[6]
+    piecesInventory.mosquito = piecesInventory[7]
 
     piecesInventory.queenBee.color = {1, 0.78, 0, 1}
     piecesInventory.beetle.color = {0.5, 0.2, 0, 1}
@@ -33,6 +36,7 @@ function init_pieces()
     piecesInventory.spider.color = {0.5, 0, 0, 1}
     piecesInventory.soldierAnt.color = {0.5, 0.5, 0.5, 1}
     piecesInventory.ladybug.color = {1, 0, 0, 1}
+    piecesInventory.mosquito.color = {0.5, 0.5, 0.5, 1}
 
     return (piecesInventory)
 end
@@ -52,6 +56,8 @@ function getPieceFromInventoryById(id)
         return SoldierAnt:new(active_player_id)
     elseif id == 6 then
         return Ladybug:new(active_player_id)
+    elseif id == 7 then
+        return Mosquito:new(active_player_id)
     end
 end
 
@@ -69,5 +75,7 @@ function createPieceByType(pieceType, owner)
         return SoldierAnt:new(owner)
     elseif pieceType == "ladybug" or pieceType == 6 then
         return Ladybug:new(owner)
+    elseif pieceType == "mosquito" or pieceType == 7 then
+        return Mosquito:new(owner)
     end
 end

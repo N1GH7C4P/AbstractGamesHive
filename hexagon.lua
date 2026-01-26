@@ -203,14 +203,15 @@ function hexagon.grid(width, height, piecesize, pointyTopped, shifted)
         return grid
 end
 
-function hexagon.drawGrid(grid, canvas)
+function hexagon.drawGrid(grid, canvas, camera_x, camera_y)
+    camera_x = camera_x or 0
+    camera_y = camera_y or 0
+    
     love.graphics.setCanvas(canvas)
-    for j = 1, grid.height do
-        for i = 1, grid.width do
-            local hx, hy = hexagon.toPlanCoordinates(i, j, grid)
-                drawHexagon(hx, hy, grid.piecesize, grid.pointyTopped)
-        end
-    end
+    -- Note: This function now expects the map to be passed via a global or param
+    -- For now, we'll draw based on grid dimensions, but the actual rendering
+    -- should be done by iterating through map.hexes
+    -- This is a compatibility stub - actual grid drawing happens in graphics.lua
     love.graphics.setCanvas()
 end
 
@@ -252,12 +253,8 @@ function hexagon.toHexagonCoordinates(x, y, grid)
         resultX, resultY = toHexagonCoordinatesHorizontal(x, y, grid)
     end
 
-    -- Out of the grid
-    if resultX < 1 or resultX > grid.width or resultY < 1 or resultY > grid.height then
-        resultX = -1
-        resultY = -1
-    end
-
+    -- Don't check bounds - let the map determine if hex exists
+    -- The calling code should check if map_get_hex returns nil
     return resultX, resultY
 end
 

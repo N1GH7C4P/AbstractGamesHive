@@ -21,6 +21,15 @@ function love.load()
     h = Config.game.mapHeight
     size = Config.game.hexSize
     
+    -- Camera/viewport state for panning
+    camera_x = 0
+    camera_y = 0
+    is_dragging = false
+    drag_start_x = 0
+    drag_start_y = 0
+    drag_start_camera_x = 0
+    drag_start_camera_y = 0
+    
     -- Game state
     move_mode = 0
     active_player_id = 1
@@ -40,6 +49,19 @@ function love.load()
     piecesInvetory = init_pieces()
     player = init_players()
     map = init_map(w, h)
+    
+    -- Debug: Check if center hex exists
+    local center_cube = cubecoords.new(0, 0, 0)
+    local center_hex = map_get_hex(map, center_cube)
+    print("Center hex (0,0,0) exists: " .. tostring(center_hex ~= nil))
+    if center_hex then
+        print("Center hex key: " .. cubecoords.to_key(center_cube))
+    end
+    
+    -- Center camera so (0,0,0) cube coordinate appears in center of screen
+    -- Since we now use direct cube-to-pixel conversion, cube (0,0,0) is at pixel (0,0)
+    camera_x = window_w / 2
+    camera_y = window_h / 2
 
     canvas = love.graphics.newCanvas(window_w, window_h)
     overlay = love.graphics.newCanvas(window_w, window_h)
@@ -73,12 +95,35 @@ function love.mousepressed(x, y, button, istouch)
     if game_over == true then
         return
     end
+    
+    -- Right-click or middle-click to start dragging
+    if button == 2 or button == 3 then
+        is_dragging = true
+        drag_start_x = x
+        drag_start_y = y
+        drag_start_camera_x = camera_x
+        drag_start_camera_y = camera_y
+        return
+    end
+    
     if button == 1 then
         local mouseX, mouseY = love.mouse.getPosition()
-        local resultX, resultY = hexagon.toHexagonCoordinates(mouseX, mouseY, grid)
+        -- Convert mouse position to cube coordinates directly
+        local pixel_x = mouseX - camera_x
+        local pixel_y = mouseY - camera_y
+        local result_cube = cubecoords.from_pixel(pixel_x, pixel_y, size)
+        local result_hex = map_get_hex(map, result_cube)
+        
+        if result_cube.x == 0 and result_cube.y == 0 and result_cube.z == 0 then
+            print("CLICKED CENTER (0,0,0): pixel=(" .. pixel_x .. "," .. pixel_y .. "), hex_exists=" .. tostring(result_hex ~= nil))
+        end
+        
+        print("CLICK: mouse=(" .. mouseX .. "," .. mouseY .. "), camera=(" .. camera_x .. "," .. camera_y .. "), pixel=(" .. pixel_x .. "," .. pixel_y .. "), cube=[" .. result_cube.x .. "," .. result_cube.y .. "," .. result_cube.z .. "], hex_exists=" .. tostring(result_hex ~= nil))
+        
+        -- Convert cube to offset for compatibility with existing code
+        local resultX, resultY = cubecoords.to_offset(result_cube)
+        
         if move_mode == 1 then
-            local result_cube = cubecoords.from_offset(resultX, resultY)
-            local result_hex = map_get_hex(map, result_cube)
             local selected_cube = cubecoords.from_offset(selected_piece_x, selected_piece_y)
             local selected_hex = map_get_hex(map, selected_cube)
             
@@ -99,7 +144,10 @@ function love.mousepressed(x, y, button, istouch)
                 return
             end
         end
-        if (resultX > 0 and resultY > 0) then
+        -- Check if hex exists in map
+        local result_cube = cubecoords.from_offset(resultX, resultY)
+        local result_hex = map_get_hex(map, result_cube)
+        if result_hex then
             if selectPieceOnMap(map, resultX, resultY, active_player_id) then
                 highlight = 1
                 clear_all_neighbours(map, w, h)
@@ -119,9 +167,26 @@ function love.mousepressed(x, y, button, istouch)
     end
  end
 
+function love.mousereleased(x, y, button, istouch)
+    -- Stop dragging on right-click or middle-click release
+    if button == 2 or button == 3 then
+        is_dragging = false
+    end
+end
+
 function love.update(dt)
     mouseX, mouseY = love.mouse.getPosition()
-    resultX, resultY = hexagon.toHexagonCoordinates(mouseX, mouseY, grid)
+    -- Convert mouse to cube coordinates for display
+    local pixel_x = mouseX - camera_x
+    local pixel_y = mouseY - camera_y
+    local hover_cube = cubecoords.from_pixel(pixel_x, pixel_y, size)
+    resultX, resultY = cubecoords.to_offset(hover_cube)
+    
+    -- Handle camera dragging
+    if is_dragging then
+        camera_x = drag_start_camera_x + (mouseX - drag_start_x)
+        camera_y = drag_start_camera_y + (mouseY - drag_start_y)
+    end
 end
 
 function love.draw()
@@ -134,12 +199,12 @@ function love.draw()
     love.graphics.setColor(0,1,0,1)
     drawBackground(canvas, window_w, window_h)
 
-    hexagon.drawGrid(grid, canvas)
-    drawAddedPieces(map, overlay, grid)
+    drawGridHexes(map, canvas, grid, camera_x, camera_y)
+    drawAddedPieces(map, overlay, grid, camera_x, camera_y)
     love.graphics.draw(canvas)
     love.graphics.draw(overlay)
     if (highlight == 1 and move_mode == 1) then
-        drawSelected(map, selected_piece_x, selected_piece_y, grid)
+        drawSelected(map, selected_piece_x, selected_piece_y, grid, camera_x, camera_y)
     end
     printPlayerStock(player, active_player_id, menu_offset_x, 20)
     print_map_pieces(map, w, h, menu_offset_x, 200)
@@ -148,18 +213,21 @@ function love.draw()
     if show_cube_coords then
         love.graphics.setColor(1, 1, 1, 0.8)
         for _, hex in pairs(map.hexes) do
-            local col, row = cubecoords.to_offset(hex.cube)
-            local hx, hy = hexagon.toPlanCoordinates(col, row, grid)
+            local hx, hy = cubecoords.to_pixel(hex.cube, size)
             local coord_text = hex.cube.x .. "," .. hex.cube.y .. "," .. hex.cube.z
-            love.graphics.print(coord_text, hx - 25, hy - 8, 0, 0.8, 0.8)
+            love.graphics.print(coord_text, hx + camera_x - 25, hy + camera_y - 8, 0, 0.8, 0.8)
         end
         love.graphics.setColor(1, 1, 1, 1)
     end
 
-    if resultX == -1 or resultY == -1 then
+    -- Display hover coordinates
+    local pixel_x = mouseX - camera_x
+    local pixel_y = mouseY - camera_y
+    local hover_cube = cubecoords.from_pixel(pixel_x, pixel_y, size)
+    local hover_hex = map_get_hex(map, hover_cube)
+    if not hover_hex then
         love.graphics.print("Out of grid", 0, window_h - 20)
     else
-        local hover_cube = cubecoords.from_offset(resultX, resultY)
         love.graphics.print("Hexagon coordinates: ["..hover_cube.x..","..hover_cube.y..","..hover_cube.z.."]", 0, window_h - 20)
     end
 

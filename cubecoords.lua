@@ -80,6 +80,86 @@ function CubeCoords.equals(a, b)
     return a.x == b.x and a.y == b.y and a.z == b.z
 end
 
+-- Get all hexes in a ring at distance N from center
+function CubeCoords.ring(center, radius)
+    if radius == 0 then
+        return {center}
+    end
+    
+    local results = {}
+    -- Start at a cube that is 'radius' steps away in direction 4 (southwest)
+    local cube = CubeCoords.add(center, CubeCoords.scale(CubeCoords.directions()[5], radius))
+    
+    -- Walk around the ring
+    local dirs = CubeCoords.directions()
+    for i = 0, 5 do
+        for j = 0, radius - 1 do
+            table.insert(results, cube)
+            cube = CubeCoords.neighbor(cube, i)
+        end
+    end
+    
+    return results
+end
+
+-- Get all hexes within distance N from center (including center)
+function CubeCoords.spiral(center, radius)
+    local results = {center}
+    for r = 1, radius do
+        local ring = CubeCoords.ring(center, r)
+        for _, hex in ipairs(ring) do
+            table.insert(results, hex)
+        end
+    end
+    return results
+end
+
+-- Convert cube coordinates directly to pixel coordinates
+-- For flat-topped hexagons (the default in this game)
+function CubeCoords.to_pixel(cube, hex_size)
+    -- For flat-topped hexagons
+    local x = hex_size * (3/2 * cube.x)
+    local y = hex_size * (math.sqrt(3)/2 * cube.x + math.sqrt(3) * cube.z)
+    return x, y
+end
+
+-- Convert pixel coordinates to cube coordinates
+-- For flat-topped hexagons
+function CubeCoords.from_pixel(px, py, hex_size)
+    -- For flat-topped hexagons
+    local q = (2/3 * px) / hex_size
+    local r = (-1/3 * px + math.sqrt(3)/3 * py) / hex_size
+    return CubeCoords.round(q, -q-r, r)
+end
+
+-- Round fractional cube coordinates to nearest integer cube coordinates
+function CubeCoords.round(x, y, z)
+    local rx = math.floor(x + 0.5)
+    local ry = math.floor(y + 0.5)
+    local rz = math.floor(z + 0.5)
+    
+    local x_diff = math.abs(rx - x)
+    local y_diff = math.abs(ry - y)
+    local z_diff = math.abs(rz - z)
+    
+    if x_diff > y_diff and x_diff > z_diff then
+        rx = -ry - rz
+    elseif y_diff > z_diff then
+        ry = -rx - rz
+    else
+        rz = -rx - ry
+    end
+    
+    return CubeCoords.new(rx, ry, rz)
+end
+
+-- Convert cube coordinates to pixel coordinates for pointy-topped hexagons
+function CubeCoords.to_pixel_pointy(cube, hex_size)
+    local x = hex_size * (math.sqrt(3) * cube.x + math.sqrt(3)/2 * cube.z)
+    local y = hex_size * (3/2 * cube.z)
+    return x, y
+end
+
 -- Get direction from a to b (returns direction vector, not normalized to unit)
 function CubeCoords.direction(from, to)
     return CubeCoords.subtract(to, from)
@@ -151,7 +231,11 @@ end
 
 -- Convert cube coordinate to a string key for table indexing
 function CubeCoords.to_key(cube)
-    return cube.x .. "," .. cube.y .. "," .. cube.z
+    -- Normalize -0 to 0 to avoid key mismatches
+    local x = cube.x == 0 and 0 or cube.x
+    local y = cube.y == 0 and 0 or cube.y
+    local z = cube.z == 0 and 0 or cube.z
+    return x .. "," .. y .. "," .. z
 end
 
 -- Convert string key back to cube coordinate

@@ -1,128 +1,40 @@
 === Debug Log Started ===
-isNextToFriendly: checking cube [7,-8,1]
+Center hex (0,0,0) exists: true
+Center hex key: 0,0,0
+CLICK: mouse=(496,288), camera=(512,384), pixel=(-16,-96), cube=[0,2,-2], hex_exists=true
+CLICKED CENTER (0,0,0): pixel=(2,-2), hex_exists=true
+CLICK: mouse=(514,382), camera=(512,384), pixel=(2,-2), cube=[0,0,-0], hex_exists=true
+isNextToFriendly: checking cube [0,-0,0]
+  active_player_id=2, turn_number[2]=1
+  Neighbors: enemy=0, friendly=0
+  First turn for player 2
+  Other player turn_number[1]=2
+  Second piece placement - must have exactly 1 enemy neighbor
+  REJECTED: enemy_count=0 != 1
+CLICK: mouse=(514,345), camera=(512,384), pixel=(2,-39), cube=[0,1,-1], hex_exists=true
+isNextToFriendly: checking cube [0,1,-1]
   active_player_id=2, turn_number[2]=1
   Neighbors: enemy=1, friendly=0
   First turn for player 2
   Other player turn_number[1]=2
   Second piece placement - must have exactly 1 enemy neighbor
   APPROVED: enemy_count=1
-isNextToFriendly: checking cube [5,-8,3]
+CLICK: mouse=(566,313), camera=(512,384), pixel=(54,-71), cube=[1,1,-2], hex_exists=true
+isNextToFriendly: checking cube [1,1,-2]
+  active_player_id=1, turn_number[1]=2
+  Neighbors: enemy=1, friendly=1
+  Normal placement - must have friendly neighbors and no enemies
+  REJECTED: friendly=1, enemy=1
+CLICK: mouse=(524,204), camera=(512,384), pixel=(12,-180), cube=[0,3,-3], hex_exists=true
+isNextToFriendly: checking cube [0,3,-3]
   active_player_id=1, turn_number[1]=2
   Neighbors: enemy=0, friendly=1
   Normal placement - must have friendly neighbors and no enemies
   APPROVED
-isNextToFriendly: checking cube [8,-9,1]
+CLICKED CENTER (0,0,0): pixel=(-3,0), hex_exists=true
+CLICK: mouse=(509,384), camera=(512,384), pixel=(-3,0), cube=[-0,0,0], hex_exists=true
+isNextToFriendly: checking cube [-0,0,0]
   active_player_id=2, turn_number[2]=2
   Neighbors: enemy=0, friendly=1
   Normal placement - must have friendly neighbors and no enemies
   APPROVED
-isNextToFriendly: checking cube [8,-8,0]
-  active_player_id=1, turn_number[1]=3
-  Neighbors: enemy=2, friendly=0
-  Normal placement - must have friendly neighbors and no enemies
-  REJECTED: friendly=0, enemy=2
-isNextToFriendly: checking cube [5,-7,2]
-  active_player_id=1, turn_number[1]=3
-  Neighbors: enemy=0, friendly=2
-  Normal placement - must have friendly neighbors and no enemies
-  APPROVED
-isNextToFriendly: checking cube [8,-8,0]
-  active_player_id=2, turn_number[2]=3
-  Neighbors: enemy=0, friendly=2
-  Normal placement - must have friendly neighbors and no enemies
-  APPROVED
-=== mark_legal_moves_for_piece called ===
-Source cube: [5,-8,3]
-Piece: Ladybug
-Checking Spider: piece.id=6, has get_legal_moves=true
-Testing Ladybug moves - exactly 3 steps (2 on top, 1 down)
-Ladybug:get_legal_moves starting from [5,-8,3]
-  Path: [5,-8,3]=(5,6) -> [6,-8,2]=(6,5) -> [7,-8,1]=(7,5) -> [7,-7,0]=(7,4)
-  Path: [5,-8,3]=(5,6) -> [6,-8,2]=(6,5) -> [7,-8,1]=(7,5) -> [6,-7,1]=(6,4)
-  Path: [5,-8,3]=(5,6) -> [6,-8,2]=(6,5) -> [7,-8,1]=(7,5) -> [7,-9,2]=(7,6)
-  Path: [5,-8,3]=(5,6) -> [6,-8,2]=(6,5) -> [5,-7,2]=(5,5) -> [6,-7,1]=(6,4)
-  Path: [5,-8,3]=(5,6) -> [6,-8,2]=(6,5) -> [5,-7,2]=(5,5) -> [5,-6,1]=(5,4)
-  Path: [5,-8,3]=(5,6) -> [6,-8,2]=(6,5) -> [5,-7,2]=(5,5) -> [4,-6,2]=(4,4)
-  Path: [5,-8,3]=(5,6) -> [6,-8,2]=(6,5) -> [5,-7,2]=(5,5) -> [4,-7,3]=(4,5)
-  Path: [5,-8,3]=(5,6) -> [5,-7,2]=(5,5) -> [6,-8,2]=(6,5) -> [7,-9,2]=(7,6)
-  Path: [5,-8,3]=(5,6) -> [5,-7,2]=(5,5) -> [6,-8,2]=(6,5) -> [6,-7,1]=(6,4)
-  Path: [5,-8,3]=(5,6) -> [5,-7,2]=(5,5) -> [6,-8,2]=(6,5) -> [6,-9,3]=(6,6)
-Total destinations found: 10
-Found 10 potential moves
-  LEGAL: (7, 4) cube=[7,-7,0]
-  LEGAL: (6, 4) cube=[6,-7,1]
-  LEGAL: (7, 6) cube=[7,-9,2]
-  LEGAL: (6, 4) cube=[6,-7,1]
-  LEGAL: (5, 4) cube=[5,-6,1]
-  LEGAL: (4, 4) cube=[4,-6,2]
-  LEGAL: (4, 5) cube=[4,-7,3]
-  LEGAL: (7, 6) cube=[7,-9,2]
-  LEGAL: (6, 4) cube=[6,-7,1]
-  LEGAL: (6, 6) cube=[6,-9,3]
-Total legal moves: 10
-=== Complete ===
-Player 	1	 has no piece nb 	1	 in stock.
-=== mark_legal_moves_for_piece called ===
-Source cube: [5,-8,3]
-Piece: Ladybug
-Checking Spider: piece.id=6, has get_legal_moves=true
-Testing Ladybug moves - exactly 3 steps (2 on top, 1 down)
-Ladybug:get_legal_moves starting from [5,-8,3]
-  Path: [5,-8,3]=(5,6) -> [6,-8,2]=(6,5) -> [7,-8,1]=(7,5) -> [7,-7,0]=(7,4)
-  Path: [5,-8,3]=(5,6) -> [6,-8,2]=(6,5) -> [7,-8,1]=(7,5) -> [6,-7,1]=(6,4)
-  Path: [5,-8,3]=(5,6) -> [6,-8,2]=(6,5) -> [7,-8,1]=(7,5) -> [7,-9,2]=(7,6)
-  Path: [5,-8,3]=(5,6) -> [6,-8,2]=(6,5) -> [5,-7,2]=(5,5) -> [6,-7,1]=(6,4)
-  Path: [5,-8,3]=(5,6) -> [6,-8,2]=(6,5) -> [5,-7,2]=(5,5) -> [5,-6,1]=(5,4)
-  Path: [5,-8,3]=(5,6) -> [6,-8,2]=(6,5) -> [5,-7,2]=(5,5) -> [4,-6,2]=(4,4)
-  Path: [5,-8,3]=(5,6) -> [6,-8,2]=(6,5) -> [5,-7,2]=(5,5) -> [4,-7,3]=(4,5)
-  Path: [5,-8,3]=(5,6) -> [5,-7,2]=(5,5) -> [6,-8,2]=(6,5) -> [7,-9,2]=(7,6)
-  Path: [5,-8,3]=(5,6) -> [5,-7,2]=(5,5) -> [6,-8,2]=(6,5) -> [6,-7,1]=(6,4)
-  Path: [5,-8,3]=(5,6) -> [5,-7,2]=(5,5) -> [6,-8,2]=(6,5) -> [6,-9,3]=(6,6)
-Total destinations found: 10
-Found 10 potential moves
-  LEGAL: (7, 4) cube=[7,-7,0]
-  LEGAL: (6, 4) cube=[6,-7,1]
-  LEGAL: (7, 6) cube=[7,-9,2]
-  LEGAL: (6, 4) cube=[6,-7,1]
-  LEGAL: (5, 4) cube=[5,-6,1]
-  LEGAL: (4, 4) cube=[4,-6,2]
-  LEGAL: (4, 5) cube=[4,-7,3]
-  LEGAL: (7, 6) cube=[7,-9,2]
-  LEGAL: (6, 4) cube=[6,-7,1]
-  LEGAL: (6, 6) cube=[6,-9,3]
-Total legal moves: 10
-=== Complete ===
-=== mark_legal_moves_for_piece called ===
-Source cube: [8,-9,1]
-Piece: Ladybug
-Checking Spider: piece.id=6, has get_legal_moves=true
-Testing Ladybug moves - exactly 3 steps (2 on top, 1 down)
-Ladybug:get_legal_moves starting from [8,-9,1]
-  Path: [8,-9,1]=(8,5) -> [8,-8,0]=(8,4) -> [7,-8,1]=(7,5) -> [7,-7,0]=(7,4)
-  Path: [8,-9,1]=(8,5) -> [8,-8,0]=(8,4) -> [7,-8,1]=(7,5) -> [7,-9,2]=(7,6)
-  Path: [8,-9,1]=(8,5) -> [7,-8,1]=(7,5) -> [8,-8,0]=(8,4) -> [9,-9,0]=(9,5)
-  Path: [8,-9,1]=(8,5) -> [7,-8,1]=(7,5) -> [8,-8,0]=(8,4) -> [9,-8,-1]=(9,4)
-  Path: [8,-9,1]=(8,5) -> [7,-8,1]=(7,5) -> [8,-8,0]=(8,4) -> [8,-7,-1]=(8,3)
-  Path: [8,-9,1]=(8,5) -> [7,-8,1]=(7,5) -> [8,-8,0]=(8,4) -> [7,-7,0]=(7,4)
-  Path: [8,-9,1]=(8,5) -> [7,-8,1]=(7,5) -> [6,-7,1]=(6,4) -> [7,-7,0]=(7,4)
-  Path: [8,-9,1]=(8,5) -> [7,-8,1]=(7,5) -> [6,-7,1]=(6,4) -> [6,-6,0]=(6,3)
-  Path: [8,-9,1]=(8,5) -> [7,-8,1]=(7,5) -> [6,-7,1]=(6,4) -> [5,-6,1]=(5,4)
-  Path: [8,-9,1]=(8,5) -> [7,-8,1]=(7,5) -> [6,-8,2]=(6,5) -> [7,-9,2]=(7,6)
-  Path: [8,-9,1]=(8,5) -> [7,-8,1]=(7,5) -> [6,-8,2]=(6,5) -> [5,-8,3]=(5,6)
-  Path: [8,-9,1]=(8,5) -> [7,-8,1]=(7,5) -> [6,-8,2]=(6,5) -> [6,-9,3]=(6,6)
-Total destinations found: 12
-Found 12 potential moves
-  LEGAL: (7, 4) cube=[7,-7,0]
-  LEGAL: (7, 6) cube=[7,-9,2]
-  LEGAL: (9, 5) cube=[9,-9,0]
-  LEGAL: (9, 4) cube=[9,-8,-1]
-  LEGAL: (8, 3) cube=[8,-7,-1]
-  LEGAL: (7, 4) cube=[7,-7,0]
-  LEGAL: (7, 4) cube=[7,-7,0]
-  LEGAL: (6, 3) cube=[6,-6,0]
-  LEGAL: (5, 4) cube=[5,-6,1]
-  LEGAL: (7, 6) cube=[7,-9,2]
-  LEGAL: (5, 6) cube=[5,-8,3]
-  LEGAL: (6, 6) cube=[6,-9,3]
-Total legal moves: 12
-=== Complete ===

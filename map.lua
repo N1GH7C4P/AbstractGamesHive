@@ -84,15 +84,11 @@ function tryAddPieceToMap(player_nb, id, map, col, row)
     end
     
     if isMapEmpty(map) then
-        -- Place first piece at default position
-        local first_cube = cubecoords.from_offset(6, 5)
-        local first_hex = map_get_hex(map, first_cube)
-        if first_hex then
-            highlight = 0
-            removePieceFromStock(player_nb, id)
-            first_hex.player_id = player_nb
-            first_hex.piece = getPieceFromInventoryById(id)
-        end
+        -- Place first piece at clicked position
+        highlight = 0
+        removePieceFromStock(player_nb, id)
+        hex.player_id = player_nb
+        hex.piece = getPieceFromInventoryById(id)
         return true
     end
     
@@ -116,22 +112,29 @@ function init_map(w, h)
     map.hexes = {}
     map.offset_to_key = {}
     
-    -- Build all hexes
-    for row = 1, h do
-        map.offset_to_key[row] = {}
-        for col = 1, w do
-            local cube = cubecoords.from_offset(col, row)
-            local key = cubecoords.to_key(cube)
-            
-            map.offset_to_key[row][col] = key
-            map.hexes[key] = {
-                cube = cube,
-                piece = nil,
-                player_id = nil,
-                neighbour = nil,
-                tmp = nil
-            }
+    -- Build hexes in rings radiating from center (0,0,0)
+    -- Create 10 rings around the center
+    local center = cubecoords.new(0, 0, 0)
+    local rings = 10
+    local all_hexes = cubecoords.spiral(center, rings)
+    
+    for _, cube in ipairs(all_hexes) do
+        local key = cubecoords.to_key(cube)
+        local col, row = cubecoords.to_offset(cube)
+        
+        -- Initialize offset_to_key table as needed
+        if not map.offset_to_key[row] then
+            map.offset_to_key[row] = {}
         end
+        
+        map.offset_to_key[row][col] = key
+        map.hexes[key] = {
+            cube = cube,
+            piece = nil,
+            player_id = nil,
+            neighbour = nil,
+            tmp = nil
+        }
     end
     
     return map
@@ -226,8 +229,7 @@ function mark_legal_moves_for_piece(map, src_cube, w, h)
         
         for _, hex in pairs(map.hexes) do
             if hex.neighbour and not cubecoords.equals(hex.cube, src_cube) then
-                local col, row = cubecoords.to_offset(hex.cube)
-                print("  Adjacent: (" .. col .. ", " .. row .. ") cube=" .. cubecoords.to_key(hex.cube))
+                print("  Adjacent: [" .. hex.cube.x .. "," .. hex.cube.y .. "," .. hex.cube.z .. "]")
                 table.insert(adjacent_positions, hex)
             end
         end
@@ -237,8 +239,7 @@ function mark_legal_moves_for_piece(map, src_cube, w, h)
         local legal_moves = {}
         
         for _, hex in ipairs(adjacent_positions) do
-            local col, row = cubecoords.to_offset(hex.cube)
-            print("Testing adjacent hex (" .. col .. ", " .. row .. ")")
+            print("Testing adjacent hex [" .. hex.cube.x .. "," .. hex.cube.y .. "," .. hex.cube.z .. "]")
             
             if hex.piece then
                 print("  BLOCKED: hex occupied")
@@ -281,8 +282,7 @@ function mark_legal_moves_for_piece(map, src_cube, w, h)
                 local hex = map_get_hex(map, dest_cube)
                 if hex then
                     table.insert(legal_moves, hex)
-                    local col, row = cubecoords.to_offset(dest_cube)
-                    print("  Legal: (" .. col .. ", " .. row .. ")")
+                    print("  Legal: [" .. dest_cube.x .. "," .. dest_cube.y .. "," .. dest_cube.z .. "]")
                 end
             end
         end
@@ -312,8 +312,7 @@ function mark_legal_moves_for_piece(map, src_cube, w, h)
         print("Found " .. #spider_moves .. " potential moves")
         
         for i, dest_cube in ipairs(spider_moves) do
-            local col, row = cubecoords.to_offset(dest_cube)
-            print("  Move " .. i .. ": (" .. col .. ", " .. row .. ") cube=[" .. dest_cube.x .. "," .. dest_cube.y .. "," .. dest_cube.z .. "]")
+            print("  Move " .. i .. ": [" .. dest_cube.x .. "," .. dest_cube.y .. "," .. dest_cube.z .. "]")
         end
         
         local legal_moves = {}
@@ -329,6 +328,43 @@ function mark_legal_moves_for_piece(map, src_cube, w, h)
             else
                 local col, row = cubecoords.to_offset(dest_cube)
                 print("  REJECTED (breaks hive): (" .. col .. ", " .. row .. ")")
+            end
+        end
+        
+        print("Total legal moves: " .. #legal_moves)
+        for _, hex in ipairs(legal_moves) do
+            hex.can_move = true
+        end
+        
+        print("=== Complete ===")
+        return
+    end
+    
+    -- For Mosquito (id == 7), use specialized method
+    if src_hex.piece.id == 7 and src_hex.piece.get_legal_moves then
+        print("Testing Mosquito moves - mimics adjacent pieces")
+        
+        -- Check if piece can detach first (unless it's on top of the hive)
+        if not src_hex.piece.under_piece and not pieceCanDetach(map, src_cube) then
+            print("Mosquito cannot detach - would break hive")
+            print("=== Complete ===")
+            return
+        end
+        
+        local mosquito_moves = src_hex.piece:get_legal_moves(map, src_cube)
+        print("Found " .. #mosquito_moves .. " potential moves")
+        
+        local legal_moves = {}
+        for _, dest_cube in ipairs(mosquito_moves) do
+            -- Verify the hive won't break when moving here
+            if try_self_detach(map, src_cube, dest_cube) then
+                local hex = map_get_hex(map, dest_cube)
+                if hex then
+                    table.insert(legal_moves, hex)
+                    print("  LEGAL: [" .. dest_cube.x .. "," .. dest_cube.y .. "," .. dest_cube.z .. "]")
+                end
+            else
+                print("  REJECTED (breaks hive): [" .. dest_cube.x .. "," .. dest_cube.y .. "," .. dest_cube.z .. "]")
             end
         end
         
@@ -362,12 +398,10 @@ function mark_legal_moves_for_piece(map, src_cube, w, h)
                 local hex = map_get_hex(map, dest_cube)
                 if hex then
                     table.insert(legal_moves, hex)
-                    local col, row = cubecoords.to_offset(dest_cube)
-                    print("  LEGAL: (" .. col .. ", " .. row .. ") cube=[" .. dest_cube.x .. "," .. dest_cube.y .. "," .. dest_cube.z .. "]")
+                    print("  LEGAL: [" .. dest_cube.x .. "," .. dest_cube.y .. "," .. dest_cube.z .. "]")
                 end
             else
-                local col, row = cubecoords.to_offset(dest_cube)
-                print("  REJECTED (breaks hive): (" .. col .. ", " .. row .. ")")
+                print("  REJECTED (breaks hive): [" .. dest_cube.x .. "," .. dest_cube.y .. "," .. dest_cube.z .. "]")
             end
         end
         
@@ -424,10 +458,8 @@ function mark_legal_moves_for_piece(map, src_cube, w, h)
         print("Testing Beetle adjacent moves:")
         local neighbors = cubecoords.all_neighbors(src_cube)
         for i, neighbor_cube in ipairs(neighbors) do
-            local col, row = cubecoords.to_offset(neighbor_cube)
             local can_move = try_move_piece_on_map(map, src_cube, neighbor_cube)
-            print("  Neighbor " .. i .. ": [" .. neighbor_cube.x .. "," .. neighbor_cube.y .. "," .. neighbor_cube.z .. "]" .. 
-                  "=(" .. col .. "," .. row .. ") -> " .. tostring(can_move))
+            print("  Neighbor " .. i .. ": [" .. neighbor_cube.x .. "," .. neighbor_cube.y .. "," .. neighbor_cube.z .. "] -> " .. tostring(can_move))
         end
     end
     
