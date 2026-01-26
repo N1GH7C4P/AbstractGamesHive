@@ -1,10 +1,4 @@
 === Debug Log Started ===
-Game state exported to: gamestate.txt
-Loading game state from: gamestate.txt
-Set active player: 1
-Set turn numbers: P1=1, P2=1
-Game state loaded successfully!
-Pieces on board: 0
 isNextToFriendly: checking cube [7,-8,1]
   active_player_id=2, turn_number[2]=1
   Neighbors: enemy=1, friendly=0
@@ -12,16 +6,6 @@ isNextToFriendly: checking cube [7,-8,1]
   Other player turn_number[1]=2
   Second piece placement - must have exactly 1 enemy neighbor
   APPROVED: enemy_count=1
-isNextToFriendly: checking cube [8,-9,1]
-  active_player_id=1, turn_number[1]=2
-  Neighbors: enemy=1, friendly=0
-  Normal placement - must have friendly neighbors and no enemies
-  REJECTED: friendly=0, enemy=1
-isNextToFriendly: checking cube [8,-8,0]
-  active_player_id=1, turn_number[1]=2
-  Neighbors: enemy=1, friendly=0
-  Normal placement - must have friendly neighbors and no enemies
-  REJECTED: friendly=0, enemy=1
 isNextToFriendly: checking cube [5,-8,3]
   active_player_id=1, turn_number[1]=2
   Neighbors: enemy=0, friendly=1
@@ -47,226 +31,98 @@ isNextToFriendly: checking cube [8,-8,0]
   Neighbors: enemy=0, friendly=2
   Normal placement - must have friendly neighbors and no enemies
   APPROVED
-isNextToFriendly: checking cube [4,-7,3]
-  active_player_id=1, turn_number[1]=4
-  Neighbors: enemy=0, friendly=2
-  Normal placement - must have friendly neighbors and no enemies
-  APPROVED
-isNextToFriendly: checking cube [8,-10,2]
-  active_player_id=2, turn_number[2]=4
-  Neighbors: enemy=0, friendly=1
-  Normal placement - must have friendly neighbors and no enemies
-  APPROVED
-isNextToFriendly: checking cube [5,-6,1]
-  active_player_id=1, turn_number[1]=5
-  Neighbors: enemy=0, friendly=1
-  Normal placement - must have friendly neighbors and no enemies
-  APPROVED
-isNextToFriendly: checking cube [7,-7,0]
-  active_player_id=2, turn_number[2]=5
-  Neighbors: enemy=0, friendly=2
-  Normal placement - must have friendly neighbors and no enemies
-  APPROVED
-Player 	1	 has no piece nb 	2	 in stock.
-Player 	1	 has no piece nb 	2	 in stock.
-isNextToFriendly: checking cube [4,-6,2]
-  active_player_id=1, turn_number[1]=6
-  Neighbors: enemy=0, friendly=3
-  Normal placement - must have friendly neighbors and no enemies
-  APPROVED
-isNextToFriendly: checking cube [9,-11,2]
-  active_player_id=2, turn_number[2]=6
-  Neighbors: enemy=0, friendly=1
-  Normal placement - must have friendly neighbors and no enemies
-  APPROVED
 === mark_legal_moves_for_piece called ===
-Source cube: [4,-7,3]
-Piece: Beetle
-Checking Spider: piece.id=2, has get_legal_moves=false
-Testing Beetle adjacent moves:
-  Neighbor 1: [5,-8,3]=(5,6) -> true
-  Neighbor 2: [5,-7,2]=(5,5) -> true
-  Neighbor 3: [4,-6,2]=(4,4) -> true
-  Neighbor 4: [3,-6,3]=(3,5) -> true
-  Neighbor 5: [3,-7,4]=(3,6) -> false
-  Neighbor 6: [4,-8,4]=(4,6) -> true
-Tests: 109, Legal moves: 5
+Source cube: [5,-8,3]
+Piece: Ladybug
+Checking Spider: piece.id=6, has get_legal_moves=true
+Testing Ladybug moves - exactly 3 steps (2 on top, 1 down)
+Ladybug:get_legal_moves starting from [5,-8,3]
+  Path: [5,-8,3]=(5,6) -> [6,-8,2]=(6,5) -> [7,-8,1]=(7,5) -> [7,-7,0]=(7,4)
+  Path: [5,-8,3]=(5,6) -> [6,-8,2]=(6,5) -> [7,-8,1]=(7,5) -> [6,-7,1]=(6,4)
+  Path: [5,-8,3]=(5,6) -> [6,-8,2]=(6,5) -> [7,-8,1]=(7,5) -> [7,-9,2]=(7,6)
+  Path: [5,-8,3]=(5,6) -> [6,-8,2]=(6,5) -> [5,-7,2]=(5,5) -> [6,-7,1]=(6,4)
+  Path: [5,-8,3]=(5,6) -> [6,-8,2]=(6,5) -> [5,-7,2]=(5,5) -> [5,-6,1]=(5,4)
+  Path: [5,-8,3]=(5,6) -> [6,-8,2]=(6,5) -> [5,-7,2]=(5,5) -> [4,-6,2]=(4,4)
+  Path: [5,-8,3]=(5,6) -> [6,-8,2]=(6,5) -> [5,-7,2]=(5,5) -> [4,-7,3]=(4,5)
+  Path: [5,-8,3]=(5,6) -> [5,-7,2]=(5,5) -> [6,-8,2]=(6,5) -> [7,-9,2]=(7,6)
+  Path: [5,-8,3]=(5,6) -> [5,-7,2]=(5,5) -> [6,-8,2]=(6,5) -> [6,-7,1]=(6,4)
+  Path: [5,-8,3]=(5,6) -> [5,-7,2]=(5,5) -> [6,-8,2]=(6,5) -> [6,-9,3]=(6,6)
+Total destinations found: 10
+Found 10 potential moves
+  LEGAL: (7, 4) cube=[7,-7,0]
+  LEGAL: (6, 4) cube=[6,-7,1]
+  LEGAL: (7, 6) cube=[7,-9,2]
+  LEGAL: (6, 4) cube=[6,-7,1]
+  LEGAL: (5, 4) cube=[5,-6,1]
+  LEGAL: (4, 4) cube=[4,-6,2]
+  LEGAL: (4, 5) cube=[4,-7,3]
+  LEGAL: (7, 6) cube=[7,-9,2]
+  LEGAL: (6, 4) cube=[6,-7,1]
+  LEGAL: (6, 6) cube=[6,-9,3]
+Total legal moves: 10
 === Complete ===
-Spot not empty
+Player 	1	 has no piece nb 	1	 in stock.
 === mark_legal_moves_for_piece called ===
-Source cube: [7,-7,0]
-Piece: Beetle
-Checking Spider: piece.id=2, has get_legal_moves=false
-Testing Beetle adjacent moves:
-  Neighbor 1: [8,-8,0]=(8,4) -> true
-  Neighbor 2: [8,-7,-1]=(8,3) -> true
-  Neighbor 3: [7,-6,-1]=(7,3) -> false
-  Neighbor 4: [6,-6,0]=(6,3) -> true
-  Neighbor 5: [6,-7,1]=(6,4) -> true
-  Neighbor 6: [7,-8,1]=(7,5) -> true
-Tests: 109, Legal moves: 5
-=== Complete ===
-=== mark_legal_moves_for_piece called ===
-Source cube: [5,-6,1]
-Piece: Beetle
-Checking Spider: piece.id=2, has get_legal_moves=false
-Testing Beetle adjacent moves:
-  Neighbor 1: [6,-7,1]=(6,4) -> true
-  Neighbor 2: [6,-6,0]=(6,3) -> true
-  Neighbor 3: [5,-5,0]=(5,3) -> false
-  Neighbor 4: [4,-5,1]=(4,3) -> true
-  Neighbor 5: [4,-6,2]=(4,4) -> true
-  Neighbor 6: [5,-7,2]=(5,5) -> true
-Tests: 109, Legal moves: 5
+Source cube: [5,-8,3]
+Piece: Ladybug
+Checking Spider: piece.id=6, has get_legal_moves=true
+Testing Ladybug moves - exactly 3 steps (2 on top, 1 down)
+Ladybug:get_legal_moves starting from [5,-8,3]
+  Path: [5,-8,3]=(5,6) -> [6,-8,2]=(6,5) -> [7,-8,1]=(7,5) -> [7,-7,0]=(7,4)
+  Path: [5,-8,3]=(5,6) -> [6,-8,2]=(6,5) -> [7,-8,1]=(7,5) -> [6,-7,1]=(6,4)
+  Path: [5,-8,3]=(5,6) -> [6,-8,2]=(6,5) -> [7,-8,1]=(7,5) -> [7,-9,2]=(7,6)
+  Path: [5,-8,3]=(5,6) -> [6,-8,2]=(6,5) -> [5,-7,2]=(5,5) -> [6,-7,1]=(6,4)
+  Path: [5,-8,3]=(5,6) -> [6,-8,2]=(6,5) -> [5,-7,2]=(5,5) -> [5,-6,1]=(5,4)
+  Path: [5,-8,3]=(5,6) -> [6,-8,2]=(6,5) -> [5,-7,2]=(5,5) -> [4,-6,2]=(4,4)
+  Path: [5,-8,3]=(5,6) -> [6,-8,2]=(6,5) -> [5,-7,2]=(5,5) -> [4,-7,3]=(4,5)
+  Path: [5,-8,3]=(5,6) -> [5,-7,2]=(5,5) -> [6,-8,2]=(6,5) -> [7,-9,2]=(7,6)
+  Path: [5,-8,3]=(5,6) -> [5,-7,2]=(5,5) -> [6,-8,2]=(6,5) -> [6,-7,1]=(6,4)
+  Path: [5,-8,3]=(5,6) -> [5,-7,2]=(5,5) -> [6,-8,2]=(6,5) -> [6,-9,3]=(6,6)
+Total destinations found: 10
+Found 10 potential moves
+  LEGAL: (7, 4) cube=[7,-7,0]
+  LEGAL: (6, 4) cube=[6,-7,1]
+  LEGAL: (7, 6) cube=[7,-9,2]
+  LEGAL: (6, 4) cube=[6,-7,1]
+  LEGAL: (5, 4) cube=[5,-6,1]
+  LEGAL: (4, 4) cube=[4,-6,2]
+  LEGAL: (4, 5) cube=[4,-7,3]
+  LEGAL: (7, 6) cube=[7,-9,2]
+  LEGAL: (6, 4) cube=[6,-7,1]
+  LEGAL: (6, 6) cube=[6,-9,3]
+Total legal moves: 10
 === Complete ===
 === mark_legal_moves_for_piece called ===
-Source cube: [8,-8,0]
-Piece: Queen bee
-Testing Queen moves - checking adjacent hexes only
-  Adjacent: (8, 3) cube=8,-7,-1
-  Adjacent: (7, 4) cube=7,-7,0
-  Adjacent: (9, 4) cube=9,-8,-1
-  Adjacent: (7, 5) cube=7,-8,1
-  Adjacent: (8, 5) cube=8,-9,1
-  Adjacent: (9, 5) cube=9,-9,0
-Found 6 adjacent hexes
-Testing adjacent hex (8, 3)
-  pieceCanDetach: true
-  try_self_detach: false
-Testing adjacent hex (7, 4)
-  pieceCanDetach: true
-  try_self_detach: true
-  LEGAL MOVE!
-Testing adjacent hex (9, 4)
-  pieceCanDetach: true
-  try_self_detach: false
-Testing adjacent hex (7, 5)
-  BLOCKED: hex occupied
-Testing adjacent hex (8, 5)
-  BLOCKED: hex occupied
-Testing adjacent hex (9, 5)
-  pieceCanDetach: true
-  try_self_detach: true
-  LEGAL MOVE!
-Total legal moves: 2
+Source cube: [8,-9,1]
+Piece: Ladybug
+Checking Spider: piece.id=6, has get_legal_moves=true
+Testing Ladybug moves - exactly 3 steps (2 on top, 1 down)
+Ladybug:get_legal_moves starting from [8,-9,1]
+  Path: [8,-9,1]=(8,5) -> [8,-8,0]=(8,4) -> [7,-8,1]=(7,5) -> [7,-7,0]=(7,4)
+  Path: [8,-9,1]=(8,5) -> [8,-8,0]=(8,4) -> [7,-8,1]=(7,5) -> [7,-9,2]=(7,6)
+  Path: [8,-9,1]=(8,5) -> [7,-8,1]=(7,5) -> [8,-8,0]=(8,4) -> [9,-9,0]=(9,5)
+  Path: [8,-9,1]=(8,5) -> [7,-8,1]=(7,5) -> [8,-8,0]=(8,4) -> [9,-8,-1]=(9,4)
+  Path: [8,-9,1]=(8,5) -> [7,-8,1]=(7,5) -> [8,-8,0]=(8,4) -> [8,-7,-1]=(8,3)
+  Path: [8,-9,1]=(8,5) -> [7,-8,1]=(7,5) -> [8,-8,0]=(8,4) -> [7,-7,0]=(7,4)
+  Path: [8,-9,1]=(8,5) -> [7,-8,1]=(7,5) -> [6,-7,1]=(6,4) -> [7,-7,0]=(7,4)
+  Path: [8,-9,1]=(8,5) -> [7,-8,1]=(7,5) -> [6,-7,1]=(6,4) -> [6,-6,0]=(6,3)
+  Path: [8,-9,1]=(8,5) -> [7,-8,1]=(7,5) -> [6,-7,1]=(6,4) -> [5,-6,1]=(5,4)
+  Path: [8,-9,1]=(8,5) -> [7,-8,1]=(7,5) -> [6,-8,2]=(6,5) -> [7,-9,2]=(7,6)
+  Path: [8,-9,1]=(8,5) -> [7,-8,1]=(7,5) -> [6,-8,2]=(6,5) -> [5,-8,3]=(5,6)
+  Path: [8,-9,1]=(8,5) -> [7,-8,1]=(7,5) -> [6,-8,2]=(6,5) -> [6,-9,3]=(6,6)
+Total destinations found: 12
+Found 12 potential moves
+  LEGAL: (7, 4) cube=[7,-7,0]
+  LEGAL: (7, 6) cube=[7,-9,2]
+  LEGAL: (9, 5) cube=[9,-9,0]
+  LEGAL: (9, 4) cube=[9,-8,-1]
+  LEGAL: (8, 3) cube=[8,-7,-1]
+  LEGAL: (7, 4) cube=[7,-7,0]
+  LEGAL: (7, 4) cube=[7,-7,0]
+  LEGAL: (6, 3) cube=[6,-6,0]
+  LEGAL: (5, 4) cube=[5,-6,1]
+  LEGAL: (7, 6) cube=[7,-9,2]
+  LEGAL: (5, 6) cube=[5,-8,3]
+  LEGAL: (6, 6) cube=[6,-9,3]
+Total legal moves: 12
 === Complete ===
-=== mark_legal_moves_for_piece called ===
-Source cube: [5,-7,2]
-Piece: Beetle
-Checking Spider: piece.id=2, has get_legal_moves=false
-Testing Beetle adjacent moves:
-  Neighbor 1: [6,-8,2]=(6,5) -> true
-  Neighbor 2: [6,-7,1]=(6,4) -> true
-  Neighbor 3: [5,-6,1]=(5,4) -> true
-  Neighbor 4: [4,-6,2]=(4,4) -> false
-  Neighbor 5: [4,-7,3]=(4,5) -> true
-  Neighbor 6: [5,-8,3]=(5,6) -> true
-Tests: 109, Legal moves: 5
-=== Complete ===
-=== mark_legal_moves_for_piece called ===
-Source cube: [6,-7,1]
-Piece: Beetle
-Checking Spider: piece.id=2, has get_legal_moves=false
-Testing Beetle adjacent moves:
-  Neighbor 1: [7,-8,1]=(7,5) -> true
-  Neighbor 2: [7,-7,0]=(7,4) -> true
-  Neighbor 3: [6,-6,0]=(6,3) -> false
-  Neighbor 4: [5,-6,1]=(5,4) -> true
-  Neighbor 5: [5,-7,2]=(5,5) -> true
-  Neighbor 6: [6,-8,2]=(6,5) -> true
-Tests: 109, Legal moves: 5
-=== Complete ===
-=== mark_legal_moves_for_piece called ===
-Source cube: [6,-7,1]
-Piece: Beetle
-Checking Spider: piece.id=2, has get_legal_moves=false
-Testing Beetle adjacent moves:
-  Neighbor 1: [7,-8,1]=(7,5) -> true
-  Neighbor 2: [7,-7,0]=(7,4) -> true
-  Neighbor 3: [6,-6,0]=(6,3) -> false
-  Neighbor 4: [5,-6,1]=(5,4) -> true
-  Neighbor 5: [5,-7,2]=(5,5) -> true
-  Neighbor 6: [6,-8,2]=(6,5) -> true
-Tests: 109, Legal moves: 5
-=== Complete ===
-=== mark_legal_moves_for_piece called ===
-Source cube: [6,-7,1]
-Piece: Beetle
-Checking Spider: piece.id=2, has get_legal_moves=false
-Testing Beetle adjacent moves:
-  Neighbor 1: [7,-8,1]=(7,5) -> true
-  Neighbor 2: [7,-7,0]=(7,4) -> true
-  Neighbor 3: [6,-6,0]=(6,3) -> false
-  Neighbor 4: [5,-6,1]=(5,4) -> true
-  Neighbor 5: [5,-7,2]=(5,5) -> true
-  Neighbor 6: [6,-8,2]=(6,5) -> true
-Tests: 109, Legal moves: 5
-=== Complete ===
-=== mark_legal_moves_for_piece called ===
-Source cube: [6,-8,2]
-Piece: Beetle
-Checking Spider: piece.id=2, has get_legal_moves=false
-Testing Beetle adjacent moves:
-  Neighbor 1: [7,-9,2]=(7,6) -> true
-  Neighbor 2: [7,-8,1]=(7,5) -> true
-  Neighbor 3: [6,-7,1]=(6,4) -> true
-  Neighbor 4: [5,-7,2]=(5,5) -> true
-  Neighbor 5: [5,-8,3]=(5,6) -> true
-  Neighbor 6: [6,-9,3]=(6,6) -> true
-Tests: 109, Legal moves: 6
-=== Complete ===
-=== mark_legal_moves_for_piece called ===
-Source cube: [5,-7,2]
-Piece: Beetle
-Checking Spider: piece.id=2, has get_legal_moves=false
-Testing Beetle adjacent moves:
-  Neighbor 1: [6,-8,2]=(6,5) -> true
-  Neighbor 2: [6,-7,1]=(6,4) -> true
-  Neighbor 3: [5,-6,1]=(5,4) -> true
-  Neighbor 4: [4,-6,2]=(4,4) -> false
-    Beetle BLOCKED by freedom of movement to (4,5)
-  Neighbor 5: [4,-7,3]=(4,5) -> false
-  Neighbor 6: [5,-8,3]=(5,6) -> true
-    Beetle BLOCKED by freedom of movement to (4,5)
-Tests: 109, Legal moves: 4
-=== Complete ===
-=== mark_legal_moves_for_piece called ===
-Source cube: [5,-7,2]
-Piece: Beetle
-Checking Spider: piece.id=2, has get_legal_moves=false
-Testing Beetle adjacent moves:
-  Neighbor 1: [6,-8,2]=(6,5) -> true
-  Neighbor 2: [6,-7,1]=(6,4) -> true
-  Neighbor 3: [5,-6,1]=(5,4) -> true
-  Neighbor 4: [4,-6,2]=(4,4) -> false
-    Beetle BLOCKED by freedom of movement to (4,5)
-  Neighbor 5: [4,-7,3]=(4,5) -> false
-  Neighbor 6: [5,-8,3]=(5,6) -> true
-    Beetle BLOCKED by freedom of movement to (4,5)
-Tests: 109, Legal moves: 4
-=== Complete ===
-=== mark_legal_moves_for_piece called ===
-Source cube: [5,-7,2]
-Piece: Beetle
-Checking Spider: piece.id=2, has get_legal_moves=false
-Testing Beetle adjacent moves:
-  Neighbor 1: [6,-8,2]=(6,5) -> true
-  Neighbor 2: [6,-7,1]=(6,4) -> true
-  Neighbor 3: [5,-6,1]=(5,4) -> true
-  Neighbor 4: [4,-6,2]=(4,4) -> false
-    Beetle BLOCKED by freedom of movement to (4,5)
-  Neighbor 5: [4,-7,3]=(4,5) -> false
-  Neighbor 6: [5,-8,3]=(5,6) -> true
-    Beetle BLOCKED by freedom of movement to (4,5)
-Tests: 109, Legal moves: 4
-=== Complete ===
-Spot not empty
-=== mark_legal_moves_for_piece called ===
-Source cube: [6,-8,2]
-Piece: Soldier ant
-Checking Spider: piece.id=5, has get_legal_moves=true
-Testing Soldier Ant moves - unlimited movement with BFS
-Found 21 potential moves
-Total legal moves: 21
-=== Complete ===
-Spot not empty

@@ -1,37 +1,68 @@
-require "pieces"
+-- Player class
+Player = {}
+Player.__index = Player
 
-function init_players()
-    player = {}
-
-    for i = 1, 2 do
-        player[i] = {}
-        player[i].pieces = {}
-        player[i].pieces[1] = {}
-        player[i].pieces[1].template = piecesInventory.queenBee
-        player[i].pieces[1].inStock = 1
-        player[i].pieces[2] = {}
-        player[i].pieces[2].template = piecesInventory.beetle
-        player[i].pieces[2].inStock = 2
-        player[i].pieces[3] = {}
-        player[i].pieces[3].template = piecesInventory.grassHopper
-        player[i].pieces[3].inStock = 3
-        player[i].pieces[4] = {}
-        player[i].pieces[4].template = piecesInventory.spider
-        player[i].pieces[4].inStock = 2
-        player[i].pieces[5] = {}
-        player[i].pieces[5].template = piecesInventory.soldierAnt
-        player[i].pieces[5].inStock = 3
+function Player:new(playerId, pieceConfig)
+    local instance = setmetatable({}, Player)
+    instance.id = playerId
+    instance.pieces = {}
+    
+    -- Initialize pieces from configuration
+    for _, pieceInfo in ipairs(pieceConfig) do
+        table.insert(instance.pieces, {
+            id = pieceInfo.id,
+            name = pieceInfo.name,
+            initials = pieceInfo.initials,
+            inStock = pieceInfo.count
+        })
     end
-
-    return player
+    
+    return instance
 end
 
+function Player:getPieceStock(pieceId)
+    if self.pieces[pieceId] then
+        return self.pieces[pieceId].inStock
+    end
+    return 0
+end
+
+function Player:removePieceFromStock(pieceId)
+    if self.pieces[pieceId] and self.pieces[pieceId].inStock > 0 then
+        self.pieces[pieceId].inStock = self.pieces[pieceId].inStock - 1
+        return true
+    end
+    return false
+end
+
+function Player:addPieceToStock(pieceId)
+    if self.pieces[pieceId] then
+        self.pieces[pieceId].inStock = self.pieces[pieceId].inStock + 1
+        return true
+    end
+    return false
+end
+
+function Player:getPieceInfo(pieceId)
+    return self.pieces[pieceId]
+end
+
+function Player:getAllPieces()
+    return self.pieces
+end
+
+-- Legacy global functions for backward compatibility
 function removePieceFromStock(player_nb, id)
-    if player[player_nb].pieces[id].inStock > 0 then
-        player[player_nb].pieces[id].inStock = player[player_nb].pieces[id].inStock - 1
+    if player[player_nb] then
+        player[player_nb]:removePieceFromStock(id)
     end
 end
 
 function getPiecesInStock(player_nb, id)
-    return (player[player_nb].pieces[id].inStock)
+    if player[player_nb] then
+        return player[player_nb]:getPieceStock(id)
+    end
+    return 0
 end
+
+return Player

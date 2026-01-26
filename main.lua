@@ -1,6 +1,7 @@
 function love.load()
     hexagon = require("hexagon")
     cubecoords = require("cubecoords")
+    Config = require("config")
     require "pieces"
     require "player"
     require "game"
@@ -12,10 +13,16 @@ function love.load()
     -- Initialize console to capture print statements
     console.init()
 
-    menu_offset_x = 620
+    -- Load configuration
+    menu_offset_x = Config.game.menuOffsetX
+    window_w = Config.game.windowWidth
+    window_h = Config.game.windowHeight
+    w = Config.game.mapWidth
+    h = Config.game.mapHeight
+    size = Config.game.hexSize
+    
+    -- Game state
     move_mode = 0
-    window_w = 1024
-    window_h = 768
     active_player_id = 1
     active_piece_id = 5
     selected_piece_x = 0
@@ -24,13 +31,10 @@ function love.load()
     game_over = false
     who_won = {0, 0}
     show_cube_coords = false
+    turn_number = {1, 1}
 
     love.window.setMode(window_w, window_h)
 	love.window.setTitle("hive")
-    w = 11;
-    h = 10;
-    size = 35;
-    turn_number = {1, 1}
 
     grid = hexagon.grid(w, h, size, false, false)
     piecesInvetory = init_pieces()
@@ -42,7 +46,9 @@ function love.load()
 end
 
 function love.keypressed(key)
-    if key == "a" and active_piece_id < 5 then
+    local maxPieceId = #Config.pieceInventory
+    
+    if key == "a" and active_piece_id < maxPieceId then
         active_piece_id = active_piece_id + 1
     elseif key == "s" and active_piece_id > 1 then
         active_piece_id = active_piece_id - 1

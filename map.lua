@@ -96,7 +96,7 @@ function tryAddPieceToMap(player_nb, id, map, col, row)
         return true
     end
     
-    if (turn_number[player_nb] == 4 and player[player_nb].pieces[1].inStock == 1 and id ~= 1) then
+    if (turn_number[player_nb] == Config.rules.queenMustBePlacedByTurn and player[player_nb].pieces[1].inStock == 1 and id ~= 1) then
         print("Must place Queen bee")
         return false
     end
@@ -318,6 +318,45 @@ function mark_legal_moves_for_piece(map, src_cube, w, h)
         
         local legal_moves = {}
         for _, dest_cube in ipairs(spider_moves) do
+            -- Verify the hive won't break when moving here
+            if try_self_detach(map, src_cube, dest_cube) then
+                local hex = map_get_hex(map, dest_cube)
+                if hex then
+                    table.insert(legal_moves, hex)
+                    local col, row = cubecoords.to_offset(dest_cube)
+                    print("  LEGAL: (" .. col .. ", " .. row .. ") cube=[" .. dest_cube.x .. "," .. dest_cube.y .. "," .. dest_cube.z .. "]")
+                end
+            else
+                local col, row = cubecoords.to_offset(dest_cube)
+                print("  REJECTED (breaks hive): (" .. col .. ", " .. row .. ")")
+            end
+        end
+        
+        print("Total legal moves: " .. #legal_moves)
+        for _, hex in ipairs(legal_moves) do
+            hex.can_move = true
+        end
+        
+        print("=== Complete ===")
+        return
+    end
+    
+    -- For Ladybug (id == 6), use specialized method
+    if src_hex.piece.id == 6 and src_hex.piece.get_legal_moves then
+        print("Testing Ladybug moves - exactly 3 steps (2 on top, 1 down)")
+        
+        -- Check if piece can detach first
+        if not pieceCanDetach(map, src_cube) then
+            print("Ladybug cannot detach - would break hive")
+            print("=== Complete ===")
+            return
+        end
+        
+        local ladybug_moves = src_hex.piece:get_legal_moves(map, src_cube)
+        print("Found " .. #ladybug_moves .. " potential moves")
+        
+        local legal_moves = {}
+        for _, dest_cube in ipairs(ladybug_moves) do
             -- Verify the hive won't break when moving here
             if try_self_detach(map, src_cube, dest_cube) then
                 local hex = map_get_hex(map, dest_cube)

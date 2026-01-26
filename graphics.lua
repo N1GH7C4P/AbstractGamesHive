@@ -74,9 +74,13 @@ function drawSelected(map, x, y, grid)
 end
 
 function printPlayerStock(player, player_id, x, y)
-    for i = 1, 5 do
-        love.graphics.print("Player "..player_id.."'s remaining pieces", x, y)    
-        love.graphics.print(player[player_id].pieces[i].template.name..": "..tostring(player[player_id].pieces[i].inStock), x, y + 10 + i*20)
+    local pieces = player[player_id].pieces
+    love.graphics.print("Player "..player_id.."'s remaining pieces", x, y)
+    
+    for i = 1, #pieces do
+        local piece = pieces[i]
+        local pieceName = piece.template and piece.template.name or piece.name
+        love.graphics.print(pieceName..": "..tostring(piece.inStock), x, y + 10 + i*20)
         if (i == active_piece_id) then
             love.graphics.print("<==", x+100, y + 10 + i*20)
         end

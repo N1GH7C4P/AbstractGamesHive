@@ -1,3 +1,26 @@
+local PlayerClass = require("player")
+local Config = require("config")
+
+function init_players()
+    player = {}
+    
+    -- Create two players with pieces from configuration
+    for i = 1, 2 do
+        player[i] = PlayerClass:new(i, Config.pieceInventory)
+        
+        -- Add backward compatibility: pieces array with template structure
+        for pieceIndex, pieceData in ipairs(player[i].pieces) do
+            pieceData.template = piecesInventory[pieceData.id] or {
+                name = pieceData.name,
+                initials = pieceData.initials,
+                id = pieceData.id
+            }
+        end
+    end
+    
+    return player
+end
+
 function countNearbyPlayer(map, x, y, w, h)
     local enemy_count = 0
     local friendly_count = 0
