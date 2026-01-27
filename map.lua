@@ -13,6 +13,13 @@ local function addPieceToMap(player_nb, id, map, col, row)
     if hex then
         hex.player_id = player_nb
         hex.piece = getPieceFromInventoryById(id)
+        
+        -- Check if piece was placed on outermost ring and expand if so
+        local center = cubecoords.new(0, 0, 0)
+        local distance = cubecoords.distance(center, cube)
+        if distance >= map.current_radius then
+            expand_map(map)
+        end
     end
 end
 
@@ -33,7 +40,7 @@ local function isNextToFriendly(map, col, row)
     print("isNextToFriendly: checking cube [" .. cube.x .. "," .. cube.y .. "," .. cube.z .. "]")
     print("  active_player_id=" .. active_player_id .. ", turn_number[" .. active_player_id .. "]=" .. turn_number[active_player_id])
 
-    enemy_count, friendly_count = countNearbyPlayer(map, col, row, map.w, map.h)
+    enemy_count, friendly_count = countNearbyPlayer(map, cube)
     print("  Neighbors: enemy=" .. enemy_count .. ", friendly=" .. friendly_count)
     
     -- Check for first and second piece
@@ -84,12 +91,18 @@ function tryAddPieceToMap(player_nb, id, map, col, row)
     end
     
     if isMapEmpty(map) then
-        -- Place first piece at clicked position
-        highlight = 0
-        removePieceFromStock(player_nb, id)
-        hex.player_id = player_nb
-        hex.piece = getPieceFromInventoryById(id)
-        return true
+        -- Force first piece at center (0,0,0)
+        local center_cube = cubecoords.new(0, 0, 0)
+        local center_hex = map_get_hex(map, center_cube)
+        if center_hex then
+            highlight = 0
+            removePieceFromStock(player_nb, id)
+            center_hex.player_id = player_nb
+            center_hex.piece = getPieceFromInventoryById(id)
+            -- No need to expand for first piece at center
+            return true
+        end
+        return false
     end
     
     if (turn_number[player_nb] == Config.rules.queenMustBePlacedByTurn and player[player_nb].pieces[1].inStock == 1 and id ~= 1) then
@@ -105,29 +118,20 @@ function tryAddPieceToMap(player_nb, id, map, col, row)
     return true
 end
 
-function init_map(w, h)
+function init_map()
     local map = {}
-    map.w = w
-    map.h = h
     map.hexes = {}
-    map.offset_to_key = {}
+    map.current_radius = 10  -- Track current grid radius
     
     -- Build hexes in rings radiating from center (0,0,0)
-    -- Create 10 rings around the center
+    -- Start with 10 rings around the center
     local center = cubecoords.new(0, 0, 0)
     local rings = 10
     local all_hexes = cubecoords.spiral(center, rings)
     
     for _, cube in ipairs(all_hexes) do
         local key = cubecoords.to_key(cube)
-        local col, row = cubecoords.to_offset(cube)
         
-        -- Initialize offset_to_key table as needed
-        if not map.offset_to_key[row] then
-            map.offset_to_key[row] = {}
-        end
-        
-        map.offset_to_key[row][col] = key
         map.hexes[key] = {
             cube = cube,
             piece = nil,
@@ -138,6 +142,45 @@ function init_map(w, h)
     end
     
     return map
+end
+
+-- Expand the map by adding one more ring
+function expand_map(map)
+    map.current_radius = map.current_radius + 1
+    local center = cubecoords.new(0, 0, 0)
+    local new_ring = cubecoords.ring(center, map.current_radius)
+    
+    for _, cube in ipairs(new_ring) do
+        local key = cubecoords.to_key(cube)
+        
+        map.hexes[key] = {
+            cube = cube,
+            piece = nil,
+            player_id = nil,
+            neighbour = nil,
+            tmp = nil
+        }
+    end
+    
+    print("Map expanded to radius " .. map.current_radius)
+end
+
+-- Check if any neighbors of a cube are outside the map, and expand if needed
+function ensure_map_coverage(map, cube)
+    local neighbors = cubecoords.all_neighbors(cube)
+    local needs_expansion = false
+    
+    for _, neighbor in ipairs(neighbors) do
+        local hex = map_get_hex(map, neighbor)
+        if not hex then
+            needs_expansion = true
+            break
+        end
+    end
+    
+    if needs_expansion then
+        expand_map(map)
+    end
 end
 
 -- Helper to get hex by cube coordinates
@@ -634,9 +677,8 @@ function try_self_detach(map, src_cube, dest_cube)
     local tmp = src_hex.player_id
     src_hex.player_id = nil
     
-    -- Convert cube to offset coordinates for countNearbyPlayer
-    local dest_col, dest_row = cubecoords.to_offset(dest_cube)
-    local enemy, friend = countNearbyPlayer(map, dest_col, dest_row, map.w, map.h)
+    -- Check if destination would be connected to the hive
+    local enemy, friend = countNearbyPlayer(map, dest_cube)
     if (enemy + friend == 0) then
         src_hex.player_id = tmp
         return false
@@ -685,7 +727,16 @@ function move_piece_on_map(map, src_col, src_row, dest_col, dest_row)
     
     -- Call the piece's move_piece method if available
     if src_hex.piece and src_hex.piece.move_piece then
-        return src_hex.piece:move_piece(map, src_cube, dest_cube, active_player_id)
+        local success = src_hex.piece:move_piece(map, src_cube, dest_cube, active_player_id)
+        if success then
+            -- Check if piece moved to outermost ring and expand if so
+            local center = cubecoords.new(0, 0, 0)
+            local distance = cubecoords.distance(center, dest_cube)
+            if distance >= map.current_radius then
+                expand_map(map)
+            end
+        end
+        return success
     end
     
     return false

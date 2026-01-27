@@ -1,7 +1,7 @@
 -- Game state export functionality
 GameState = {}
 
-function GameState.export_to_file(map, w, h, filename)
+function GameState.export_to_file(map, filename)
     filename = filename or "gamestate.txt"
     
     local file = io.open(filename, "w")
@@ -47,10 +47,7 @@ function GameState.export_to_file(map, w, h, filename)
     for _, hex in pairs(map.hexes) do
         if hex.piece then
             piece_count = piece_count + 1
-            local col, row = cubecoords.to_offset(hex.cube)
             table.insert(pieces_list, {
-                col = col,
-                row = row,
                 cube = hex.cube,
                 piece = hex.piece,
                 player_id = hex.player_id
@@ -60,21 +57,20 @@ function GameState.export_to_file(map, w, h, filename)
     
     file:write("Total pieces on board: " .. piece_count .. "\n\n")
     
-    -- Sort by player then by position
+    -- Sort by player then by cube coordinates
     table.sort(pieces_list, function(a, b)
         if a.player_id == b.player_id then
-            if a.row == b.row then
-                return a.col < b.col
+            if a.cube.x == b.cube.x then
+                return a.cube.z < b.cube.z
             end
-            return a.row < b.row
+            return a.cube.x < b.cube.x
         end
         return a.player_id < b.player_id
     end)
     
     for _, p in ipairs(pieces_list) do
-        file:write(string.format("(%2d, %2d) - Player %d - %s (id:%d) [cube: %d,%d,%d]", 
-            p.col, p.row, p.player_id, p.piece.name, p.piece.id,
-            p.cube.x, p.cube.y, p.cube.z))
+        file:write(string.format("[%2d,%2d,%2d] - Player %d - %s (id:%d)", 
+            p.cube.x, p.cube.y, p.cube.z, p.player_id, p.piece.name, p.piece.id))
         
         if p.piece.under_piece then
             file:write(" [STACKED on " .. p.piece.under_piece.name .. "]")
@@ -87,8 +83,7 @@ function GameState.export_to_file(map, w, h, filename)
         for _, ncube in ipairs(neighbors) do
             local nhex = map_get_hex(map, ncube)
             if nhex and nhex.piece then
-                local ncol, nrow = cubecoords.to_offset(nhex.cube)
-                table.insert(neighbor_pieces, "(" .. ncol .. "," .. nrow .. ")")
+                table.insert(neighbor_pieces, "[" .. ncube.x .. "," .. ncube.y .. "," .. ncube.z .. "]")
             end
         end
         
@@ -97,30 +92,12 @@ function GameState.export_to_file(map, w, h, filename)
         end
     end
     
-    file:write("\n=== BOARD MAP (visual) ===\n")
-    for i = 1, h do
-        local line = ""
-        if i % 2 == 0 then
-            line = "  "  -- Indent even rows for hex grid
-        end
-        for j = 1, w do
-            local hex = map_get_hex_offset(map, j, i)
-            if hex and hex.piece then
-                line = line .. string.format("[%s%d]", hex.piece.initials, hex.player_id)
-            else
-                line = line .. " .. "
-            end
-            line = line .. " "
-        end
-        file:write(line .. "\n")
-    end
-    
     file:close()
     print("Game state exported to: " .. filename)
     return true
 end
 
-function GameState.load_from_file(map, w, h, filename)
+function GameState.load_from_file(map, filename)
     filename = filename or "gamestate.txt"
     
     local file = io.open(filename, "r")

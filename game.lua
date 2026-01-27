@@ -21,11 +21,11 @@ function init_players()
     return player
 end
 
-function countNearbyPlayer(map, x, y, w, h)
+function countNearbyPlayer(map, cube)
     local enemy_count = 0
     local friendly_count = 0
     
-    mark_neighbours_on_map(map, x, y, w, h)
+    mark_neighbours_on_map_cube(map, cube)
     
     for _, hex in pairs(map.hexes) do
         if hex.neighbour then
@@ -63,8 +63,7 @@ function checkIfWin(map, w, h)
             
             -- If a Queen Bee was found, check if it's surrounded
             if queen_player_id then
-                local col, row = cubecoords.to_offset(hex.cube)
-                enemy, friend = countNearbyPlayer(map, col, row, w, h)
+                enemy, friend = countNearbyPlayer(map, hex.cube)
                 if enemy + friend == 6 then
                     game_over = true
                     who_won[queen_player_id] = 1

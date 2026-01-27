@@ -10,21 +10,21 @@ function CubeCoords.new(x, y, z)
     return {x = x, y = y, z = z}
 end
 
--- Convert offset coordinates (col, row with alternating offsets) to cube
--- Uses "odd-q" layout for flat-topped hexagons: odd columns are shifted down
-function CubeCoords.from_offset(col, row)
-    local x = col
-    local z = row - math.floor((col + (col % 2)) / 2)
-    local y = -x - z
-    return CubeCoords.new(x, y, z)
-end
-
 -- Convert cube coordinates back to offset coordinates
 -- Uses "odd-q" layout for flat-topped hexagons: odd columns are shifted down
 function CubeCoords.to_offset(cube)
     local col = cube.x
     local row = cube.z + math.floor((cube.x + (cube.x % 2)) / 2)
     return col, row
+end
+
+-- Convert offset coordinates to cube coordinates
+-- Uses "odd-q" layout for flat-topped hexagons: odd columns are shifted down
+function CubeCoords.from_offset(col, row)
+    local x = col
+    local z = row - math.floor((col + (col % 2)) / 2)
+    local y = -x - z
+    return CubeCoords.new(x, y, z)
 end
 
 -- Get the 6 neighboring directions in cube coordinates
