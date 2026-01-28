@@ -10,6 +10,7 @@ function Ladybug:new(owner)
     instance.initials = "LB"
     instance.color = {1, 0, 0, 1}  -- Red
     instance.id = 6
+    instance.image_path = "img/ladybug.png"
     return instance
 end
 

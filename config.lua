@@ -2,14 +2,16 @@
 Config = {}
 
 -- Piece inventory configuration for each player
+-- Names correspond to piece classes
 Config.pieceInventory = {
-    {id = 1, name = "Queen bee", initials = "QB", count = 1},
-    {id = 2, name = "Beetle", initials = "Be", count = 2},
-    {id = 3, name = "Grasshopper", initials = "GH", count = 3},
-    {id = 4, name = "Spider", initials = "Sp", count = 2},
-    {id = 5, name = "Soldier ant", initials = "SA", count = 3},
-    {id = 6, name = "Ladybug", initials = "LB", count = 1},
-    {id = 7, name = "Mosquito", initials = "Mo", count = 1},
+    {name = "QueenBee", count = 1},
+    {name = "Beetle", count = 2},
+    {name = "Grasshopper", count = 3},
+    {name = "Spider", count = 2},
+    {name = "SoldierAnt", count = 3},
+    {name = "Ladybug", count = 1},
+    {name = "Mosquito", count = 1},
+    {name = "Pillbug", count = 1},
 }
 
 -- Game settings

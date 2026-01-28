@@ -10,6 +10,7 @@ function Beetle:new(owner)
     instance.initials = "Be"
     instance.color = {0.5, 0.2, 0, 1}
     instance.id = 2
+    instance.image_path = "img/beetle.png"
     return instance
 end
 

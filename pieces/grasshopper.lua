@@ -10,6 +10,7 @@ function Grasshopper:new(owner)
     instance.initials = "GH"
     instance.color = {0.2, 1, 0.2, 1}
     instance.id = 3
+    instance.image_path = "img/grasshopper.png"
     return instance
 end
 

@@ -10,6 +10,7 @@ function QueenBee:new(owner)
     instance.initials = "QB"
     instance.color = {1, 0.78, 0, 1}
     instance.id = 1
+    instance.image_path = "img/queen_bee.png"
     return instance
 end
 

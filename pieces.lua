@@ -7,58 +7,49 @@ Spider = require("pieces.spider")
 SoldierAnt = require("pieces.soldierant")
 Ladybug = require("pieces.ladybug")
 Mosquito = require("pieces.mosquito")
+Pillbug = require("pieces.pillbug")
 
--- Legacy functions for compatibility
+-- Map of class names to constructors
+local pieceClasses = {
+    QueenBee = QueenBee,
+    Beetle = Beetle,
+    Grasshopper = Grasshopper,
+    Spider = Spider,
+    SoldierAnt = SoldierAnt,
+    Ladybug = Ladybug,
+    Mosquito = Mosquito,
+    Pillbug = Pillbug
+}
+
+-- Initialize piece templates from config
 function init_pieces()
+    local Config = require("config")
     piecesInventory = {}
-
-    -- Initialize from config-like structure for backward compatibility
-    piecesInventory[1] = {name = "Queen bee", initials = "QB", id = 1}
-    piecesInventory[2] = {name = "Beetle", initials = "Be", id = 2}
-    piecesInventory[3] = {name = "Grasshopper", initials = "GH", id = 3}
-    piecesInventory[4] = {name = "Spider", initials = "Sp", id = 4}
-    piecesInventory[5] = {name = "Soldier ant", initials = "SA", id = 5}
-    piecesInventory[6] = {name = "Ladybug", initials = "LB", id = 6}
-    piecesInventory[7] = {name = "Mosquito", initials = "Mo", id = 7}
     
-    -- Old named access for backward compatibility
-    piecesInventory.queenBee = piecesInventory[1]
-    piecesInventory.beetle = piecesInventory[2]
-    piecesInventory.grassHopper = piecesInventory[3]
-    piecesInventory.spider = piecesInventory[4]
-    piecesInventory.soldierAnt = piecesInventory[5]
-    piecesInventory.ladybug = piecesInventory[6]
-    piecesInventory.mosquito = piecesInventory[7]
-
-    piecesInventory.queenBee.color = {1, 0.78, 0, 1}
-    piecesInventory.beetle.color = {0.5, 0.2, 0, 1}
-    piecesInventory.grassHopper.color = {0.2, 1, 0.2, 1}
-    piecesInventory.spider.color = {0.5, 0, 0, 1}
-    piecesInventory.soldierAnt.color = {0.5, 0.5, 0.5, 1}
-    piecesInventory.ladybug.color = {1, 0, 0, 1}
-    piecesInventory.mosquito.color = {0.5, 0.5, 0.5, 1}
-
-    return (piecesInventory)
-end
-
-function getPieceFromInventoryById(id)
-    -- Return a new instance of the appropriate piece class
-    -- This ensures each placed piece has all the methods available
-    if id == 1 then
-        return QueenBee:new(active_player_id)
-    elseif id == 2 then
-        return Beetle:new(active_player_id)
-    elseif id == 3 then
-        return Grasshopper:new(active_player_id)
-    elseif id == 4 then
-        return Spider:new(active_player_id)
-    elseif id == 5 then
-        return SoldierAnt:new(active_player_id)
-    elseif id == 6 then
-        return Ladybug:new(active_player_id)
-    elseif id == 7 then
-        return Mosquito:new(active_player_id)
+    -- Create template pieces (owner 1 for template)
+    for index, pieceConfig in ipairs(Config.pieceInventory) do
+        local className = pieceConfig.name
+        local pieceClass = pieceClasses[className]
+        
+        if pieceClass then
+            -- Create a template instance to get properties
+            local template = pieceClass:new(1)
+            
+            piecesInventory[index] = {
+                id = template.id,
+                name = template.name,
+                initials = template.initials,
+                color = template.color,
+                image_path = template.image_path,
+                image = nil,
+                class = pieceClass
+            }
+        else
+            print("Warning: Unknown piece class: " .. className)
+        end
     end
+    
+    return piecesInventory
 end
 
 -- Create a new piece instance by type

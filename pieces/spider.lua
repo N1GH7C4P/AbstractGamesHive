@@ -10,6 +10,7 @@ function Spider:new(owner)
     instance.initials = "Sp"
     instance.color = {0.5, 0, 0, 1}
     instance.id = 4
+    instance.image_path = "img/spider.png"
     return instance
 end
 

@@ -1,8 +1,129 @@
--- Game state export functionality
+-- Game state save/load functionality
 GameState = {}
 
-function GameState.export_to_file(map, filename)
-    filename = filename or "gamestate.txt"
+-- Simple JSON encoder
+local function json_encode(obj)
+    local t = type(obj)
+    
+    if t == "table" then
+        local is_array = true
+        local max_index = 0
+        for k, v in pairs(obj) do
+            if type(k) ~= "number" or k < 1 or k ~= math.floor(k) then
+                is_array = false
+                break
+            end
+            max_index = math.max(max_index, k)
+        end
+        
+        if is_array then
+            local parts = {}
+            for i = 1, max_index do
+                parts[i] = json_encode(obj[i])
+            end
+            return "[" .. table.concat(parts, ",") .. "]"
+        else
+            local parts = {}
+            for k, v in pairs(obj) do
+                local key = type(k) == "string" and ('"' .. k .. '"') or tostring(k)
+                table.insert(parts, key .. ":" .. json_encode(v))
+            end
+            return "{" .. table.concat(parts, ",") .. "}"
+        end
+    elseif t == "string" then
+        return '"' .. obj:gsub('\\', '\\\\'):gsub('"', '\\"'):gsub('\n', '\\n') .. '"'
+    elseif t == "number" or t == "boolean" then
+        return tostring(obj)
+    else
+        return "null"
+    end
+end
+
+-- Simple JSON decoder
+local function json_decode(str)
+    str = str:gsub("^%s*", ""):gsub("%s*$", "")
+    
+    if str == "null" or str == "" then
+        return nil
+    elseif str == "true" then
+        return true
+    elseif str == "false" then
+        return false
+    elseif str:match("^%-?%d+%.?%d*$") then
+        return tonumber(str)
+    elseif str:sub(1, 1) == '"' then
+        return str:sub(2, -2):gsub('\\"', '"'):gsub('\\\\', '\\'):gsub('\\n', '\n')
+    elseif str:sub(1, 1) == '[' then
+        local arr = {}
+        local content = str:sub(2, -2)
+        if content ~= "" then
+            local depth = 0
+            local current = ""
+            for i = 1, #content do
+                local c = content:sub(i, i)
+                if c == '{' or c == '[' then
+                    depth = depth + 1
+                    current = current .. c
+                elseif c == '}' or c == ']' then
+                    depth = depth - 1
+                    current = current .. c
+                elseif c == ',' and depth == 0 then
+                    table.insert(arr, json_decode(current))
+                    current = ""
+                else
+                    current = current .. c
+                end
+            end
+            if current ~= "" then
+                table.insert(arr, json_decode(current))
+            end
+        end
+        return arr
+    elseif str:sub(1, 1) == '{' then
+        local obj = {}
+        local content = str:sub(2, -2)
+        if content ~= "" then
+            local depth = 0
+            local current = ""
+            local pairs_arr = {}
+            for i = 1, #content do
+                local c = content:sub(i, i)
+                if c == '{' or c == '[' then
+                    depth = depth + 1
+                    current = current .. c
+                elseif c == '}' or c == ']' then
+                    depth = depth - 1
+                    current = current .. c
+                elseif c == ',' and depth == 0 then
+                    table.insert(pairs_arr, current)
+                    current = ""
+                else
+                    current = current .. c
+                end
+            end
+            if current ~= "" then
+                table.insert(pairs_arr, current)
+            end
+            
+            for _, pair in ipairs(pairs_arr) do
+                local colon_pos = pair:find(":")
+                if colon_pos then
+                    local key_str = pair:sub(1, colon_pos - 1):gsub("^%s*", ""):gsub("%s*$", "")
+                    local val_str = pair:sub(colon_pos + 1):gsub("^%s*", ""):gsub("%s*$", "")
+                    local key = key_str:sub(1, 1) == '"' and key_str:sub(2, -2) or tonumber(key_str)
+                    obj[key] = json_decode(val_str)
+                end
+            end
+        end
+        return obj
+    end
+    
+    return nil
+end
+
+-- Save complete game state to file
+function GameState.save(filename)
+    filename = filename or "savegame.json"
     
     local file = io.open(filename, "w")
     if not file then
@@ -10,95 +131,74 @@ function GameState.export_to_file(map, filename)
         return false
     end
     
-    file:write("=== HIVE GAME STATE ===\n")
-    file:write("Date: " .. os.date("%Y-%m-%d %H:%M:%S") .. "\n\n")
+    -- Build save data structure
+    local save_data = {}
     
-    -- Game info
-    file:write("Active Player: " .. active_player_id .. "\n")
-    file:write("Turn Numbers: Player 1: " .. turn_number[1] .. ", Player 2: " .. turn_number[2] .. "\n")
-    file:write("Move Mode: " .. move_mode .. "\n")
-    file:write("Game Over: " .. tostring(game_over) .. "\n\n")
+    -- Global game state
+    save_data.game_state = {
+        active_player_id = active_player_id,
+        active_piece_id = active_piece_id,
+        turn_number = {turn_number[1], turn_number[2]},
+        move_mode = move_mode,
+        game_over = game_over,
+        who_won = {who_won[1], who_won[2]},
+        selected_piece_x = selected_piece_x,
+        selected_piece_y = selected_piece_y,
+        highlight = highlight
+    }
     
-    -- Selected piece
-    if move_mode == 1 then
-        file:write("Selected Piece: (" .. selected_piece_x .. ", " .. selected_piece_y .. ")\n")
-        if map[selected_piece_y] and map[selected_piece_y][selected_piece_x] and map[selected_piece_y][selected_piece_x].piece then
-            file:write("  Type: " .. map[selected_piece_y][selected_piece_x].piece.name .. "\n")
-            file:write("  Owner: Player " .. map[selected_piece_y][selected_piece_x].player_id .. "\n")
-        end
-        file:write("\n")
-    end
+    -- Camera state
+    save_data.camera = {
+        x = camera_x,
+        y = camera_y,
+        zoom = camera_zoom
+    }
     
-    -- Player inventory
-    file:write("=== PLAYER INVENTORY ===\n")
+    -- Player inventories
+    save_data.players = {}
     for p = 1, 2 do
-        file:write("Player " .. p .. ":\n")
-        for i = 1, 5 do
-            file:write("  " .. player[p].pieces[i].template.name .. ": " .. player[p].pieces[i].inStock .. " in stock\n")
+        save_data.players[p] = {
+            id = player[p].id,
+            pieces = {}
+        }
+        for i, piece_info in ipairs(player[p].pieces) do
+            save_data.players[p].pieces[i] = {
+                id = piece_info.id,
+                name = piece_info.name,
+                inStock = piece_info.inStock
+            }
         end
-        file:write("\n")
     end
     
     -- Pieces on board
-    file:write("=== PIECES ON BOARD ===\n")
-    local piece_count = 0
-    local pieces_list = {}
-    
-    for _, hex in pairs(map.hexes) do
+    save_data.board = {}
+    for cube_key, hex in pairs(map.hexes) do
         if hex.piece then
-            piece_count = piece_count + 1
-            table.insert(pieces_list, {
-                cube = hex.cube,
-                piece = hex.piece,
-                player_id = hex.player_id
+            table.insert(save_data.board, {
+                cube = {x = hex.cube.x, y = hex.cube.y, z = hex.cube.z},
+                piece_id = hex.piece.id,
+                player_id = hex.player_id,
+                has_under_piece = hex.piece.under_piece ~= nil,
+                under_piece_id = hex.piece.under_piece and hex.piece.under_piece.id or nil
             })
         end
     end
     
-    file:write("Total pieces on board: " .. piece_count .. "\n\n")
+    -- Map metadata
+    save_data.map = {
+        current_radius = map.current_radius
+    }
     
-    -- Sort by player then by cube coordinates
-    table.sort(pieces_list, function(a, b)
-        if a.player_id == b.player_id then
-            if a.cube.x == b.cube.x then
-                return a.cube.z < b.cube.z
-            end
-            return a.cube.x < b.cube.x
-        end
-        return a.player_id < b.player_id
-    end)
-    
-    for _, p in ipairs(pieces_list) do
-        file:write(string.format("[%2d,%2d,%2d] - Player %d - %s (id:%d)", 
-            p.cube.x, p.cube.y, p.cube.z, p.player_id, p.piece.name, p.piece.id))
-        
-        if p.piece.under_piece then
-            file:write(" [STACKED on " .. p.piece.under_piece.name .. "]")
-        end
-        file:write("\n")
-        
-        -- Show neighbors
-        local neighbors = cubecoords.all_neighbors(p.cube)
-        local neighbor_pieces = {}
-        for _, ncube in ipairs(neighbors) do
-            local nhex = map_get_hex(map, ncube)
-            if nhex and nhex.piece then
-                table.insert(neighbor_pieces, "[" .. ncube.x .. "," .. ncube.y .. "," .. ncube.z .. "]")
-            end
-        end
-        
-        if #neighbor_pieces > 0 then
-            file:write("  Adjacent pieces at: " .. table.concat(neighbor_pieces, ", ") .. "\n")
-        end
-    end
-    
+    -- Write to file
+    file:write(json_encode(save_data))
     file:close()
-    print("Game state exported to: " .. filename)
+    print("Game saved to: " .. filename)
     return true
 end
 
-function GameState.load_from_file(map, filename)
-    filename = filename or "gamestate.txt"
+-- Load game state from file
+function GameState.load(filename)
+    filename = filename or "savegame.json"
     
     local file = io.open(filename, "r")
     if not file then
@@ -106,106 +206,115 @@ function GameState.load_from_file(map, filename)
         return false
     end
     
-    print("Loading game state from: " .. filename)
+    local content = file:read("*all")
+    file:close()
     
-    -- Clear current board
-    for _, hex in pairs(map.hexes) do
+    -- Parse save data
+    local save_data = json_decode(content)
+    if not save_data then
+        print("ERROR: Failed to parse save file")
+        return false
+    end
+    
+    -- Clear current game state
+    for cube_key, hex in pairs(map.hexes) do
         hex.piece = nil
         hex.player_id = nil
         hex.neighbour = nil
+        hex.can_move = nil
+        hex.can_special = nil
     end
     
-    -- Reset player inventories to full
-    for p = 1, 2 do
-        player[p].pieces[1].inStock = 1  -- Queen Bee
-        player[p].pieces[2].inStock = 2  -- Beetle
-        player[p].pieces[3].inStock = 3  -- Grasshopper
-        player[p].pieces[4].inStock = 2  -- Spider
-        player[p].pieces[5].inStock = 3  -- Soldier Ant
+    -- Restore global game state
+    if save_data.game_state then
+        active_player_id = save_data.game_state.active_player_id or 1
+        active_piece_id = save_data.game_state.active_piece_id or 1
+        turn_number = {
+            save_data.game_state.turn_number[1] or 1,
+            save_data.game_state.turn_number[2] or 1
+        }
+        move_mode = save_data.game_state.move_mode or 0
+        game_over = save_data.game_state.game_over or false
+        who_won = {
+            save_data.game_state.who_won[1] or 0,
+            save_data.game_state.who_won[2] or 0
+        }
+        selected_piece_x = save_data.game_state.selected_piece_x or 0
+        selected_piece_y = save_data.game_state.selected_piece_y or 0
+        highlight = save_data.game_state.highlight or 0
     end
     
-    local pieces_loaded = 0
-    local in_pieces_section = false
+    -- Restore camera
+    if save_data.camera then
+        camera_x = save_data.camera.x or 0
+        camera_y = save_data.camera.y or 0
+        camera_zoom = save_data.camera.zoom or 0.8
+    end
     
-    for line in file:lines() do
-        -- Check if we're in the pieces section
-        if line:match("=== PIECES ON BOARD ===") then
-            in_pieces_section = true
-        elseif line:match("=== BOARD MAP") then
-            in_pieces_section = false
-        elseif in_pieces_section then
-            -- Parse piece lines: ( 6,  5) - Player 1 - Soldier ant (id:5)
-            local col, row, player_id, piece_name, piece_id = line:match("^%s*%(%s*(%d+),%s*(%d+)%)%s*%-%s*Player%s*(%d+)%s*%-%s*(.-)%s*%(id:(%d+)%)")
-            
-            if col and row and player_id and piece_id then
-                col = tonumber(col)
-                row = tonumber(row)
-                player_id = tonumber(player_id)
-                piece_id = tonumber(piece_id)
-                
-                -- Create piece instance based on ID
-                local piece = nil
-                if piece_id == 1 then
-                    piece = QueenBee:new(player_id)
-                elseif piece_id == 2 then
-                    piece = Beetle:new(player_id)
-                elseif piece_id == 3 then
-                    piece = Grasshopper:new(player_id)
-                elseif piece_id == 4 then
-                    piece = Spider:new(player_id)
-                elseif piece_id == 5 then
-                    piece = SoldierAnt:new(player_id)
+    -- Restore player inventories
+    if save_data.players then
+        for p = 1, 2 do
+            if save_data.players[p] then
+                for i, piece_data in ipairs(save_data.players[p].pieces) do
+                    if player[p].pieces[i] then
+                        player[p].pieces[i].inStock = piece_data.inStock
+                    end
                 end
+            end
+        end
+    end
+    
+    -- Restore map metadata
+    if save_data.map then
+        map.current_radius = save_data.map.current_radius or 10
+    end
+    
+    -- Restore pieces on board
+    if save_data.board then
+        -- First pass: place all pieces without stacking
+        for _, piece_data in ipairs(save_data.board) do
+            if not piece_data.has_under_piece then
+                local cube = cubecoords.new(piece_data.cube.x, piece_data.cube.y, piece_data.cube.z)
+                local hex = map_get_hex(map, cube)
                 
-                if piece then
-                    -- Get cube coordinates
-                    local cube = cubecoords.from_offset(col, row)
-                    local hex = map_get_hex(map, cube)
-                    
-                    if hex then
-                        -- Place piece on map
-                        hex.piece = piece
-                        hex.player_id = player_id
-                        piece:place(cube)
-                        
-                        -- Decrease from stock
-                        player[player_id].pieces[piece_id].inStock = player[player_id].pieces[piece_id].inStock - 1
-                        
-                        pieces_loaded = pieces_loaded + 1
-                        print("Loaded: " .. piece.name .. " at (" .. col .. ", " .. row .. ") for Player " .. player_id)
+                if hex then
+                    -- Get piece template and create instance
+                    local piece_template = piecesInventory[piece_data.piece_id]
+                    if piece_template then
+                        hex.piece = piece_template.class:new(piece_data.player_id)
+                        hex.player_id = piece_data.player_id
                     end
                 end
             end
         end
         
-        -- Parse turn numbers
-        local turn1, turn2 = line:match("Turn Numbers: Player 1: (%d+), Player 2: (%d+)")
-        if turn1 and turn2 then
-            turn_number[1] = tonumber(turn1)
-            turn_number[2] = tonumber(turn2)
-            print("Set turn numbers: P1=" .. turn_number[1] .. ", P2=" .. turn_number[2])
-        end
-        
-        -- Parse active player
-        local active = line:match("Active Player: (%d+)")
-        if active then
-            active_player_id = tonumber(active)
-            print("Set active player: " .. active_player_id)
+        -- Second pass: handle stacked pieces (beetles on top)
+        for _, piece_data in ipairs(save_data.board) do
+            if piece_data.has_under_piece then
+                local cube = cubecoords.new(piece_data.cube.x, piece_data.cube.y, piece_data.cube.z)
+                local hex = map_get_hex(map, cube)
+                
+                if hex and hex.piece then
+                    -- Create the beetle piece
+                    local beetle_template = piecesInventory[piece_data.piece_id]
+                    if beetle_template then
+                        local beetle_piece = beetle_template.class:new(piece_data.player_id)
+                        -- Set up stacking
+                        beetle_piece.under_piece = hex.piece
+                        hex.piece = beetle_piece
+                        hex.player_id = piece_data.player_id
+                    end
+                end
+            end
         end
     end
     
-    file:close()
+    -- Reset Pillbug special move state
+    pillbug_special_mode = false
+    pillbug_cube = nil
+    pillbug_target_cube = nil
     
-    -- Reset game state
-    move_mode = 0
-    highlight = 0
-    selected_piece_x = 0
-    selected_piece_y = 0
-    game_over = false
-    who_won = {0, 0}
-    
-    print("Game state loaded successfully!")
-    print("Pieces on board: " .. pieces_loaded)
+    print("Game loaded from: " .. filename)
     return true
 end
 

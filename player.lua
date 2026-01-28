@@ -7,13 +7,15 @@ function Player:new(playerId, pieceConfig)
     instance.id = playerId
     instance.pieces = {}
     
-    -- Initialize pieces from configuration
-    for _, pieceInfo in ipairs(pieceConfig) do
+    -- Initialize pieces from configuration with templates from piecesInventory
+    for pieceIndex, pieceInfo in ipairs(pieceConfig) do
+        local template = piecesInventory[pieceIndex]
         table.insert(instance.pieces, {
-            id = pieceInfo.id,
-            name = pieceInfo.name,
-            initials = pieceInfo.initials,
-            inStock = pieceInfo.count
+            id = template.id,
+            name = template.name,
+            initials = template.initials,
+            inStock = pieceInfo.count,
+            template = template
         })
     end
     

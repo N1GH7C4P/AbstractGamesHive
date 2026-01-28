@@ -5,14 +5,18 @@ require "game"
 -- The map stores hexes using cube coordinate keys
 -- Maintains backward compatibility through wrapper functions
 
-local function addPieceToMap(player_nb, id, map, col, row)
+local function addPieceToMap(player_nb, piece_template, map, cube)
     highlight = 0
-    removePieceFromStock(player_nb, id)
-    local cube = cubecoords.from_offset(col, row)
+    removePieceFromStock(player_nb, piece_template.id)
     local hex = map_get_hex(map, cube)
     if hex then
         hex.player_id = player_nb
-        hex.piece = getPieceFromInventoryById(id)
+        local new_piece = piece_template.class:new(player_nb)
+        if not new_piece then
+            print("ERROR: Failed to create piece from template: " .. piece_template.name)
+            return
+        end
+        hex.piece = new_piece
         
         -- Check if piece was placed on outermost ring and expand if so
         local center = cubecoords.new(0, 0, 0)
@@ -71,13 +75,12 @@ local function isNextToFriendly(map, col, row)
     return false
 end
 
-function tryAddPieceToMap(player_nb, id, map, col, row)
-    if getPiecesInStock(player_nb, id) == 0 then
-        print("Player ", player_nb, " has no piece nb ", id, " in stock.")
+function tryAddPieceToMap(player_nb, piece_template, map, cube)
+    if getPiecesInStock(player_nb, piece_template.id) == 0 then
+        print("Player ", player_nb, " has no piece ", piece_template.name, " in stock.")
         return false
     end
     
-    local cube = cubecoords.from_offset(col, row)
     local hex = map_get_hex(map, cube)
     
     if not hex then
@@ -96,25 +99,32 @@ function tryAddPieceToMap(player_nb, id, map, col, row)
         local center_hex = map_get_hex(map, center_cube)
         if center_hex then
             highlight = 0
-            removePieceFromStock(player_nb, id)
+            removePieceFromStock(player_nb, piece_template.id)
             center_hex.player_id = player_nb
-            center_hex.piece = getPieceFromInventoryById(id)
+            center_hex.piece = piece_template.class:new(player_nb)
             -- No need to expand for first piece at center
             return true
         end
         return false
     end
     
-    if (turn_number[player_nb] == Config.rules.queenMustBePlacedByTurn and player[player_nb].pieces[1].inStock == 1 and id ~= 1) then
+    if (turn_number[player_nb] == Config.rules.queenMustBePlacedByTurn and player[player_nb].pieces[1].inStock == 1 and piece_template.id ~= 1) then
         print("Must place Queen bee")
         return false
     end
     
+    local col, row = cubecoords.to_offset(cube)
     if not isNextToFriendly(map, col, row) then
         return false
     end
     
-    addPieceToMap(player_nb, id, map, col, row)
+    addPieceToMap(player_nb, piece_template, map, cube)
+    
+    -- Send network message if in multiplayer game
+    if network and network.mode ~= "none" and network.connected then
+        network.send_place(player_nb, piece_template.id, cube)
+    end
+    
     return true
 end
 
@@ -198,16 +208,6 @@ function map_get_hex_offset(map, col, row)
     return map.hexes[key]
 end
 
-function print_map_pieces(map, w, h, x, y)
-    local count = 0
-    for _, hex in pairs(map.hexes) do
-        if hex.piece then
-            love.graphics.print(hex.piece.name.." ["..hex.cube.x..","..hex.cube.y..","..hex.cube.z.."] - placed by: player"..hex.player_id, x, y + count*20)
-            count = count + 1
-        end
-    end
-end
-
 function mark_neighbours_on_map_cube(map, cube)
     local neighbors = cubecoords.all_neighbors(cube)
     for i, ncube in ipairs(neighbors) do
@@ -245,6 +245,7 @@ function clear_all_neighbours(map, w, h)
     for _, hex in pairs(map.hexes) do
         hex.neighbour = nil
         hex.can_move = nil
+        hex.can_special = nil
     end
 end
 
@@ -457,6 +458,63 @@ function mark_legal_moves_for_piece(map, src_cube, w, h)
         return
     end
     
+    -- For Pillbug (id == 8), show both normal moves and pickable pieces
+    if src_hex.piece.id == 8 and src_hex.piece.get_legal_moves then
+        print("Testing Pillbug moves - normal movement and special ability")
+        
+        local normal_move_hexes = {}
+        local special_target_hexes = {}
+        
+        -- Get normal movement options (only if can detach)
+        if pieceCanDetach(map, src_cube) then
+            local pillbug_moves = src_hex.piece:get_legal_moves(map, src_cube)
+            print("Found " .. #pillbug_moves .. " normal moves")
+            
+            for _, move_data in ipairs(pillbug_moves) do
+                local hex = map_get_hex(map, move_data.cube)
+                print("  Checking move [" .. move_data.cube.x .. "," .. move_data.cube.y .. "," .. move_data.cube.z .. "]: hex_exists=" .. tostring(hex ~= nil))
+                
+                if hex then
+                    local can_detach = try_self_detach(map, src_cube, move_data.cube)
+                    print("    try_self_detach: " .. tostring(can_detach))
+                    
+                    if can_detach then
+                        table.insert(normal_move_hexes, hex)
+                        print("    ADDED TO NORMAL MOVES LIST")
+                    end
+                else
+                    print("    FAILED: hex doesn't exist")
+                end
+            end
+        else
+            print("Pillbug cannot detach - no normal moves available")
+        end
+        
+        -- Get pickable pieces for special ability (always available)
+        local pickable = src_hex.piece:get_pickable_pieces(map, src_cube)
+        print("Found " .. #pickable .. " pickable pieces")
+        
+        for _, piece_cube in ipairs(pickable) do
+            local hex = map_get_hex(map, piece_cube)
+            if hex then
+                table.insert(special_target_hexes, hex)
+                print("  PICKABLE: [" .. piece_cube.x .. "," .. piece_cube.y .. "," .. piece_cube.z .. "]")
+            end
+        end
+        
+        -- Now mark all moves at once
+        for _, hex in ipairs(normal_move_hexes) do
+            hex.can_move = true
+        end
+        for _, hex in ipairs(special_target_hexes) do
+            hex.can_special = true
+        end
+        
+        print("Marked " .. #normal_move_hexes .. " normal moves and " .. #special_target_hexes .. " special targets")
+        print("=== Complete ===")
+        return
+    end
+    
     -- For Soldier Ant (id == 5), use specialized method
     if src_hex.piece.id == 5 and src_hex.piece.get_legal_moves then
         print("Testing Soldier Ant moves - unlimited movement with BFS")
@@ -634,12 +692,17 @@ function firstPieceCoords(map)
 end
 
 function pieceCanDetach(map, cube)
+    print("  pieceCanDetach checking [" .. cube.x .. "," .. cube.y .. "," .. cube.z .. "]")
     local hex = map_get_hex(map, cube)
-    if not hex then return false end
+    if not hex then 
+        print("    FAIL: hex doesn't exist")
+        return false 
+    end
     
     -- If this piece has something underneath it (beetle stacking),
     -- it can always detach because the under_piece maintains hive cohesion
     if hex.piece and hex.piece.under_piece then
+        print("    SUCCESS: has piece underneath (beetle stack)")
         return true
     end
     
@@ -650,6 +713,7 @@ function pieceCanDetach(map, cube)
     local first_cube = firstPieceCoords(map)
     if not first_cube then
         hex.piece = tmp
+        print("    SUCCESS: no pieces left")
         return true
     end
     
@@ -660,16 +724,21 @@ function pieceCanDetach(map, cube)
     for _, check_hex in pairs(map.hexes) do
         if check_hex.piece and not check_hex.neighbour then
             clear_all_neighbours(map, map.w, map.h)
+            print("    FAIL: hive would break apart")
             return false
         end
     end
     
     clear_all_neighbours(map, map.w, map.h)
+    print("    SUCCESS: can detach without breaking hive")
     return true
 end
 
 function try_self_detach(map, src_cube, dest_cube)
-    clear_all_neighbours(map, map.w, map.h)
+    -- Only clear neighbour flags, not can_move/can_special which are being set during move marking
+    for _, hex in pairs(map.hexes) do
+        hex.neighbour = nil
+    end
     
     local src_hex = map_get_hex(map, src_cube)
     if not src_hex then return false end
@@ -734,6 +803,11 @@ function move_piece_on_map(map, src_col, src_row, dest_col, dest_row)
             local distance = cubecoords.distance(center, dest_cube)
             if distance >= map.current_radius then
                 expand_map(map)
+            end
+            
+            -- Send network message if in multiplayer game
+            if network and network.mode ~= "none" and network.connected then
+                network.send_move(active_player_id, src_cube, dest_cube)
             end
         end
         return success

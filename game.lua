@@ -7,15 +7,6 @@ function init_players()
     -- Create two players with pieces from configuration
     for i = 1, 2 do
         player[i] = PlayerClass:new(i, Config.pieceInventory)
-        
-        -- Add backward compatibility: pieces array with template structure
-        for pieceIndex, pieceData in ipairs(player[i].pieces) do
-            pieceData.template = piecesInventory[pieceData.id] or {
-                name = pieceData.name,
-                initials = pieceData.initials,
-                id = pieceData.id
-            }
-        end
     end
     
     return player

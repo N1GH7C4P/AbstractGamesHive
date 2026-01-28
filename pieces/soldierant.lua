@@ -10,6 +10,7 @@ function SoldierAnt:new(owner)
     instance.initials = "SA"
     instance.color = {0.5, 0.5, 0.5, 1}
     instance.id = 5
+    instance.image_path = "img/soldier_ant.png"
     return instance
 end
 

@@ -15,20 +15,79 @@ function Input.keypressed(key)
     elseif key == "x" then
         console.clear()
     elseif key == "d" then
-        -- Export game state to file
-        gamestate.export_to_file(map, "gamestate.txt")
+        -- Save game state to file
+        gamestate.save("savegame.json")
     elseif key == "l" then
         -- Load game state from file
-        gamestate.load_from_file(map, "gamestate.txt")
+        gamestate.load("savegame.json")
     elseif key == "h" then
         -- Toggle cube coordinate display
         show_cube_coords = not show_cube_coords
         print("Cube coordinates display: " .. (show_cube_coords and "ON" or "OFF"))
+    elseif key == "n" then
+        -- Host network game
+        if network.mode == "none" then
+            network.host(12345)
+        else
+            print("Already in network game. Press 'q' to quit.")
+        end
+    elseif key == "m" then
+        -- Join network game
+        if network.mode == "none" then
+            network.join("localhost", 12345)
+        else
+            print("Already in network game. Press 'q' to quit.")
+        end
+    elseif key == "q" then
+        -- Quit network game
+        if network.mode ~= "none" then
+            network.disconnect()
+        end
+    elseif key == "=" or key == "+" then
+        -- Zoom in with keyboard
+        local zoom_speed = 0.2
+        local max_zoom = 3.0
+        local mouseX, mouseY = love.mouse.getPosition()
+        local world_x_before = (mouseX - camera_x) / camera_zoom
+        local world_y_before = (mouseY - camera_y) / camera_zoom
+        
+        camera_zoom = math.min(camera_zoom + zoom_speed, max_zoom)
+        print("Zoom in (keyboard): " .. string.format("%.1f", camera_zoom))
+        
+        local world_x_after = (mouseX - camera_x) / camera_zoom
+        local world_y_after = (mouseY - camera_y) / camera_zoom
+        camera_x = camera_x + (world_x_after - world_x_before) * camera_zoom
+        camera_y = camera_y + (world_y_after - world_y_before) * camera_zoom
+    elseif key == "-" or key == "_" then
+        -- Zoom out with keyboard
+        local zoom_speed = 0.2
+        local min_zoom = 0.3
+        local mouseX, mouseY = love.mouse.getPosition()
+        local world_x_before = (mouseX - camera_x) / camera_zoom
+        local world_y_before = (mouseY - camera_y) / camera_zoom
+        
+        camera_zoom = math.max(camera_zoom - zoom_speed, min_zoom)
+        print("Zoom out (keyboard): " .. string.format("%.1f", camera_zoom))
+        
+        local world_x_after = (mouseX - camera_x) / camera_zoom
+        local world_y_after = (mouseY - camera_y) / camera_zoom
+        camera_x = camera_x + (world_x_after - world_x_before) * camera_zoom
+        camera_y = camera_y + (world_y_after - world_y_before) * camera_zoom
+    elseif key == "0" then
+        -- Reset zoom to 1.0
+        camera_zoom = 1.0
+        print("Zoom reset to 1.0")
     end
 end
 
 function Input.mousepressed(x, y, button, istouch)
     if game_over == true then
+        return
+    end
+    
+    -- Block input if in network game and not local player's turn
+    if network and network.mode ~= "none" and not network.is_local_turn then
+        print("Waiting for opponent's move...")
         return
     end
     
@@ -44,9 +103,23 @@ function Input.mousepressed(x, y, button, istouch)
     
     if button == 1 then
         local mouseX, mouseY = love.mouse.getPosition()
-        -- Convert mouse position to cube coordinates directly
-        local pixel_x = mouseX - camera_x
-        local pixel_y = mouseY - camera_y
+        
+        -- Check if clicking on piece selector first (use centered position)
+        local piece_count = #player[active_player_id].pieces
+        local piece_size = 30
+        local piece_spacing = piece_size * 2.5
+        local total_width = (piece_count - 1) * piece_spacing
+        local center_x = (window_w - total_width) / 2
+        local selected_piece = clickPieceSelector(player, active_player_id, mouseX, mouseY, center_x, 20, piece_size)
+        if selected_piece then
+            active_piece_id = selected_piece
+            print("Selected piece: " .. player[active_player_id].pieces[selected_piece].template.name)
+            return
+        end
+        
+        -- Convert mouse position to cube coordinates directly (accounting for zoom)
+        local pixel_x = (mouseX - camera_x) / camera_zoom
+        local pixel_y = (mouseY - camera_y) / camera_zoom
         local result_cube = cubecoords.from_pixel(pixel_x, pixel_y, size)
         local result_hex = map_get_hex(map, result_cube)
         
@@ -63,8 +136,39 @@ function Input.mousepressed(x, y, button, istouch)
             local selected_cube = cubecoords.from_offset(selected_piece_x, selected_piece_y)
             local selected_hex = map_get_hex(map, selected_cube)
             
-            -- If clicking on a legal move hex (marked with can_move), try to move
-            if result_hex and result_hex.can_move then
+            -- Check if we're in Pillbug special move mode (phase 2: selecting destination)
+            if pillbug_special_mode and pillbug_target_cube then
+                if result_hex and result_hex.can_move then
+                    -- Execute Pillbug special ability
+                    if selected_hex.piece and selected_hex.piece.use_special_ability then
+                        local success = selected_hex.piece:use_special_ability(map, pillbug_cube, pillbug_target_cube, result_cube)
+                        if success then
+                            pass_turn(active_player_id)
+                        end
+                    end
+                    -- Reset state
+                    pillbug_special_mode = false
+                    pillbug_cube = nil
+                    pillbug_target_cube = nil
+                    move_mode = 0
+                    highlight = 0
+                    clear_all_neighbours(map, w, h)
+                    return
+                else
+                    -- Cancel special move
+                    pillbug_special_mode = false
+                    pillbug_cube = nil
+                    pillbug_target_cube = nil
+                    move_mode = 0
+                    highlight = 0
+                    clear_all_neighbours(map, w, h)
+                    return
+                end
+            end
+            
+            -- Check if clicking on a legal move hex (for normal movement) FIRST
+            -- This allows normal movement to work alongside special abilities
+            if result_hex and result_hex.can_move and not result_hex.can_special then
                 local did_move = move_piece_on_map(map, selected_piece_x, selected_piece_y, resultX, resultY)
                 clear_all_neighbours(map, w, h)
                 move_mode = 0
@@ -72,13 +176,37 @@ function Input.mousepressed(x, y, button, istouch)
                     pass_turn(active_player_id)
                 end
                 return
-            else
-                -- Clicking elsewhere cancels the selection
-                move_mode = 0
-                highlight = 0
+            end
+            
+            -- Check if clicking on a pickable piece (Pillbug special ability phase 1)
+            if result_hex and result_hex.can_special and selected_hex.piece and selected_hex.piece.id == 8 then
+                print("Pillbug special: Selected target piece at [" .. result_cube.x .. "," .. result_cube.y .. "," .. result_cube.z .. "]")
+                pillbug_special_mode = true
+                pillbug_cube = selected_cube
+                pillbug_target_cube = result_cube
+                
+                -- Clear current highlights and show drop locations
                 clear_all_neighbours(map, w, h)
+                
+                -- Get and mark valid drop locations
+                local drop_locations = selected_hex.piece:get_drop_locations(map, pillbug_cube, pillbug_target_cube)
+                print("Found " .. #drop_locations .. " drop locations")
+                for _, dest_cube in ipairs(drop_locations) do
+                    local hex = map_get_hex(map, dest_cube)
+                    if hex then
+                        hex.can_move = true  -- Use same highlighting for simplicity
+                        print("  DROP LOCATION: [" .. dest_cube.x .. "," .. dest_cube.y .. "," .. dest_cube.z .. "]")
+                    end
+                end
+                
                 return
             end
+            
+            -- Clicking elsewhere cancels the selection
+            move_mode = 0
+            highlight = 0
+            clear_all_neighbours(map, w, h)
+            return
         end
         -- Check if hex exists in map
         local result_cube = cubecoords.from_offset(resultX, resultY)
@@ -95,10 +223,18 @@ function Input.mousepressed(x, y, button, istouch)
                     move_mode = 1
                 end
                 return
-            elseif (not tryAddPieceToMap(active_player_id, active_piece_id, map, resultX, resultY)) then
-                return
+            else
+                -- Get the piece template from player inventory
+                local piece_info = player[active_player_id]:getPieceInfo(active_piece_id)
+                if piece_info and piece_info.template then
+                    if not tryAddPieceToMap(active_player_id, piece_info.template, map, result_cube) then
+                        return
+                    end
+                    pass_turn(active_player_id)
+                else
+                    return
+                end
             end
-            pass_turn(active_player_id)
         end
     end
 end
@@ -110,11 +246,41 @@ function Input.mousereleased(x, y, button, istouch)
     end
 end
 
+function Input.wheelmoved(x, y)
+    print("Wheelmoved: x=" .. x .. ", y=" .. y)  -- Debug logging
+    
+    -- Zoom in/out with mousewheel
+    local zoom_speed = 0.1
+    local min_zoom = 0.3
+    local max_zoom = 3.0
+    
+    -- Get mouse position before zoom
+    local mouseX, mouseY = love.mouse.getPosition()
+    local world_x_before = (mouseX - camera_x) / camera_zoom
+    local world_y_before = (mouseY - camera_y) / camera_zoom
+    
+    -- Adjust zoom
+    if y > 0 then
+        camera_zoom = math.min(camera_zoom + zoom_speed, max_zoom)
+        print("Zooming in: " .. camera_zoom)
+    elseif y < 0 then
+        camera_zoom = math.max(camera_zoom - zoom_speed, min_zoom)
+        print("Zooming out: " .. camera_zoom)
+    end
+    
+    -- Adjust camera position to zoom towards mouse cursor
+    local world_x_after = (mouseX - camera_x) / camera_zoom
+    local world_y_after = (mouseY - camera_y) / camera_zoom
+    
+    camera_x = camera_x + (world_x_after - world_x_before) * camera_zoom
+    camera_y = camera_y + (world_y_after - world_y_before) * camera_zoom
+end
+
 function Input.update_mouse(dt)
     mouseX, mouseY = love.mouse.getPosition()
-    -- Convert mouse to cube coordinates for display
-    local pixel_x = mouseX - camera_x
-    local pixel_y = mouseY - camera_y
+    -- Convert mouse to cube coordinates for display (accounting for zoom)
+    local pixel_x = (mouseX - camera_x) / camera_zoom
+    local pixel_y = (mouseY - camera_y) / camera_zoom
     local hover_cube = cubecoords.from_pixel(pixel_x, pixel_y, size)
     resultX, resultY = cubecoords.to_offset(hover_cube)
     

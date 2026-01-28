@@ -15,6 +15,7 @@ function Globals.init()
     -- Camera/viewport state for panning
     camera_x = 0
     camera_y = 0
+    camera_zoom = 0.8  -- Camera zoom level (0.8 = default, >1 = zoomed in, <1 = zoomed out)
     is_dragging = false
     drag_start_x = 0
     drag_start_y = 0
@@ -32,6 +33,11 @@ function Globals.init()
     who_won = {0, 0}
     show_cube_coords = false
     turn_number = {1, 1}
+    
+    -- Pillbug special move state
+    pillbug_special_mode = false
+    pillbug_cube = nil
+    pillbug_target_cube = nil
     
     -- Mouse state
     mouseX = 0
