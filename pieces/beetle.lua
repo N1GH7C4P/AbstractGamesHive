@@ -181,54 +181,40 @@ function Beetle:mark_legal_moves(map, src_cube)
     print("Testing Beetle adjacent moves")
     
     local legal_moves = {}
-    local tests_run = 0
-    local max_tests = 200
     
-    -- Test immediate neighbors
+    -- Check if beetle can detach (or is on top of stack)
+    local src_hex = map_get_hex(map, src_cube)
+    if not src_hex or not src_hex.piece then
+        print("No piece at source location")
+        return {normal_moves = {}, special_targets = {}}
+    end
+    
+    -- Beetles on top of stack can always move, ground beetles need to check detachment
+    local can_move_from_here = src_hex.piece.under_piece or pieceCanDetach(map, src_cube)
+    if not can_move_from_here then
+        print("Beetle cannot detach - would break hive")
+        return {normal_moves = {}, special_targets = {}}
+    end
+    
+    -- Test immediate neighbors only (beetle moves one space)
     local neighbors = cubecoords.all_neighbors(src_cube)
     for i, neighbor_cube in ipairs(neighbors) do
         local can_move = try_move_piece_on_map(map, src_cube, neighbor_cube)
         print("  Neighbor " .. i .. ": [" .. neighbor_cube.x .. "," .. neighbor_cube.y .. "," .. neighbor_cube.z .. "] -> " .. tostring(can_move))
-    end
-    
-    -- Test all hexes in map (beetles can climb)
-    for _, hex in pairs(map.hexes) do
-        if not cubecoords.equals(hex.cube, src_cube) then
-            tests_run = tests_run + 1
-            
-            if tests_run > max_tests then
-                print("WARNING: Hit test limit!")
-                break
-            end
-            
-            -- Only test if destination is near other pieces
-            local has_nearby = false
-            mark_neighbours_on_map_cube(map, hex.cube)
-            for _, nhex in pairs(map.hexes) do
-                if nhex.neighbour and nhex.piece then
-                    has_nearby = true
-                    break
+        
+        if can_move then
+            local dest_hex = map_get_hex(map, neighbor_cube)
+            if dest_hex then
+                -- Mark if this is a beetle-type move (climbing on top of stack)
+                if dest_hex.piece then
+                    dest_hex.is_beetle_move = true
                 end
-            end
-            
-            -- Clear only neighbour flags
-            for _, h in pairs(map.hexes) do
-                h.neighbour = nil
-            end
-            
-            if has_nearby or not hex.piece then
-                if try_move_piece_on_map(map, src_cube, hex.cube) then
-                    -- Mark if this is a beetle-type move (climbing on top of stack)
-                    if hex.piece then
-                        hex.is_beetle_move = true
-                    end
-                    table.insert(legal_moves, hex)
-                end
+                table.insert(legal_moves, dest_hex)
             end
         end
     end
     
-    print("Tests: " .. tests_run .. ", Legal moves: " .. #legal_moves)
+    print("Legal moves: " .. #legal_moves)
     return {normal_moves = legal_moves, special_targets = {}}
 end
 

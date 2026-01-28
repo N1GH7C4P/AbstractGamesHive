@@ -1,20 +1,20 @@
 {
   "game_state": {
-    "active_piece_id": 7,
+    "active_player_id": 2,
+    "active_piece_id": 8,
     "turn_number": [
-      7,
-      7
+      10,
+      9
     ],
+    "highlight": 0,
     "who_won": [
       0,
       0
     ],
-    "highlight": 0,
     "move_mode": 0,
-    "selected_piece_x": 3,
-    "selected_piece_y": 0,
-    "active_player_id": 1,
-    "game_over": false
+    "game_over": false,
+    "selected_piece_x": 0,
+    "selected_piece_y": 1
   },
   "camera": {
     "zoom": 0.8,
@@ -33,7 +33,7 @@
         {
           "id": 2,
           "name": "Beetle",
-          "inStock": 2
+          "inStock": 0
         },
         {
           "id": 3,
@@ -78,7 +78,7 @@
         {
           "id": 2,
           "name": "Beetle",
-          "inStock": 2
+          "inStock": 0
         },
         {
           "id": 3,
@@ -113,46 +113,29 @@
       ]
     }
   ],
+  "map": {
+    "current_radius": 10
+  },
   "board": [
-    {
-      "cube": {
-        "z": 0,
-        "x": 0,
-        "y": 0
-      },
-      "piece_id": 7,
-      "has_under_piece": false,
-      "player_id": 1
-    },
-    {
-      "cube": {
-        "z": 0,
-        "x": 1,
-        "y": -1
-      },
-      "piece_id": 1,
-      "has_under_piece": false,
-      "player_id": 1
-    },
     {
       "cube": {
         "z": 0,
         "x": 2,
         "y": -2
       },
-      "piece_id": 8,
       "has_under_piece": false,
-      "player_id": 2
+      "player_id": 2,
+      "piece_id": 2
     },
     {
       "cube": {
-        "z": -2,
-        "x": 2,
-        "y": 0
+        "z": 1,
+        "x": -2,
+        "y": 1
       },
-      "piece_id": 1,
       "has_under_piece": false,
-      "player_id": 2
+      "player_id": 1,
+      "piece_id": 7
     },
     {
       "cube": {
@@ -160,22 +143,67 @@
         "x": 3,
         "y": -2
       },
-      "piece_id": 7,
       "has_under_piece": false,
-      "player_id": 2
+      "player_id": 2,
+      "piece_id": 7
     },
     {
       "cube": {
-        "z": -2,
-        "x": 3,
+        "z": 1,
+        "x": -3,
+        "y": 2
+      },
+      "has_under_piece": false,
+      "player_id": 1,
+      "piece_id": 1
+    },
+    {
+      "cube": {
+        "z": 0,
+        "x": 0,
+        "y": 0
+      },
+      "has_under_piece": false,
+      "player_id": 2,
+      "piece_id": 1
+    },
+    {
+      "cube": {
+        "z": 1,
+        "x": -1,
+        "y": 0
+      },
+      "player_id": 1,
+      "piece_id": 2,
+      "under_piece": {
+        "id": 8,
+        "player_id": 1
+      },
+      "has_under_piece": true
+    },
+    {
+      "cube": {
+        "z": 1,
+        "x": 0,
         "y": -1
       },
-      "piece_id": 8,
       "has_under_piece": false,
-      "player_id": 1
+      "player_id": 2,
+      "piece_id": 8
+    },
+    {
+      "cube": {
+        "z": 0,
+        "x": 1,
+        "y": -1
+      },
+      "player_id": 1,
+      "piece_id": 2,
+      "under_piece": {
+        "id": 2,
+        "player_id": 2
+      },
+      "has_under_piece": true
     }
-  ],
-  "map": {
-    "current_radius": 10
-  }
+  ]
 }

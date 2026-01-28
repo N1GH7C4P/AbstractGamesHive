@@ -2,992 +2,136 @@
 Lua socket loaded successfully
 Center hex (0,0,0) exists: true
 Center hex key: 0,0,0
-Selected piece: Pillbug
-CLICK: mouse=(478,301), camera=(512,384), pixel=(-42.5,-103.75), cube=[-1,2,-1], hex_exists=true
-CLICK: mouse=(542,354), camera=(512,384), pixel=(37.5,-37.5), cube=[1,0,-1], hex_exists=true
-isNextToFriendly: checking cube [1,0,-1]
-  active_player_id=2, turn_number[2]=1
-  Neighbors: enemy=1, friendly=0
-  First turn for player 2
-  Other player turn_number[1]=2
-  Second piece placement - must have exactly 1 enemy neighbor
-  APPROVED: enemy_count=1
-Selected piece: Queen bee
-CLICK: mouse=(470,417), camera=(512,384), pixel=(-52.5,41.25), cube=[-1,0,1], hex_exists=true
-isNextToFriendly: checking cube [-1,0,1]
-  active_player_id=1, turn_number[1]=2
-  Neighbors: enemy=0, friendly=1
-  Normal placement - must have friendly neighbors and no enemies
-  APPROVED
-CLICK: mouse=(596,382), camera=(512,384), pixel=(105,-2.5), cube=[2,-1,-1], hex_exists=true
-isNextToFriendly: checking cube [2,-1,-1]
-  active_player_id=2, turn_number[2]=2
-  Neighbors: enemy=0, friendly=1
-  Normal placement - must have friendly neighbors and no enemies
-  APPROVED
-CLICKED CENTER (0,0,0): pixel=(-1.25,-2.5), hex_exists=true
-CLICK: mouse=(511,382), camera=(512,384), pixel=(-1.25,-2.5), cube=[0,-0,0], hex_exists=true
+Game loaded from: savegame.json
+CLICK: mouse=(410,393), camera=(512,384), pixel=(-127.5,11.25), cube=[-2,1,1], hex_exists=true
+CLICK: mouse=(424,380), camera=(512,384), pixel=(-110,-5), cube=[-2,1,1], hex_exists=true
 === mark_legal_moves_for_piece called ===
-Source cube: [0,-0,0]
-Piece: Pillbug
-Testing Pillbug moves - normal movement and special ability
-  pieceCanDetach checking [0,-0,0]
-    FAIL: hive would break apart
-Pillbug cannot detach - no normal moves available
-Pillbug at [0,-0,0] checking pickable pieces
-  Checking piece at [1,0,-1]: Pillbug
-    Would break hive - disconnected piece at [2,-1,-1]
+Source cube: [-2,1,1]
+Piece: Mosquito
+Testing Mosquito moves - mimics adjacent pieces
+Mosquito adjacent piece types: has Pillbug: true, has Beetle: true
+  pieceCanDetach checking [-2,1,1]
+    SUCCESS: can detach without breaking hive
+Mosquito:get_legal_moves starting from [-2,1,1]
+  Adjacent piece types: 
+    - Queen Bee (id: 1)
+    - Beetle (id: 2)
+    - Pillbug (id: 8)
+  Checking moves as Queen bee
+  Checking moves as Beetle
+  Checking moves as Pillbug
+  can_move_through_gap: from [-2,1,1] to [-2,2,0]
+    Found 2 common neighbors
+    Common neighbor 1 [-1,1,0]: OCCUPIED
+    Common neighbor 2 [-3,2,1]: empty
+    SUCCESS: At least one neighbor empty, can move through gap
+  can_move_through_gap: from [-2,1,1] to [-3,2,1]
+    Found 2 common neighbors
+    Common neighbor 1 [-2,2,0]: empty
+    Common neighbor 2 [-3,1,2]: empty
+    SUCCESS: At least one neighbor empty, can move through gap
+  can_move_through_gap: from [-2,1,1] to [-3,1,2]
+    Found 2 common neighbors
+    Common neighbor 1 [-3,2,1]: empty
+    Common neighbor 2 [-2,0,2]: OCCUPIED
+    SUCCESS: At least one neighbor empty, can move through gap
+Total unique destinations found: 6
+Found 6 potential normal moves
+Mosquito can mimic Pillbug special ability
+Pillbug at [-2,1,1] checking pickable pieces
   Checking piece at [-1,0,1]: Queen bee
-  can_move_through_gap: from [-1,0,1] to [0,-0,0]
+  can_move_through_gap_at_height_1: from [-1,0,1] to [-2,1,1]
     Found 2 common neighbors
-    Common neighbor 1 [0,-1,1]: empty
-    Common neighbor 2 [-1,1,0]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-    Can pick: true, can_move_through_gap: true
+    Common neighbor 1 height: 1
+    Common neighbor 2 height: 1
+    SUCCESS: At least one neighbor is height < 2, can move through
+    Can pick: true, can_move_through_gap_at_height_1: true
     PICKABLE!
-Found 1 pickable pieces
-Marked 0 normal moves and 1 special targets
-Marked 0 normal moves and 1 special targets
+  Checking piece at [-1,1,0]: Beetle
+  can_move_through_gap_at_height_1: from [-1,1,0] to [-2,1,1]
+    Found 2 common neighbors
+    Common neighbor 1 height: 0
+    Common neighbor 2 height: 1
+    SUCCESS: At least one neighbor is height < 2, can move through
+    Can pick: true, can_move_through_gap_at_height_1: true
+    PICKABLE!
+  Checking piece at [-2,0,2]: Pillbug
+  can_move_through_gap_at_height_1: from [-2,0,2] to [-2,1,1]
+    Found 2 common neighbors
+    Common neighbor 1 height: 1
+    Common neighbor 2 height: 0
+    SUCCESS: At least one neighbor is height < 2, can move through
+    Can pick: true, can_move_through_gap_at_height_1: true
+    PICKABLE!
+Found 3 pickable pieces
+  Hex at [-1,0,1] has dual options
+  Hex at [-1,1,0] has dual options
+  Hex at [-2,0,2] has dual options
+Marked 5 normal moves and 3 special targets
+Marked 5 normal moves and 3 special targets
 === Complete ===
-CLICK: mouse=(477,404), camera=(512,384), pixel=(-43.75,25), cube=[-1,0,1], hex_exists=true
-Pillbug special: Selected target piece at [-1,0,1]
-  can_move_through_gap: from [-1,0,1] to [0,-0,0]
+CLICK: mouse=(461,405), camera=(512,384), pixel=(-63.75,26.25), cube=[-1,0,1], hex_exists=true
+Mosquito has dual options - showing popup
+Mosquito using Pillbug power
+  can_move_through_gap_at_height_1: from [-1,0,1] to [-2,1,1]
     Found 2 common neighbors
-    Common neighbor 1 [0,-1,1]: empty
-    Common neighbor 2 [-1,1,0]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [0,-0,0] to [1,-1,0]
+    Common neighbor 1 height: 1
+    Common neighbor 2 height: 1
+    SUCCESS: At least one neighbor is height < 2, can move through
+  can_move_through_gap_at_height_1: from [-2,1,1] to [-2,2,0]
     Found 2 common neighbors
-    Common neighbor 1 [1,0,-1]: OCCUPIED
-    Common neighbor 2 [0,-1,1]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [-1,0,1] to [0,-0,0]
+    Common neighbor 1 height: 1
+    Common neighbor 2 height: 0
+    SUCCESS: At least one neighbor is height < 2, can move through
+  can_move_through_gap_at_height_1: from [-1,0,1] to [-2,1,1]
     Found 2 common neighbors
-    Common neighbor 1 [0,-1,1]: empty
-    Common neighbor 2 [-1,1,0]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [0,-0,0] to [0,1,-1]
+    Common neighbor 1 height: 1
+    Common neighbor 2 height: 1
+    SUCCESS: At least one neighbor is height < 2, can move through
+  can_move_through_gap_at_height_1: from [-2,1,1] to [-3,2,1]
     Found 2 common neighbors
-    Common neighbor 1 [1,0,-1]: OCCUPIED
-    Common neighbor 2 [-1,1,0]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [-1,0,1] to [0,-0,0]
+    Common neighbor 1 height: 0
+    Common neighbor 2 height: 0
+    SUCCESS: At least one neighbor is height < 2, can move through
+  can_move_through_gap_at_height_1: from [-1,0,1] to [-2,1,1]
     Found 2 common neighbors
-    Common neighbor 1 [0,-1,1]: empty
-    Common neighbor 2 [-1,1,0]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [0,-0,0] to [-1,1,0]
+    Common neighbor 1 height: 1
+    Common neighbor 2 height: 1
+    SUCCESS: At least one neighbor is height < 2, can move through
+  can_move_through_gap_at_height_1: from [-2,1,1] to [-3,1,2]
     Found 2 common neighbors
-    Common neighbor 1 [0,1,-1]: empty
-    Common neighbor 2 [-1,0,1]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [-1,0,1] to [0,-0,0]
-    Found 2 common neighbors
-    Common neighbor 1 [0,-1,1]: empty
-    Common neighbor 2 [-1,1,0]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [0,-0,0] to [0,-1,1]
-    Found 2 common neighbors
-    Common neighbor 1 [1,-1,0]: empty
-    Common neighbor 2 [-1,0,1]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-Found 4 drop locations
-  DROP LOCATION: [1,-1,0]
-  DROP LOCATION: [0,1,-1]
-  DROP LOCATION: [-1,1,0]
-  DROP LOCATION: [0,-1,1]
-CLICK: mouse=(553,414), camera=(512,384), pixel=(51.25,37.5), cube=[1,-1,0], hex_exists=true
-  can_move_through_gap: from [-1,0,1] to [0,-0,0]
-    Found 2 common neighbors
-    Common neighbor 1 [0,-1,1]: empty
-    Common neighbor 2 [-1,1,0]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [0,-0,0] to [1,-1,0]
-    Found 2 common neighbors
-    Common neighbor 1 [1,0,-1]: OCCUPIED
-    Common neighbor 2 [0,-1,1]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-Pillbug moved piece from [-1,0,1] to [1,-1,0]
-CLICK: mouse=(553,363), camera=(512,384), pixel=(51.25,-26.25), cube=[1,0,-1], hex_exists=true
-=== mark_legal_moves_for_piece called ===
-Source cube: [1,0,-1]
-Piece: Pillbug
-Testing Pillbug moves - normal movement and special ability
-  pieceCanDetach checking [1,0,-1]
-    SUCCESS: can detach without breaking hive
-  can_move_through_gap: from [1,0,-1] to [2,0,-2]
-    Found 2 common neighbors
-    Common neighbor 1 [2,-1,-1]: OCCUPIED
-    Common neighbor 2 [1,1,-2]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [1,0,-1] to [1,1,-2]
-    Found 2 common neighbors
-    Common neighbor 1 [2,0,-2]: empty
-    Common neighbor 2 [0,1,-1]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [1,0,-1] to [0,1,-1]
-    Found 2 common neighbors
-    Common neighbor 1 [1,1,-2]: empty
-    Common neighbor 2 [0,0,0]: OCCUPIED
-    SUCCESS: At least one neighbor empty, can move through gap
-Found 3 normal moves
-Pillbug at [1,0,-1] checking pickable pieces
-  Checking piece at [2,-1,-1]: Queen bee
-  can_move_through_gap: from [2,-1,-1] to [1,0,-1]
-    Found 2 common neighbors
-    Common neighbor 1 [2,0,-2]: empty
-    Common neighbor 2 [1,-1,0]: OCCUPIED
-    SUCCESS: At least one neighbor empty, can move through gap
-    Can pick: true, can_move_through_gap: true
-    PICKABLE!
-  Checking piece at [0,0,0]: Pillbug
-  can_move_through_gap: from [0,0,0] to [1,0,-1]
-    Found 2 common neighbors
-    Common neighbor 1 [1,-1,0]: OCCUPIED
-    Common neighbor 2 [0,1,-1]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-    Can pick: true, can_move_through_gap: true
-    PICKABLE!
-  Checking piece at [1,-1,0]: Queen bee
-  can_move_through_gap: from [1,-1,0] to [1,0,-1]
-    Found 2 common neighbors
-    Common neighbor 1 [2,-1,-1]: OCCUPIED
-    Common neighbor 2 [0,0,0]: OCCUPIED
-    FAIL: Both neighbors occupied (gate blocking)
-    Can pick: true, can_move_through_gap: false
-Found 2 pickable pieces
-Marked 2 normal moves and 2 special targets
-Marked 2 normal moves and 2 special targets
-=== Complete ===
-CLICKED CENTER (0,0,0): pixel=(12.5,7.5), hex_exists=true
-CLICK: mouse=(522,390), camera=(512,384), pixel=(12.5,7.5), cube=[0,-0,0], hex_exists=true
-Pillbug special: Selected target piece at [0,-0,0]
-  can_move_through_gap: from [0,-0,0] to [1,0,-1]
-    Found 2 common neighbors
-    Common neighbor 1 [1,-1,0]: OCCUPIED
-    Common neighbor 2 [0,1,-1]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [1,0,-1] to [2,0,-2]
-    Found 2 common neighbors
-    Common neighbor 1 [2,-1,-1]: OCCUPIED
-    Common neighbor 2 [1,1,-2]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [0,-0,0] to [1,0,-1]
-    Found 2 common neighbors
-    Common neighbor 1 [1,-1,0]: OCCUPIED
-    Common neighbor 2 [0,1,-1]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [1,0,-1] to [1,1,-2]
-    Found 2 common neighbors
-    Common neighbor 1 [2,0,-2]: empty
-    Common neighbor 2 [0,1,-1]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [0,-0,0] to [1,0,-1]
-    Found 2 common neighbors
-    Common neighbor 1 [1,-1,0]: OCCUPIED
-    Common neighbor 2 [0,1,-1]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [1,0,-1] to [0,1,-1]
-    Found 2 common neighbors
-    Common neighbor 1 [1,1,-2]: empty
-    Common neighbor 2 [0,0,0]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
+    Common neighbor 1 height: 0
+    Common neighbor 2 height: 1
+    SUCCESS: At least one neighbor is height < 2, can move through
 Found 3 drop locations
-  DROP LOCATION: [2,0,-2]
-  DROP LOCATION: [1,1,-2]
-  DROP LOCATION: [0,1,-1]
-CLICK: mouse=(585,339), camera=(512,384), pixel=(91.25,-56.25), cube=[2,0,-2], hex_exists=true
-  can_move_through_gap: from [0,-0,0] to [1,0,-1]
+  DROP LOCATION: [-2,2,0]
+  DROP LOCATION: [-3,2,1]
+  DROP LOCATION: [-3,1,2]
+CLICK: mouse=(393,358), camera=(512,384), pixel=(-148.75,-32.5), cube=[-3,2,1], hex_exists=true
+  can_move_through_gap_at_height_1: from [-1,0,1] to [-2,1,1]
     Found 2 common neighbors
-    Common neighbor 1 [1,-1,0]: OCCUPIED
-    Common neighbor 2 [0,1,-1]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [1,0,-1] to [2,0,-2]
+    Common neighbor 1 height: 1
+    Common neighbor 2 height: 1
+    SUCCESS: At least one neighbor is height < 2, can move through
+  can_move_through_gap_at_height_1: from [-2,1,1] to [-3,2,1]
     Found 2 common neighbors
-    Common neighbor 1 [2,-1,-1]: OCCUPIED
-    Common neighbor 2 [1,1,-2]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-Pillbug moved piece from [0,-0,0] to [2,0,-2]
-CLICK: mouse=(603,339), camera=(512,384), pixel=(113.75,-56.25), cube=[2,0,-2], hex_exists=true
+    Common neighbor 1 height: 0
+    Common neighbor 2 height: 0
+    SUCCESS: At least one neighbor is height < 2, can move through
+Pillbug moved piece from [-1,0,1] to [-3,2,1]
+CLICK: mouse=(535,418), camera=(512,384), pixel=(28.75,42.5), cube=[1,-1,0], hex_exists=true
 === mark_legal_moves_for_piece called ===
-Source cube: [2,0,-2]
-Piece: Pillbug
-Testing Pillbug moves - normal movement and special ability
-  pieceCanDetach checking [2,0,-2]
-    SUCCESS: can detach without breaking hive
-  can_move_through_gap: from [2,0,-2] to [3,-1,-2]
-    Found 2 common neighbors
-    Common neighbor 1 [3,0,-3]: empty
-    Common neighbor 2 [2,-1,-1]: OCCUPIED
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [2,0,-2] to [3,0,-3]
-    Found 2 common neighbors
-    Common neighbor 1 [3,-1,-2]: empty
-    Common neighbor 2 [2,1,-3]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [2,0,-2] to [2,1,-3]
-    Found 2 common neighbors
-    Common neighbor 1 [3,0,-3]: empty
-    Common neighbor 2 [1,1,-2]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [2,0,-2] to [1,1,-2]
-    Found 2 common neighbors
-    Common neighbor 1 [2,1,-3]: empty
-    Common neighbor 2 [1,0,-1]: OCCUPIED
-    SUCCESS: At least one neighbor empty, can move through gap
-Found 4 normal moves
-Pillbug at [2,0,-2] checking pickable pieces
-  Checking piece at [1,0,-1]: Pillbug
-  can_move_through_gap: from [1,0,-1] to [2,0,-2]
-    Found 2 common neighbors
-    Common neighbor 1 [2,-1,-1]: OCCUPIED
-    Common neighbor 2 [1,1,-2]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-    Can pick: true, can_move_through_gap: true
-    PICKABLE!
-  Checking piece at [2,-1,-1]: Queen bee
-  can_move_through_gap: from [2,-1,-1] to [2,0,-2]
-    Found 2 common neighbors
-    Common neighbor 1 [3,-1,-2]: empty
-    Common neighbor 2 [1,0,-1]: OCCUPIED
-    SUCCESS: At least one neighbor empty, can move through gap
-    Can pick: true, can_move_through_gap: true
-    PICKABLE!
-Found 2 pickable pieces
-Marked 2 normal moves and 2 special targets
-Marked 2 normal moves and 2 special targets
+Source cube: [1,-1,0]
+Piece: Beetle
+Testing Beetle adjacent moves
+  pieceCanDetach checking [1,-1,0]
+    FAIL: hive would break apart
+Beetle cannot detach - would break hive
+Marked 0 normal moves and 0 special targets
 === Complete ===
-CLICK: mouse=(560,350), camera=(512,384), pixel=(60,-42.5), cube=[1,0,-1], hex_exists=true
-Pillbug special: Selected target piece at [1,0,-1]
-  can_move_through_gap: from [1,0,-1] to [2,0,-2]
-    Found 2 common neighbors
-    Common neighbor 1 [2,-1,-1]: OCCUPIED
-    Common neighbor 2 [1,1,-2]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [2,0,-2] to [3,-1,-2]
-    Found 2 common neighbors
-    Common neighbor 1 [3,0,-3]: empty
-    Common neighbor 2 [2,-1,-1]: OCCUPIED
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [1,0,-1] to [2,0,-2]
-    Found 2 common neighbors
-    Common neighbor 1 [2,-1,-1]: OCCUPIED
-    Common neighbor 2 [1,1,-2]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [2,0,-2] to [3,0,-3]
-    Found 2 common neighbors
-    Common neighbor 1 [3,-1,-2]: empty
-    Common neighbor 2 [2,1,-3]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [1,0,-1] to [2,0,-2]
-    Found 2 common neighbors
-    Common neighbor 1 [2,-1,-1]: OCCUPIED
-    Common neighbor 2 [1,1,-2]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [2,0,-2] to [2,1,-3]
-    Found 2 common neighbors
-    Common neighbor 1 [3,0,-3]: empty
-    Common neighbor 2 [1,1,-2]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [1,0,-1] to [2,0,-2]
-    Found 2 common neighbors
-    Common neighbor 1 [2,-1,-1]: OCCUPIED
-    Common neighbor 2 [1,1,-2]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [2,0,-2] to [1,1,-2]
-    Found 2 common neighbors
-    Common neighbor 1 [2,1,-3]: empty
-    Common neighbor 2 [1,0,-1]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-Found 4 drop locations
-  DROP LOCATION: [3,-1,-2]
-  DROP LOCATION: [3,0,-3]
-  DROP LOCATION: [2,1,-3]
-  DROP LOCATION: [1,1,-2]
-CLICK: mouse=(621,359), camera=(512,384), pixel=(136.25,-31.25), cube=[3,-1,-2], hex_exists=true
-  can_move_through_gap: from [1,0,-1] to [2,0,-2]
-    Found 2 common neighbors
-    Common neighbor 1 [2,-1,-1]: OCCUPIED
-    Common neighbor 2 [1,1,-2]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [2,0,-2] to [3,-1,-2]
-    Found 2 common neighbors
-    Common neighbor 1 [3,0,-3]: empty
-    Common neighbor 2 [2,-1,-1]: OCCUPIED
-    SUCCESS: At least one neighbor empty, can move through gap
-Pillbug moved piece from [1,0,-1] to [3,-1,-2]
-CLICK: mouse=(595,338), camera=(512,384), pixel=(103.75,-57.5), cube=[2,0,-2], hex_exists=true
-Player 	2	 has no piece 	Queen bee	 in stock.
-CLICK: mouse=(646,364), camera=(512,384), pixel=(167.5,-25), cube=[3,-1,-2], hex_exists=true
-=== mark_legal_moves_for_piece called ===
-Source cube: [3,-1,-2]
-Piece: Pillbug
-Testing Pillbug moves - normal movement and special ability
-  pieceCanDetach checking [3,-1,-2]
-    SUCCESS: can detach without breaking hive
-  can_move_through_gap: from [3,-1,-2] to [4,-2,-2]
-    Found 2 common neighbors
-    Common neighbor 1 [4,-1,-3]: empty
-    Common neighbor 2 [3,-2,-1]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [3,-1,-2] to [4,-1,-3]
-    Found 2 common neighbors
-    Common neighbor 1 [4,-2,-2]: empty
-    Common neighbor 2 [3,0,-3]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [3,-1,-2] to [3,0,-3]
-    Found 2 common neighbors
-    Common neighbor 1 [4,-1,-3]: empty
-    Common neighbor 2 [2,0,-2]: OCCUPIED
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [3,-1,-2] to [3,-2,-1]
-    Found 2 common neighbors
-    Common neighbor 1 [4,-2,-2]: empty
-    Common neighbor 2 [2,-1,-1]: OCCUPIED
-    SUCCESS: At least one neighbor empty, can move through gap
-Found 4 normal moves
-Pillbug at [3,-1,-2] checking pickable pieces
-  Checking piece at [2,0,-2]: Pillbug
-  can_move_through_gap: from [2,0,-2] to [3,-1,-2]
-    Found 2 common neighbors
-    Common neighbor 1 [3,0,-3]: empty
-    Common neighbor 2 [2,-1,-1]: OCCUPIED
-    SUCCESS: At least one neighbor empty, can move through gap
-    Can pick: true, can_move_through_gap: true
-    PICKABLE!
-  Checking piece at [2,-1,-1]: Queen bee
-    Would break hive - disconnected piece at [1,-1,0]
-Found 1 pickable pieces
-Marked 2 normal moves and 1 special targets
-Marked 2 normal moves and 1 special targets
-=== Complete ===
-CLICK: mouse=(638,372), camera=(512,384), pixel=(157.5,-15), cube=[3,-1,-2], hex_exists=true
-CLICK: mouse=(638,372), camera=(512,384), pixel=(157.5,-15), cube=[3,-1,-2], hex_exists=true
-=== mark_legal_moves_for_piece called ===
-Source cube: [3,-1,-2]
-Piece: Pillbug
-Testing Pillbug moves - normal movement and special ability
-  pieceCanDetach checking [3,-1,-2]
-    SUCCESS: can detach without breaking hive
-  can_move_through_gap: from [3,-1,-2] to [4,-2,-2]
-    Found 2 common neighbors
-    Common neighbor 1 [4,-1,-3]: empty
-    Common neighbor 2 [3,-2,-1]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [3,-1,-2] to [4,-1,-3]
-    Found 2 common neighbors
-    Common neighbor 1 [4,-2,-2]: empty
-    Common neighbor 2 [3,0,-3]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [3,-1,-2] to [3,0,-3]
-    Found 2 common neighbors
-    Common neighbor 1 [4,-1,-3]: empty
-    Common neighbor 2 [2,0,-2]: OCCUPIED
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [3,-1,-2] to [3,-2,-1]
-    Found 2 common neighbors
-    Common neighbor 1 [4,-2,-2]: empty
-    Common neighbor 2 [2,-1,-1]: OCCUPIED
-    SUCCESS: At least one neighbor empty, can move through gap
-Found 4 normal moves
-Pillbug at [3,-1,-2] checking pickable pieces
-  Checking piece at [2,0,-2]: Pillbug
-  can_move_through_gap: from [2,0,-2] to [3,-1,-2]
-    Found 2 common neighbors
-    Common neighbor 1 [3,0,-3]: empty
-    Common neighbor 2 [2,-1,-1]: OCCUPIED
-    SUCCESS: At least one neighbor empty, can move through gap
-    Can pick: true, can_move_through_gap: true
-    PICKABLE!
-  Checking piece at [2,-1,-1]: Queen bee
-    Would break hive - disconnected piece at [1,-1,0]
-Found 1 pickable pieces
-Marked 2 normal moves and 1 special targets
-Marked 2 normal moves and 1 special targets
-=== Complete ===
-CLICK: mouse=(599,389), camera=(512,384), pixel=(108.75,6.25), cube=[2,-1,-1], hex_exists=true
-CLICK: mouse=(630,365), camera=(512,384), pixel=(147.5,-23.75), cube=[3,-1,-2], hex_exists=true
-=== mark_legal_moves_for_piece called ===
-Source cube: [3,-1,-2]
-Piece: Pillbug
-Testing Pillbug moves - normal movement and special ability
-  pieceCanDetach checking [3,-1,-2]
-    SUCCESS: can detach without breaking hive
-  can_move_through_gap: from [3,-1,-2] to [4,-2,-2]
-    Found 2 common neighbors
-    Common neighbor 1 [4,-1,-3]: empty
-    Common neighbor 2 [3,-2,-1]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [3,-1,-2] to [4,-1,-3]
-    Found 2 common neighbors
-    Common neighbor 1 [4,-2,-2]: empty
-    Common neighbor 2 [3,0,-3]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [3,-1,-2] to [3,0,-3]
-    Found 2 common neighbors
-    Common neighbor 1 [4,-1,-3]: empty
-    Common neighbor 2 [2,0,-2]: OCCUPIED
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [3,-1,-2] to [3,-2,-1]
-    Found 2 common neighbors
-    Common neighbor 1 [4,-2,-2]: empty
-    Common neighbor 2 [2,-1,-1]: OCCUPIED
-    SUCCESS: At least one neighbor empty, can move through gap
-Found 4 normal moves
-Pillbug at [3,-1,-2] checking pickable pieces
-  Checking piece at [2,0,-2]: Pillbug
-  can_move_through_gap: from [2,0,-2] to [3,-1,-2]
-    Found 2 common neighbors
-    Common neighbor 1 [3,0,-3]: empty
-    Common neighbor 2 [2,-1,-1]: OCCUPIED
-    SUCCESS: At least one neighbor empty, can move through gap
-    Can pick: true, can_move_through_gap: true
-    PICKABLE!
-  Checking piece at [2,-1,-1]: Queen bee
-    Would break hive - disconnected piece at [1,-1,0]
-Found 1 pickable pieces
-Marked 2 normal moves and 1 special targets
-Marked 2 normal moves and 1 special targets
-=== Complete ===
-CLICK: mouse=(630,365), camera=(512,384), pixel=(147.5,-23.75), cube=[3,-1,-2], hex_exists=true
-CLICK: mouse=(630,365), camera=(512,384), pixel=(147.5,-23.75), cube=[3,-1,-2], hex_exists=true
-=== mark_legal_moves_for_piece called ===
-Source cube: [3,-1,-2]
-Piece: Pillbug
-Testing Pillbug moves - normal movement and special ability
-  pieceCanDetach checking [3,-1,-2]
-    SUCCESS: can detach without breaking hive
-  can_move_through_gap: from [3,-1,-2] to [4,-2,-2]
-    Found 2 common neighbors
-    Common neighbor 1 [4,-1,-3]: empty
-    Common neighbor 2 [3,-2,-1]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [3,-1,-2] to [4,-1,-3]
-    Found 2 common neighbors
-    Common neighbor 1 [4,-2,-2]: empty
-    Common neighbor 2 [3,0,-3]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [3,-1,-2] to [3,0,-3]
-    Found 2 common neighbors
-    Common neighbor 1 [4,-1,-3]: empty
-    Common neighbor 2 [2,0,-2]: OCCUPIED
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [3,-1,-2] to [3,-2,-1]
-    Found 2 common neighbors
-    Common neighbor 1 [4,-2,-2]: empty
-    Common neighbor 2 [2,-1,-1]: OCCUPIED
-    SUCCESS: At least one neighbor empty, can move through gap
-Found 4 normal moves
-Pillbug at [3,-1,-2] checking pickable pieces
-  Checking piece at [2,0,-2]: Pillbug
-  can_move_through_gap: from [2,0,-2] to [3,-1,-2]
-    Found 2 common neighbors
-    Common neighbor 1 [3,0,-3]: empty
-    Common neighbor 2 [2,-1,-1]: OCCUPIED
-    SUCCESS: At least one neighbor empty, can move through gap
-    Can pick: true, can_move_through_gap: true
-    PICKABLE!
-  Checking piece at [2,-1,-1]: Queen bee
-    Would break hive - disconnected piece at [1,-1,0]
-Found 1 pickable pieces
-Marked 2 normal moves and 1 special targets
-Marked 2 normal moves and 1 special targets
-=== Complete ===
-CLICK: mouse=(630,365), camera=(512,384), pixel=(147.5,-23.75), cube=[3,-1,-2], hex_exists=true
-CLICK: mouse=(605,344), camera=(512,384), pixel=(116.25,-50), cube=[2,0,-2], hex_exists=true
-Player 	2	 has no piece 	Queen bee	 in stock.
-CLICK: mouse=(543,409), camera=(512,384), pixel=(38.75,31.25), cube=[1,-1,0], hex_exists=true
-Player 	2	 has no piece 	Queen bee	 in stock.
-CLICK: mouse=(631,366), camera=(512,384), pixel=(148.75,-22.5), cube=[3,-1,-2], hex_exists=true
-=== mark_legal_moves_for_piece called ===
-Source cube: [3,-1,-2]
-Piece: Pillbug
-Testing Pillbug moves - normal movement and special ability
-  pieceCanDetach checking [3,-1,-2]
-    SUCCESS: can detach without breaking hive
-  can_move_through_gap: from [3,-1,-2] to [4,-2,-2]
-    Found 2 common neighbors
-    Common neighbor 1 [4,-1,-3]: empty
-    Common neighbor 2 [3,-2,-1]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [3,-1,-2] to [4,-1,-3]
-    Found 2 common neighbors
-    Common neighbor 1 [4,-2,-2]: empty
-    Common neighbor 2 [3,0,-3]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [3,-1,-2] to [3,0,-3]
-    Found 2 common neighbors
-    Common neighbor 1 [4,-1,-3]: empty
-    Common neighbor 2 [2,0,-2]: OCCUPIED
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [3,-1,-2] to [3,-2,-1]
-    Found 2 common neighbors
-    Common neighbor 1 [4,-2,-2]: empty
-    Common neighbor 2 [2,-1,-1]: OCCUPIED
-    SUCCESS: At least one neighbor empty, can move through gap
-Found 4 normal moves
-Pillbug at [3,-1,-2] checking pickable pieces
-  Checking piece at [2,0,-2]: Pillbug
-  can_move_through_gap: from [2,0,-2] to [3,-1,-2]
-    Found 2 common neighbors
-    Common neighbor 1 [3,0,-3]: empty
-    Common neighbor 2 [2,-1,-1]: OCCUPIED
-    SUCCESS: At least one neighbor empty, can move through gap
-    Can pick: true, can_move_through_gap: true
-    PICKABLE!
-  Checking piece at [2,-1,-1]: Queen bee
-    Would break hive - disconnected piece at [1,-1,0]
-Found 1 pickable pieces
-Marked 2 normal moves and 1 special targets
-Marked 2 normal moves and 1 special targets
-=== Complete ===
-CLICK: mouse=(633,366), camera=(512,384), pixel=(151.25,-22.5), cube=[3,-1,-2], hex_exists=true
-Selected piece: Mosquito
-CLICK: mouse=(554,373), camera=(512,384), pixel=(52.5,-13.75), cube=[1,0,-1], hex_exists=true
-isNextToFriendly: checking cube [1,0,-1]
-  active_player_id=2, turn_number[2]=4
-  Neighbors: enemy=2, friendly=1
-  Normal placement - must have friendly neighbors and no enemies
-  REJECTED: friendly=1, enemy=2
-CLICK: mouse=(587,288), camera=(512,384), pixel=(93.75,-120), cube=[2,1,-3], hex_exists=true
-isNextToFriendly: checking cube [2,1,-3]
-  active_player_id=2, turn_number[2]=4
-  Neighbors: enemy=1, friendly=0
-  Normal placement - must have friendly neighbors and no enemies
-  REJECTED: friendly=0, enemy=1
-CLICK: mouse=(547,455), camera=(512,384), pixel=(43.75,88.75), cube=[1,-2,1], hex_exists=true
-isNextToFriendly: checking cube [1,-2,1]
-  active_player_id=2, turn_number[2]=4
-  Neighbors: enemy=1, friendly=0
-  Normal placement - must have friendly neighbors and no enemies
-  REJECTED: friendly=0, enemy=1
-CLICK: mouse=(648,404), camera=(512,384), pixel=(170,25), cube=[3,-2,-1], hex_exists=true
-isNextToFriendly: checking cube [3,-2,-1]
-  active_player_id=2, turn_number[2]=4
-  Neighbors: enemy=0, friendly=2
-  Normal placement - must have friendly neighbors and no enemies
-  APPROVED
-CLICKED CENTER (0,0,0): pixel=(-6.25,15), hex_exists=true
-CLICK: mouse=(507,396), camera=(512,384), pixel=(-6.25,15), cube=[0,0,-0], hex_exists=true
-isNextToFriendly: checking cube [0,-0,0]
-  active_player_id=1, turn_number[1]=5
-  Neighbors: enemy=0, friendly=1
-  Normal placement - must have friendly neighbors and no enemies
-  APPROVED
-CLICK: mouse=(645,408), camera=(512,384), pixel=(166.25,30), cube=[3,-2,-1], hex_exists=true
-=== mark_legal_moves_for_piece called ===
-Source cube: [3,-2,-1]
-Piece: Mosquito
-Testing Mosquito moves - mimics adjacent pieces
-Mosquito adjacent piece types: has Pillbug: true, has Beetle: false
-  pieceCanDetach checking [3,-2,-1]
-    SUCCESS: can detach without breaking hive
-Mosquito:get_legal_moves starting from [3,-2,-1]
-  Adjacent piece types: 
-    - Queen Bee (id: 1)
-    - Pillbug (id: 8)
-  Checking moves as Queen bee
-  Checking moves as Pillbug
-  can_move_through_gap: from [3,-2,-1] to [4,-3,-1]
-    Found 2 common neighbors
-    Common neighbor 1 [4,-2,-2]: empty
-    Common neighbor 2 [3,-3,0]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [3,-2,-1] to [4,-2,-2]
-    Found 2 common neighbors
-    Common neighbor 1 [4,-3,-1]: empty
-    Common neighbor 2 [3,-1,-2]: OCCUPIED
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [3,-2,-1] to [2,-2,0]
-    Found 2 common neighbors
-    Common neighbor 1 [2,-1,-1]: OCCUPIED
-    Common neighbor 2 [3,-3,0]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [3,-2,-1] to [3,-3,0]
-    Found 2 common neighbors
-    Common neighbor 1 [4,-3,-1]: empty
-    Common neighbor 2 [2,-2,0]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-Total unique destinations found: 4
-Found 4 potential normal moves
-Mosquito can mimic Pillbug special ability
-Pillbug at [3,-2,-1] checking pickable pieces
-  Checking piece at [3,-1,-2]: Pillbug
-  can_move_through_gap: from [3,-1,-2] to [3,-2,-1]
-    Found 2 common neighbors
-    Common neighbor 1 [4,-2,-2]: empty
-    Common neighbor 2 [2,-1,-1]: OCCUPIED
-    SUCCESS: At least one neighbor empty, can move through gap
-    Can pick: true, can_move_through_gap: true
-    PICKABLE!
-  Checking piece at [2,-1,-1]: Queen bee
-    Would break hive - disconnected piece at [2,0,-2]
-Found 1 pickable pieces
-Marked 2 normal moves and 1 special targets
-Marked 2 normal moves and 1 special targets
-=== Complete ===
-CLICK: mouse=(638,370), camera=(512,384), pixel=(157.5,-17.5), cube=[3,-1,-2], hex_exists=true
-Mosquito special: Selected target piece at [3,-1,-2]
-  can_move_through_gap: from [3,-1,-2] to [3,-2,-1]
-    Found 2 common neighbors
-    Common neighbor 1 [4,-2,-2]: empty
-    Common neighbor 2 [2,-1,-1]: OCCUPIED
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [3,-2,-1] to [4,-3,-1]
-    Found 2 common neighbors
-    Common neighbor 1 [4,-2,-2]: empty
-    Common neighbor 2 [3,-3,0]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [3,-1,-2] to [3,-2,-1]
-    Found 2 common neighbors
-    Common neighbor 1 [4,-2,-2]: empty
-    Common neighbor 2 [2,-1,-1]: OCCUPIED
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [3,-2,-1] to [4,-2,-2]
-    Found 2 common neighbors
-    Common neighbor 1 [4,-3,-1]: empty
-    Common neighbor 2 [3,-1,-2]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [3,-1,-2] to [3,-2,-1]
-    Found 2 common neighbors
-    Common neighbor 1 [4,-2,-2]: empty
-    Common neighbor 2 [2,-1,-1]: OCCUPIED
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [3,-2,-1] to [2,-2,0]
-    Found 2 common neighbors
-    Common neighbor 1 [2,-1,-1]: OCCUPIED
-    Common neighbor 2 [3,-3,0]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [3,-1,-2] to [3,-2,-1]
-    Found 2 common neighbors
-    Common neighbor 1 [4,-2,-2]: empty
-    Common neighbor 2 [2,-1,-1]: OCCUPIED
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [3,-2,-1] to [3,-3,0]
-    Found 2 common neighbors
-    Common neighbor 1 [4,-3,-1]: empty
-    Common neighbor 2 [2,-2,0]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-Found 4 drop locations
-  DROP LOCATION: [4,-3,-1]
-  DROP LOCATION: [4,-2,-2]
-  DROP LOCATION: [2,-2,0]
-  DROP LOCATION: [3,-3,0]
-CLICK: mouse=(602,427), camera=(512,384), pixel=(112.5,53.75), cube=[2,-2,0], hex_exists=true
-  can_move_through_gap: from [3,-1,-2] to [3,-2,-1]
-    Found 2 common neighbors
-    Common neighbor 1 [4,-2,-2]: empty
-    Common neighbor 2 [2,-1,-1]: OCCUPIED
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [3,-2,-1] to [2,-2,0]
-    Found 2 common neighbors
-    Common neighbor 1 [2,-1,-1]: OCCUPIED
-    Common neighbor 2 [3,-3,0]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-Pillbug moved piece from [3,-1,-2] to [2,-2,0]
-CLICK: mouse=(599,429), camera=(512,384), pixel=(108.75,56.25), cube=[2,-2,0], hex_exists=true
-Player 	1	 has no piece 	Mosquito	 in stock.
-CLICK: mouse=(603,335), camera=(512,384), pixel=(113.75,-61.25), cube=[2,0,-2], hex_exists=true
-=== mark_legal_moves_for_piece called ===
-Source cube: [2,0,-2]
-Piece: Pillbug
-Testing Pillbug moves - normal movement and special ability
-  pieceCanDetach checking [2,0,-2]
-    SUCCESS: can detach without breaking hive
-  can_move_through_gap: from [2,0,-2] to [3,-1,-2]
-    Found 2 common neighbors
-    Common neighbor 1 [3,0,-3]: empty
-    Common neighbor 2 [2,-1,-1]: OCCUPIED
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [2,0,-2] to [3,0,-3]
-    Found 2 common neighbors
-    Common neighbor 1 [3,-1,-2]: empty
-    Common neighbor 2 [2,1,-3]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [2,0,-2] to [2,1,-3]
-    Found 2 common neighbors
-    Common neighbor 1 [3,0,-3]: empty
-    Common neighbor 2 [1,1,-2]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [2,0,-2] to [1,1,-2]
-    Found 2 common neighbors
-    Common neighbor 1 [2,1,-3]: empty
-    Common neighbor 2 [1,0,-1]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [2,0,-2] to [1,0,-1]
-    Found 2 common neighbors
-    Common neighbor 1 [1,1,-2]: empty
-    Common neighbor 2 [2,-1,-1]: OCCUPIED
-    SUCCESS: At least one neighbor empty, can move through gap
-Found 5 normal moves
-Pillbug at [2,0,-2] checking pickable pieces
-  Checking piece at [2,-1,-1]: Queen bee
-    Would break hive - disconnected piece at [2,0,-2]
-Found 0 pickable pieces
-Marked 2 normal moves and 0 special targets
-Marked 2 normal moves and 0 special targets
-=== Complete ===
-CLICK: mouse=(633,362), camera=(512,384), pixel=(151.25,-27.5), cube=[3,-1,-2], hex_exists=true
-  pieceCanDetach checking [2,0,-2]
-    SUCCESS: can detach without breaking hive
-  can_move_through_gap: from [2,0,-2] to [3,-1,-2]
-    Found 2 common neighbors
-    Common neighbor 1 [3,0,-3]: empty
-    Common neighbor 2 [2,-1,-1]: OCCUPIED
-    SUCCESS: At least one neighbor empty, can move through gap
-CLICK: mouse=(639,406), camera=(512,384), pixel=(158.75,27.5), cube=[3,-2,-1], hex_exists=true
-=== mark_legal_moves_for_piece called ===
-Source cube: [3,-2,-1]
-Piece: Mosquito
-Testing Mosquito moves - mimics adjacent pieces
-Mosquito adjacent piece types: has Pillbug: true, has Beetle: false
-  pieceCanDetach checking [3,-2,-1]
-    SUCCESS: can detach without breaking hive
-Mosquito:get_legal_moves starting from [3,-2,-1]
-  Adjacent piece types: 
-    - Queen Bee (id: 1)
-    - Pillbug (id: 8)
-  Checking moves as Queen bee
-  Checking moves as Pillbug
-  can_move_through_gap: from [3,-2,-1] to [4,-3,-1]
-    Found 2 common neighbors
-    Common neighbor 1 [4,-2,-2]: empty
-    Common neighbor 2 [3,-3,0]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [3,-2,-1] to [4,-2,-2]
-    Found 2 common neighbors
-    Common neighbor 1 [4,-3,-1]: empty
-    Common neighbor 2 [3,-1,-2]: OCCUPIED
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [3,-2,-1] to [3,-3,0]
-    Found 2 common neighbors
-    Common neighbor 1 [4,-3,-1]: empty
-    Common neighbor 2 [2,-2,0]: OCCUPIED
-    SUCCESS: At least one neighbor empty, can move through gap
-Total unique destinations found: 3
-Found 3 potential normal moves
-Mosquito can mimic Pillbug special ability
-Pillbug at [3,-2,-1] checking pickable pieces
-  Checking piece at [3,-1,-2]: Pillbug
-  can_move_through_gap: from [3,-1,-2] to [3,-2,-1]
-    Found 2 common neighbors
-    Common neighbor 1 [4,-2,-2]: empty
-    Common neighbor 2 [2,-1,-1]: OCCUPIED
-    SUCCESS: At least one neighbor empty, can move through gap
-    Can pick: true, can_move_through_gap: true
-    PICKABLE!
-  Checking piece at [2,-1,-1]: Queen bee
-  can_move_through_gap: from [2,-1,-1] to [3,-2,-1]
-    Found 2 common neighbors
-    Common neighbor 1 [3,-1,-2]: OCCUPIED
-    Common neighbor 2 [2,-2,0]: OCCUPIED
-    FAIL: Both neighbors occupied (gate blocking)
-    Can pick: true, can_move_through_gap: false
-  Checking piece at [2,-2,0]: Pillbug
-  can_move_through_gap: from [2,-2,0] to [3,-2,-1]
-    Found 2 common neighbors
-    Common neighbor 1 [3,-3,0]: empty
-    Common neighbor 2 [2,-1,-1]: OCCUPIED
-    SUCCESS: At least one neighbor empty, can move through gap
-    Can pick: true, can_move_through_gap: true
-    PICKABLE!
-Found 2 pickable pieces
-Marked 2 normal moves and 2 special targets
-Marked 2 normal moves and 2 special targets
-=== Complete ===
-CLICK: mouse=(639,406), camera=(512,384), pixel=(158.75,27.5), cube=[3,-2,-1], hex_exists=true
-CLICK: mouse=(639,407), camera=(512,384), pixel=(158.75,28.75), cube=[3,-2,-1], hex_exists=true
-=== mark_legal_moves_for_piece called ===
-Source cube: [3,-2,-1]
-Piece: Mosquito
-Testing Mosquito moves - mimics adjacent pieces
-Mosquito adjacent piece types: has Pillbug: true, has Beetle: false
-  pieceCanDetach checking [3,-2,-1]
-    SUCCESS: can detach without breaking hive
-Mosquito:get_legal_moves starting from [3,-2,-1]
-  Adjacent piece types: 
-    - Queen Bee (id: 1)
-    - Pillbug (id: 8)
-  Checking moves as Queen bee
-  Checking moves as Pillbug
-  can_move_through_gap: from [3,-2,-1] to [4,-3,-1]
-    Found 2 common neighbors
-    Common neighbor 1 [4,-2,-2]: empty
-    Common neighbor 2 [3,-3,0]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [3,-2,-1] to [4,-2,-2]
-    Found 2 common neighbors
-    Common neighbor 1 [4,-3,-1]: empty
-    Common neighbor 2 [3,-1,-2]: OCCUPIED
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [3,-2,-1] to [3,-3,0]
-    Found 2 common neighbors
-    Common neighbor 1 [4,-3,-1]: empty
-    Common neighbor 2 [2,-2,0]: OCCUPIED
-    SUCCESS: At least one neighbor empty, can move through gap
-Total unique destinations found: 3
-Found 3 potential normal moves
-Mosquito can mimic Pillbug special ability
-Pillbug at [3,-2,-1] checking pickable pieces
-  Checking piece at [3,-1,-2]: Pillbug
-  can_move_through_gap: from [3,-1,-2] to [3,-2,-1]
-    Found 2 common neighbors
-    Common neighbor 1 [4,-2,-2]: empty
-    Common neighbor 2 [2,-1,-1]: OCCUPIED
-    SUCCESS: At least one neighbor empty, can move through gap
-    Can pick: true, can_move_through_gap: true
-    PICKABLE!
-  Checking piece at [2,-1,-1]: Queen bee
-  can_move_through_gap: from [2,-1,-1] to [3,-2,-1]
-    Found 2 common neighbors
-    Common neighbor 1 [3,-1,-2]: OCCUPIED
-    Common neighbor 2 [2,-2,0]: OCCUPIED
-    FAIL: Both neighbors occupied (gate blocking)
-    Can pick: true, can_move_through_gap: false
-  Checking piece at [2,-2,0]: Pillbug
-  can_move_through_gap: from [2,-2,0] to [3,-2,-1]
-    Found 2 common neighbors
-    Common neighbor 1 [3,-3,0]: empty
-    Common neighbor 2 [2,-1,-1]: OCCUPIED
-    SUCCESS: At least one neighbor empty, can move through gap
-    Can pick: true, can_move_through_gap: true
-    PICKABLE!
-Found 2 pickable pieces
-Marked 2 normal moves and 2 special targets
-Marked 2 normal moves and 2 special targets
-=== Complete ===
-CLICK: mouse=(639,407), camera=(512,384), pixel=(158.75,28.75), cube=[3,-2,-1], hex_exists=true
-CLICK: mouse=(622,422), camera=(512,384), pixel=(137.5,47.5), cube=[3,-2,-1], hex_exists=true
-=== mark_legal_moves_for_piece called ===
-Source cube: [3,-2,-1]
-Piece: Mosquito
-Testing Mosquito moves - mimics adjacent pieces
-Mosquito adjacent piece types: has Pillbug: true, has Beetle: false
-  pieceCanDetach checking [3,-2,-1]
-    SUCCESS: can detach without breaking hive
-Mosquito:get_legal_moves starting from [3,-2,-1]
-  Adjacent piece types: 
-    - Queen Bee (id: 1)
-    - Pillbug (id: 8)
-  Checking moves as Queen bee
-  Checking moves as Pillbug
-  can_move_through_gap: from [3,-2,-1] to [4,-3,-1]
-    Found 2 common neighbors
-    Common neighbor 1 [4,-2,-2]: empty
-    Common neighbor 2 [3,-3,0]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [3,-2,-1] to [4,-2,-2]
-    Found 2 common neighbors
-    Common neighbor 1 [4,-3,-1]: empty
-    Common neighbor 2 [3,-1,-2]: OCCUPIED
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [3,-2,-1] to [3,-3,0]
-    Found 2 common neighbors
-    Common neighbor 1 [4,-3,-1]: empty
-    Common neighbor 2 [2,-2,0]: OCCUPIED
-    SUCCESS: At least one neighbor empty, can move through gap
-Total unique destinations found: 3
-Found 3 potential normal moves
-Mosquito can mimic Pillbug special ability
-Pillbug at [3,-2,-1] checking pickable pieces
-  Checking piece at [3,-1,-2]: Pillbug
-  can_move_through_gap: from [3,-1,-2] to [3,-2,-1]
-    Found 2 common neighbors
-    Common neighbor 1 [4,-2,-2]: empty
-    Common neighbor 2 [2,-1,-1]: OCCUPIED
-    SUCCESS: At least one neighbor empty, can move through gap
-    Can pick: true, can_move_through_gap: true
-    PICKABLE!
-  Checking piece at [2,-1,-1]: Queen bee
-  can_move_through_gap: from [2,-1,-1] to [3,-2,-1]
-    Found 2 common neighbors
-    Common neighbor 1 [3,-1,-2]: OCCUPIED
-    Common neighbor 2 [2,-2,0]: OCCUPIED
-    FAIL: Both neighbors occupied (gate blocking)
-    Can pick: true, can_move_through_gap: false
-  Checking piece at [2,-2,0]: Pillbug
-  can_move_through_gap: from [2,-2,0] to [3,-2,-1]
-    Found 2 common neighbors
-    Common neighbor 1 [3,-3,0]: empty
-    Common neighbor 2 [2,-1,-1]: OCCUPIED
-    SUCCESS: At least one neighbor empty, can move through gap
-    Can pick: true, can_move_through_gap: true
-    PICKABLE!
-Found 2 pickable pieces
-Marked 2 normal moves and 2 special targets
-Marked 2 normal moves and 2 special targets
-=== Complete ===
-CLICK: mouse=(644,414), camera=(512,384), pixel=(165,37.5), cube=[3,-2,-1], hex_exists=true
-CLICKED CENTER (0,0,0): pixel=(-18.75,16.25), hex_exists=true
-CLICK: mouse=(497,397), camera=(512,384), pixel=(-18.75,16.25), cube=[0,0,-0], hex_exists=true
-Player 	2	 has no piece 	Mosquito	 in stock.
-CLICKED CENTER (0,0,0): pixel=(-6.25,-8.75), hex_exists=true
-CLICK: mouse=(507,377), camera=(512,384), pixel=(-6.25,-8.75), cube=[0,-0,0], hex_exists=true
-Player 	2	 has no piece 	Mosquito	 in stock.
-CLICK: mouse=(551,404), camera=(512,384), pixel=(48.75,25), cube=[1,-1,0], hex_exists=true
-Player 	2	 has no piece 	Mosquito	 in stock.
-CLICK: mouse=(638,406), camera=(512,384), pixel=(157.5,27.5), cube=[3,-2,-1], hex_exists=true
-=== mark_legal_moves_for_piece called ===
-Source cube: [3,-2,-1]
-Piece: Mosquito
-Testing Mosquito moves - mimics adjacent pieces
-Mosquito adjacent piece types: has Pillbug: true, has Beetle: false
-  pieceCanDetach checking [3,-2,-1]
-    SUCCESS: can detach without breaking hive
-Mosquito:get_legal_moves starting from [3,-2,-1]
-  Adjacent piece types: 
-    - Queen Bee (id: 1)
-    - Pillbug (id: 8)
-  Checking moves as Queen bee
-  Checking moves as Pillbug
-  can_move_through_gap: from [3,-2,-1] to [4,-3,-1]
-    Found 2 common neighbors
-    Common neighbor 1 [4,-2,-2]: empty
-    Common neighbor 2 [3,-3,0]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [3,-2,-1] to [4,-2,-2]
-    Found 2 common neighbors
-    Common neighbor 1 [4,-3,-1]: empty
-    Common neighbor 2 [3,-1,-2]: OCCUPIED
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [3,-2,-1] to [3,-3,0]
-    Found 2 common neighbors
-    Common neighbor 1 [4,-3,-1]: empty
-    Common neighbor 2 [2,-2,0]: OCCUPIED
-    SUCCESS: At least one neighbor empty, can move through gap
-Total unique destinations found: 3
-Found 3 potential normal moves
-Mosquito can mimic Pillbug special ability
-Pillbug at [3,-2,-1] checking pickable pieces
-  Checking piece at [3,-1,-2]: Pillbug
-  can_move_through_gap: from [3,-1,-2] to [3,-2,-1]
-    Found 2 common neighbors
-    Common neighbor 1 [4,-2,-2]: empty
-    Common neighbor 2 [2,-1,-1]: OCCUPIED
-    SUCCESS: At least one neighbor empty, can move through gap
-    Can pick: true, can_move_through_gap: true
-    PICKABLE!
-  Checking piece at [2,-1,-1]: Queen bee
-  can_move_through_gap: from [2,-1,-1] to [3,-2,-1]
-    Found 2 common neighbors
-    Common neighbor 1 [3,-1,-2]: OCCUPIED
-    Common neighbor 2 [2,-2,0]: OCCUPIED
-    FAIL: Both neighbors occupied (gate blocking)
-    Can pick: true, can_move_through_gap: false
-  Checking piece at [2,-2,0]: Pillbug
-  can_move_through_gap: from [2,-2,0] to [3,-2,-1]
-    Found 2 common neighbors
-    Common neighbor 1 [3,-3,0]: empty
-    Common neighbor 2 [2,-1,-1]: OCCUPIED
-    SUCCESS: At least one neighbor empty, can move through gap
-    Can pick: true, can_move_through_gap: true
-    PICKABLE!
-Found 2 pickable pieces
-Marked 2 normal moves and 2 special targets
-Marked 2 normal moves and 2 special targets
-=== Complete ===
-CLICK: mouse=(638,406), camera=(512,384), pixel=(157.5,27.5), cube=[3,-2,-1], hex_exists=true
-CLICK: mouse=(594,393), camera=(512,384), pixel=(102.5,11.25), cube=[2,-1,-1], hex_exists=true
+CLICKED CENTER (0,0,0): pixel=(2.5,-1.25), hex_exists=true
+CLICK: mouse=(514,383), camera=(512,384), pixel=(2.5,-1.25), cube=[-0,0,0], hex_exists=true
+CLICK: mouse=(595,385), camera=(512,384), pixel=(103.75,1.25), cube=[2,-1,-1], hex_exists=true
 === mark_legal_moves_for_piece called ===
 Source cube: [2,-1,-1]
 Piece: Queen bee
@@ -997,186 +141,368 @@ Found 6 adjacent hexes
     SUCCESS: can detach without breaking hive
   pieceCanDetach checking [2,-1,-1]
     SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [2,-1,-1]
+    SUCCESS: can detach without breaking hive
 Total legal moves: 2
 Marked 2 normal moves and 0 special targets
 === Complete ===
-CLICK: mouse=(596,340), camera=(512,384), pixel=(105,-55), cube=[2,0,-2], hex_exists=true
+CLICK: mouse=(552,363), camera=(512,384), pixel=(50,-26.25), cube=[1,0,-1], hex_exists=true
   pieceCanDetach checking [2,-1,-1]
     SUCCESS: can detach without breaking hive
-CLICK: mouse=(634,368), camera=(512,384), pixel=(152.5,-20), cube=[3,-1,-2], hex_exists=true
+CLICK: mouse=(467,359), camera=(512,384), pixel=(-56.25,-31.25), cube=[-1,1,0], hex_exists=true
 === mark_legal_moves_for_piece called ===
-Source cube: [3,-1,-2]
+Source cube: [-1,1,0]
+Piece: Beetle
+Testing Beetle adjacent moves
+  pieceCanDetach checking [-1,1,0]
+    FAIL: hive would break apart
+Beetle cannot detach - would break hive
+Marked 0 normal moves and 0 special targets
+=== Complete ===
+CLICKED CENTER (0,0,0): pixel=(-2.5,0), hex_exists=true
+CLICK: mouse=(510,384), camera=(512,384), pixel=(-2.5,0), cube=[-0,0,0], hex_exists=true
+CLICK: mouse=(438,427), camera=(512,384), pixel=(-92.5,53.75), cube=[-2,0,2], hex_exists=true
+=== mark_legal_moves_for_piece called ===
+Source cube: [-2,0,2]
 Piece: Pillbug
 Testing Pillbug moves - normal movement and special ability
-  pieceCanDetach checking [3,-1,-2]
-    FAIL: hive would break apart
-Pillbug cannot detach - no normal moves available
-Pillbug at [3,-1,-2] checking pickable pieces
-  Checking piece at [2,0,-2]: Queen bee
-  can_move_through_gap: from [2,0,-2] to [3,-1,-2]
+  pieceCanDetach checking [-2,0,2]
+    SUCCESS: can detach without breaking hive
+  can_move_through_gap: from [-2,0,2] to [-1,-1,2]
     Found 2 common neighbors
-    Common neighbor 1 [3,0,-3]: empty
-    Common neighbor 2 [2,-1,-1]: empty
+    Common neighbor 1 [-1,0,1]: empty
+    Common neighbor 2 [-2,-1,3]: empty
     SUCCESS: At least one neighbor empty, can move through gap
-    Can pick: true, can_move_through_gap: true
-    PICKABLE!
-  Checking piece at [3,-2,-1]: Mosquito
-    Would break hive - disconnected piece at [2,0,-2]
-Found 1 pickable pieces
-Marked 0 normal moves and 1 special targets
-Marked 0 normal moves and 1 special targets
+  can_move_through_gap: from [-2,0,2] to [-1,0,1]
+    Found 2 common neighbors
+    Common neighbor 1 [-1,-1,2]: empty
+    Common neighbor 2 [-2,1,1]: OCCUPIED
+    SUCCESS: At least one neighbor empty, can move through gap
+  can_move_through_gap: from [-2,0,2] to [-3,1,2]
+    Found 2 common neighbors
+    Common neighbor 1 [-2,1,1]: OCCUPIED
+    Common neighbor 2 [-3,0,3]: empty
+    SUCCESS: At least one neighbor empty, can move through gap
+  can_move_through_gap: from [-2,0,2] to [-3,0,3]
+    Found 2 common neighbors
+    Common neighbor 1 [-3,1,2]: empty
+    Common neighbor 2 [-2,-1,3]: empty
+    SUCCESS: At least one neighbor empty, can move through gap
+  can_move_through_gap: from [-2,0,2] to [-2,-1,3]
+    Found 2 common neighbors
+    Common neighbor 1 [-1,-1,2]: empty
+    Common neighbor 2 [-3,0,3]: empty
+    SUCCESS: At least one neighbor empty, can move through gap
+Found 5 normal moves
+Pillbug at [-2,0,2] checking pickable pieces
+  Checking piece at [-2,1,1]: Mosquito
+    Would break hive - disconnected piece at [-3,2,1]
+Found 0 pickable pieces
+Marked 2 normal moves and 0 special targets
+Marked 2 normal moves and 0 special targets
 === Complete ===
-CLICK: mouse=(626,353), camera=(512,384), pixel=(142.5,-38.75), cube=[3,-1,-2], hex_exists=true
-CLICK: mouse=(626,353), camera=(512,384), pixel=(142.5,-38.75), cube=[3,-1,-2], hex_exists=true
+CLICK: mouse=(459,410), camera=(512,384), pixel=(-66.25,32.5), cube=[-1,0,1], hex_exists=true
+  pieceCanDetach checking [-2,0,2]
+    SUCCESS: can detach without breaking hive
+  can_move_through_gap: from [-2,0,2] to [-1,0,1]
+    Found 2 common neighbors
+    Common neighbor 1 [-1,-1,2]: empty
+    Common neighbor 2 [-2,1,1]: OCCUPIED
+    SUCCESS: At least one neighbor empty, can move through gap
+CLICKED CENTER (0,0,0): pixel=(-10,12.5), hex_exists=true
+CLICK: mouse=(504,394), camera=(512,384), pixel=(-10,12.5), cube=[0,0,-0], hex_exists=true
+Player 	2	 has no piece 	Pillbug	 in stock.
+CLICK: mouse=(591,425), camera=(512,384), pixel=(98.75,51.25), cube=[2,-2,0], hex_exists=true
 === mark_legal_moves_for_piece called ===
-Source cube: [3,-1,-2]
+Source cube: [2,-2,0]
+Piece: Beetle
+Testing Beetle adjacent moves
+  pieceCanDetach checking [2,-2,0]
+    FAIL: hive would break apart
+Beetle cannot detach - would break hive
+Marked 0 normal moves and 0 special targets
+=== Complete ===
+CLICK: mouse=(592,432), camera=(512,384), pixel=(100,60), cube=[2,-2,0], hex_exists=true
+CLICK: mouse=(389,369), camera=(512,384), pixel=(-153.75,-18.75), cube=[-3,2,1], hex_exists=true
+Player 	2	 has no piece 	Pillbug	 in stock.
+CLICK: mouse=(389,341), camera=(512,384), pixel=(-153.75,-53.75), cube=[-3,2,1], hex_exists=true
+Player 	2	 has no piece 	Pillbug	 in stock.
+CLICK: mouse=(645,406), camera=(512,384), pixel=(166.25,27.5), cube=[3,-2,-1], hex_exists=true
+=== mark_legal_moves_for_piece called ===
+Source cube: [3,-2,-1]
+Piece: Mosquito
+Testing Mosquito moves - mimics adjacent pieces
+Mosquito adjacent piece types: has Pillbug: false, has Beetle: true
+  pieceCanDetach checking [3,-2,-1]
+    SUCCESS: can detach without breaking hive
+Mosquito:get_legal_moves starting from [3,-2,-1]
+  Adjacent piece types: 
+    - Beetle (id: 2)
+  Checking moves as Beetle
+Total unique destinations found: 6
+Found 6 potential normal moves
+Marked 3 normal moves and 0 special targets
+Marked 3 normal moves and 0 special targets
+=== Complete ===
+CLICK: mouse=(645,406), camera=(512,384), pixel=(166.25,27.5), cube=[3,-2,-1], hex_exists=true
+CLICK: mouse=(605,423), camera=(512,384), pixel=(116.25,48.75), cube=[2,-2,0], hex_exists=true
+=== mark_legal_moves_for_piece called ===
+Source cube: [2,-2,0]
+Piece: Beetle
+Testing Beetle adjacent moves
+  pieceCanDetach checking [2,-2,0]
+    FAIL: hive would break apart
+Beetle cannot detach - would break hive
+Marked 0 normal moves and 0 special targets
+=== Complete ===
+CLICK: mouse=(598,425), camera=(512,384), pixel=(107.5,51.25), cube=[2,-2,0], hex_exists=true
+CLICK: mouse=(556,412), camera=(512,384), pixel=(55,35), cube=[1,-1,0], hex_exists=true
+=== mark_legal_moves_for_piece called ===
+Source cube: [1,-1,0]
+Piece: Beetle
+Testing Beetle adjacent moves
+  pieceCanDetach checking [1,-1,0]
+    FAIL: hive would break apart
+Beetle cannot detach - would break hive
+Marked 0 normal moves and 0 special targets
+=== Complete ===
+CLICK: mouse=(556,412), camera=(512,384), pixel=(55,35), cube=[1,-1,0], hex_exists=true
+CLICK: mouse=(556,462), camera=(512,384), pixel=(55,97.5), cube=[1,-2,1], hex_exists=true
+=== mark_legal_moves_for_piece called ===
+Source cube: [1,-2,1]
 Piece: Pillbug
 Testing Pillbug moves - normal movement and special ability
-  pieceCanDetach checking [3,-1,-2]
-    FAIL: hive would break apart
-Pillbug cannot detach - no normal moves available
-Pillbug at [3,-1,-2] checking pickable pieces
-  Checking piece at [2,0,-2]: Queen bee
-  can_move_through_gap: from [2,0,-2] to [3,-1,-2]
+  pieceCanDetach checking [1,-2,1]
+    SUCCESS: can detach without breaking hive
+  can_move_through_gap: from [1,-2,1] to [2,-3,1]
     Found 2 common neighbors
-    Common neighbor 1 [3,0,-3]: empty
-    Common neighbor 2 [2,-1,-1]: empty
+    Common neighbor 1 [2,-2,0]: OCCUPIED
+    Common neighbor 2 [1,-3,2]: empty
     SUCCESS: At least one neighbor empty, can move through gap
-    Can pick: true, can_move_through_gap: true
-    PICKABLE!
-  Checking piece at [3,-2,-1]: Mosquito
-    Would break hive - disconnected piece at [2,0,-2]
-Found 1 pickable pieces
-Marked 0 normal moves and 1 special targets
-Marked 0 normal moves and 1 special targets
+  can_move_through_gap: from [1,-2,1] to [0,-1,1]
+    Found 2 common neighbors
+    Common neighbor 1 [1,-1,0]: OCCUPIED
+    Common neighbor 2 [0,-2,2]: empty
+    SUCCESS: At least one neighbor empty, can move through gap
+  can_move_through_gap: from [1,-2,1] to [0,-2,2]
+    Found 2 common neighbors
+    Common neighbor 1 [0,-1,1]: empty
+    Common neighbor 2 [1,-3,2]: empty
+    SUCCESS: At least one neighbor empty, can move through gap
+  can_move_through_gap: from [1,-2,1] to [1,-3,2]
+    Found 2 common neighbors
+    Common neighbor 1 [2,-3,1]: empty
+    Common neighbor 2 [0,-2,2]: empty
+    SUCCESS: At least one neighbor empty, can move through gap
+Found 4 normal moves
+Pillbug at [1,-2,1] checking pickable pieces
+  Checking piece at [2,-2,0]: Beetle
+    Would break hive - disconnected piece at [3,-2,-1]
+  Checking piece at [1,-1,0]: Beetle
+    Would break hive - disconnected piece at [-2,1,1]
+Found 0 pickable pieces
+Marked 2 normal moves and 0 special targets
+Marked 2 normal moves and 0 special targets
 === Complete ===
-CLICK: mouse=(602,339), camera=(512,384), pixel=(112.5,-56.25), cube=[2,0,-2], hex_exists=true
-Pillbug special: Selected target piece at [2,0,-2]
-Found 0 drop locations
-CLICK: mouse=(633,361), camera=(512,384), pixel=(151.25,-28.75), cube=[3,-1,-2], hex_exists=true
-CLICK: mouse=(633,361), camera=(512,384), pixel=(151.25,-28.75), cube=[3,-1,-2], hex_exists=true
+CLICK: mouse=(557,462), camera=(512,384), pixel=(56.25,97.5), cube=[1,-2,1], hex_exists=true
+CLICK: mouse=(557,461), camera=(512,384), pixel=(56.25,96.25), cube=[1,-2,1], hex_exists=true
 === mark_legal_moves_for_piece called ===
-Source cube: [3,-1,-2]
+Source cube: [1,-2,1]
 Piece: Pillbug
 Testing Pillbug moves - normal movement and special ability
-  pieceCanDetach checking [3,-1,-2]
-    FAIL: hive would break apart
-Pillbug cannot detach - no normal moves available
-Pillbug at [3,-1,-2] checking pickable pieces
-  Checking piece at [2,0,-2]: Queen bee
-  can_move_through_gap: from [2,0,-2] to [3,-1,-2]
+  pieceCanDetach checking [1,-2,1]
+    SUCCESS: can detach without breaking hive
+  can_move_through_gap: from [1,-2,1] to [2,-3,1]
     Found 2 common neighbors
-    Common neighbor 1 [3,0,-3]: empty
-    Common neighbor 2 [2,-1,-1]: empty
+    Common neighbor 1 [2,-2,0]: OCCUPIED
+    Common neighbor 2 [1,-3,2]: empty
     SUCCESS: At least one neighbor empty, can move through gap
-    Can pick: true, can_move_through_gap: true
-    PICKABLE!
-  Checking piece at [3,-2,-1]: Mosquito
-    Would break hive - disconnected piece at [2,0,-2]
-Found 1 pickable pieces
-Marked 0 normal moves and 1 special targets
-Marked 0 normal moves and 1 special targets
+  can_move_through_gap: from [1,-2,1] to [0,-1,1]
+    Found 2 common neighbors
+    Common neighbor 1 [1,-1,0]: OCCUPIED
+    Common neighbor 2 [0,-2,2]: empty
+    SUCCESS: At least one neighbor empty, can move through gap
+  can_move_through_gap: from [1,-2,1] to [0,-2,2]
+    Found 2 common neighbors
+    Common neighbor 1 [0,-1,1]: empty
+    Common neighbor 2 [1,-3,2]: empty
+    SUCCESS: At least one neighbor empty, can move through gap
+  can_move_through_gap: from [1,-2,1] to [1,-3,2]
+    Found 2 common neighbors
+    Common neighbor 1 [2,-3,1]: empty
+    Common neighbor 2 [0,-2,2]: empty
+    SUCCESS: At least one neighbor empty, can move through gap
+Found 4 normal moves
+Pillbug at [1,-2,1] checking pickable pieces
+  Checking piece at [2,-2,0]: Beetle
+    Would break hive - disconnected piece at [3,-2,-1]
+  Checking piece at [1,-1,0]: Beetle
+    Would break hive - disconnected piece at [-2,1,1]
+Found 0 pickable pieces
+Marked 2 normal moves and 0 special targets
+Marked 2 normal moves and 0 special targets
 === Complete ===
-CLICK: mouse=(603,344), camera=(512,384), pixel=(113.75,-50), cube=[2,0,-2], hex_exists=true
-Pillbug special: Selected target piece at [2,0,-2]
-Found 0 drop locations
-CLICK: mouse=(653,364), camera=(512,384), pixel=(176.25,-25), cube=[3,-1,-2], hex_exists=true
-CLICK: mouse=(653,364), camera=(512,384), pixel=(176.25,-25), cube=[3,-1,-2], hex_exists=true
+CLICK: mouse=(511,429), camera=(512,384), pixel=(-1.25,56.25), cube=[0,-1,1], hex_exists=true
+  pieceCanDetach checking [1,-2,1]
+    SUCCESS: can detach without breaking hive
+  can_move_through_gap: from [1,-2,1] to [0,-1,1]
+    Found 2 common neighbors
+    Common neighbor 1 [1,-1,0]: OCCUPIED
+    Common neighbor 2 [0,-2,2]: empty
+    SUCCESS: At least one neighbor empty, can move through gap
+CLICKED CENTER (0,0,0): pixel=(0,0), hex_exists=true
+CLICK: mouse=(512,384), camera=(512,384), pixel=(0,0), cube=[0,0,-0], hex_exists=true
 === mark_legal_moves_for_piece called ===
-Source cube: [3,-1,-2]
+Source cube: [0,-0,0]
+Piece: Beetle
+Testing Beetle adjacent moves
+  pieceCanDetach checking [0,-0,0]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,-0,0]
+    SUCCESS: can detach without breaking hive
+  Neighbor 1: [1,-1,0] -> true
+  pieceCanDetach checking [0,-0,0]
+    SUCCESS: can detach without breaking hive
+  Neighbor 2: [1,0,-1] -> true
+  pieceCanDetach checking [0,-0,0]
+    SUCCESS: can detach without breaking hive
+    Beetle BLOCKED by freedom of movement to (0,-1)
+  Neighbor 3: [0,1,-1] -> false
+  pieceCanDetach checking [0,-0,0]
+    SUCCESS: can detach without breaking hive
+  Neighbor 4: [-1,1,0] -> true
+  pieceCanDetach checking [0,-0,0]
+    SUCCESS: can detach without breaking hive
+  Neighbor 5: [-1,0,1] -> true
+  pieceCanDetach checking [0,-0,0]
+    SUCCESS: can detach without breaking hive
+  Neighbor 6: [0,-1,1] -> true
+Legal moves: 5
+Marked 5 normal moves and 0 special targets
+=== Complete ===
+CLICKED CENTER (0,0,0): pixel=(0,0), hex_exists=true
+CLICK: mouse=(512,384), camera=(512,384), pixel=(0,0), cube=[0,0,-0], hex_exists=true
+CLICKED CENTER (0,0,0): pixel=(0,0), hex_exists=true
+CLICK: mouse=(512,384), camera=(512,384), pixel=(0,0), cube=[0,0,-0], hex_exists=true
+=== mark_legal_moves_for_piece called ===
+Source cube: [0,-0,0]
+Piece: Beetle
+Testing Beetle adjacent moves
+  pieceCanDetach checking [0,-0,0]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,-0,0]
+    SUCCESS: can detach without breaking hive
+  Neighbor 1: [1,-1,0] -> true
+  pieceCanDetach checking [0,-0,0]
+    SUCCESS: can detach without breaking hive
+  Neighbor 2: [1,0,-1] -> true
+  pieceCanDetach checking [0,-0,0]
+    SUCCESS: can detach without breaking hive
+    Beetle BLOCKED by freedom of movement to (0,-1)
+  Neighbor 3: [0,1,-1] -> false
+  pieceCanDetach checking [0,-0,0]
+    SUCCESS: can detach without breaking hive
+  Neighbor 4: [-1,1,0] -> true
+  pieceCanDetach checking [0,-0,0]
+    SUCCESS: can detach without breaking hive
+  Neighbor 5: [-1,0,1] -> true
+  pieceCanDetach checking [0,-0,0]
+    SUCCESS: can detach without breaking hive
+  Neighbor 6: [0,-1,1] -> true
+Legal moves: 5
+Marked 5 normal moves and 0 special targets
+=== Complete ===
+CLICK: mouse=(551,411), camera=(512,384), pixel=(48.75,33.75), cube=[1,-1,0], hex_exists=true
+  pieceCanDetach checking [0,-0,0]
+    SUCCESS: can detach without breaking hive
+CLICK: mouse=(553,369), camera=(512,384), pixel=(51.25,-18.75), cube=[1,0,-1], hex_exists=true
+=== mark_legal_moves_for_piece called ===
+Source cube: [1,0,-1]
+Piece: Queen bee
+Testing Queen moves - checking adjacent hexes only
+Found 6 adjacent hexes
+  pieceCanDetach checking [1,0,-1]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [1,0,-1]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [1,0,-1]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [1,0,-1]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [1,0,-1]
+    SUCCESS: can detach without breaking hive
+Total legal moves: 3
+Marked 3 normal moves and 0 special targets
+=== Complete ===
+CLICKED CENTER (0,0,0): pixel=(12.5,6.25), hex_exists=true
+CLICK: mouse=(522,389), camera=(512,384), pixel=(12.5,6.25), cube=[-0,0,0], hex_exists=true
+  pieceCanDetach checking [1,0,-1]
+    SUCCESS: can detach without breaking hive
+CLICK: mouse=(478,354), camera=(512,384), pixel=(-42.5,-37.5), cube=[-1,1,0], hex_exists=true
+=== mark_legal_moves_for_piece called ===
+Source cube: [-1,1,0]
+Piece: Beetle
+Testing Beetle adjacent moves
+  pieceCanDetach checking [-1,1,0]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-1,1,0]
+    SUCCESS: can detach without breaking hive
+  Neighbor 1: [0,0,0] -> true
+  pieceCanDetach checking [-1,1,0]
+    SUCCESS: can detach without breaking hive
+  Neighbor 2: [0,1,-1] -> true
+  pieceCanDetach checking [-1,1,0]
+    SUCCESS: can detach without breaking hive
+  Neighbor 3: [-1,2,-1] -> false
+  pieceCanDetach checking [-1,1,0]
+    SUCCESS: can detach without breaking hive
+  Neighbor 4: [-2,2,0] -> true
+  pieceCanDetach checking [-1,1,0]
+    SUCCESS: can detach without breaking hive
+  Neighbor 5: [-2,1,1] -> true
+  pieceCanDetach checking [-1,1,0]
+    SUCCESS: can detach without breaking hive
+  Neighbor 6: [-1,0,1] -> true
+Legal moves: 5
+Marked 5 normal moves and 0 special targets
+=== Complete ===
+CLICK: mouse=(474,407), camera=(512,384), pixel=(-47.5,28.75), cube=[-1,0,1], hex_exists=true
+  pieceCanDetach checking [-1,1,0]
+    SUCCESS: can detach without breaking hive
+CLICK: mouse=(507,438), camera=(512,384), pixel=(-6.25,67.5), cube=[0,-1,1], hex_exists=true
+=== mark_legal_moves_for_piece called ===
+Source cube: [0,-1,1]
 Piece: Pillbug
 Testing Pillbug moves - normal movement and special ability
-  pieceCanDetach checking [3,-1,-2]
-    FAIL: hive would break apart
-Pillbug cannot detach - no normal moves available
-Pillbug at [3,-1,-2] checking pickable pieces
-  Checking piece at [2,0,-2]: Queen bee
-  can_move_through_gap: from [2,0,-2] to [3,-1,-2]
+  pieceCanDetach checking [0,-1,1]
+    SUCCESS: can detach without breaking hive
+  can_move_through_gap: from [0,-1,1] to [1,-2,1]
     Found 2 common neighbors
-    Common neighbor 1 [3,0,-3]: empty
-    Common neighbor 2 [2,-1,-1]: empty
+    Common neighbor 1 [1,-1,0]: OCCUPIED
+    Common neighbor 2 [0,-2,2]: empty
     SUCCESS: At least one neighbor empty, can move through gap
-    Can pick: true, can_move_through_gap: true
-    PICKABLE!
-  Checking piece at [3,-2,-1]: Mosquito
-    Would break hive - disconnected piece at [2,0,-2]
-Found 1 pickable pieces
-Marked 0 normal moves and 1 special targets
-Marked 0 normal moves and 1 special targets
-=== Complete ===
-CLICK: mouse=(651,364), camera=(512,384), pixel=(173.75,-25), cube=[3,-1,-2], hex_exists=true
-CLICK: mouse=(651,363), camera=(512,384), pixel=(173.75,-26.25), cube=[3,-1,-2], hex_exists=true
-=== mark_legal_moves_for_piece called ===
-Source cube: [3,-1,-2]
-Piece: Pillbug
-Testing Pillbug moves - normal movement and special ability
-  pieceCanDetach checking [3,-1,-2]
-    FAIL: hive would break apart
-Pillbug cannot detach - no normal moves available
-Pillbug at [3,-1,-2] checking pickable pieces
-  Checking piece at [2,0,-2]: Queen bee
-  can_move_through_gap: from [2,0,-2] to [3,-1,-2]
+  can_move_through_gap: from [0,-1,1] to [-1,-1,2]
     Found 2 common neighbors
-    Common neighbor 1 [3,0,-3]: empty
-    Common neighbor 2 [2,-1,-1]: empty
+    Common neighbor 1 [-1,0,1]: OCCUPIED
+    Common neighbor 2 [0,-2,2]: empty
     SUCCESS: At least one neighbor empty, can move through gap
-    Can pick: true, can_move_through_gap: true
-    PICKABLE!
-  Checking piece at [3,-2,-1]: Mosquito
-    Would break hive - disconnected piece at [2,0,-2]
-Found 1 pickable pieces
-Marked 0 normal moves and 1 special targets
-Marked 0 normal moves and 1 special targets
-=== Complete ===
-CLICK: mouse=(651,362), camera=(512,384), pixel=(173.75,-27.5), cube=[3,-1,-2], hex_exists=true
-CLICK: mouse=(651,362), camera=(512,384), pixel=(173.75,-27.5), cube=[3,-1,-2], hex_exists=true
-=== mark_legal_moves_for_piece called ===
-Source cube: [3,-1,-2]
-Piece: Pillbug
-Testing Pillbug moves - normal movement and special ability
-  pieceCanDetach checking [3,-1,-2]
-    FAIL: hive would break apart
-Pillbug cannot detach - no normal moves available
-Pillbug at [3,-1,-2] checking pickable pieces
-  Checking piece at [2,0,-2]: Queen bee
-  can_move_through_gap: from [2,0,-2] to [3,-1,-2]
+  can_move_through_gap: from [0,-1,1] to [0,-2,2]
     Found 2 common neighbors
-    Common neighbor 1 [3,0,-3]: empty
-    Common neighbor 2 [2,-1,-1]: empty
+    Common neighbor 1 [1,-2,1]: empty
+    Common neighbor 2 [-1,-1,2]: empty
     SUCCESS: At least one neighbor empty, can move through gap
-    Can pick: true, can_move_through_gap: true
-    PICKABLE!
-  Checking piece at [3,-2,-1]: Mosquito
-    Would break hive - disconnected piece at [2,0,-2]
-Found 1 pickable pieces
-Marked 0 normal moves and 1 special targets
-Marked 0 normal moves and 1 special targets
-=== Complete ===
-CLICK: mouse=(651,362), camera=(512,384), pixel=(173.75,-27.5), cube=[3,-1,-2], hex_exists=true
-CLICK: mouse=(638,360), camera=(512,384), pixel=(157.5,-30), cube=[3,-1,-2], hex_exists=true
-=== mark_legal_moves_for_piece called ===
-Source cube: [3,-1,-2]
-Piece: Pillbug
-Testing Pillbug moves - normal movement and special ability
-  pieceCanDetach checking [3,-1,-2]
-    FAIL: hive would break apart
-Pillbug cannot detach - no normal moves available
-Pillbug at [3,-1,-2] checking pickable pieces
-  Checking piece at [2,0,-2]: Queen bee
-  can_move_through_gap: from [2,0,-2] to [3,-1,-2]
+Found 3 normal moves
+Pillbug at [0,-1,1] checking pickable pieces
+  Checking piece at [0,0,0]: Queen bee
+  can_move_through_gap_at_height_1: from [0,0,0] to [0,-1,1]
     Found 2 common neighbors
-    Common neighbor 1 [3,0,-3]: empty
-    Common neighbor 2 [2,-1,-1]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-    Can pick: true, can_move_through_gap: true
-    PICKABLE!
-  Checking piece at [3,-2,-1]: Mosquito
-    Would break hive - disconnected piece at [2,0,-2]
-Found 1 pickable pieces
-Marked 0 normal moves and 1 special targets
-Marked 0 normal moves and 1 special targets
+    Common neighbor 1 height: 2
+    Common neighbor 2 height: 2
+    FAIL: Both neighbors are height 2+, blocking movement (beetle gate)
+    Can pick: true, can_move_through_gap_at_height_1: false
+Found 0 pickable pieces
+Marked 2 normal moves and 0 special targets
+Marked 2 normal moves and 0 special targets
 === Complete ===
-CLICK: mouse=(637,359), camera=(512,384), pixel=(156.25,-31.25), cube=[3,-1,-2], hex_exists=true
-CLICK: mouse=(987,528), camera=(512,384), pixel=(593.75,180), cube=[11,-8,-3], hex_exists=false
-Game saved to: savegame.json
+CLICK: mouse=(507,438), camera=(512,384), pixel=(-6.25,67.5), cube=[0,-1,1], hex_exists=true
 Game saved to: savegame.json

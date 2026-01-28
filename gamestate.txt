@@ -22,7 +22,7 @@ Player 2:
   Soldier ant: 3 in stock
 
 === PIECES ON BOARD ===
-Total pieces on board: 4
+Total pieces on board: 4r
 
 [ 0, 0, 0] - Player 1 - Pillbug (id:8)
   Adjacent pieces at: [1,-1,0], [1,0,-1], [0,-1,1]

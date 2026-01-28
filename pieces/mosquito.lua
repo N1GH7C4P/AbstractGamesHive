@@ -139,6 +139,9 @@ function Mosquito:move_piece(map, src_cube, dest_cube, active_player_id)
     
     if not src_hex or not dest_hex then return false end
     
+    -- Mark piece as moved this turn
+    src_hex.piece.has_moved_last_turn = true
+    
     -- Check if mimicking beetle and moving onto a piece
     local adjacent_types = self:get_adjacent_piece_types(map, src_cube)
     local can_stack = adjacent_types[PiecesEnum.BEETLE]  -- Has beetle adjacent
@@ -151,10 +154,10 @@ function Mosquito:move_piece(map, src_cube, dest_cube, active_player_id)
         dest_hex.piece = src_hex.piece
         dest_hex.player_id = active_player_id
         
-        -- Handle source piece
+        -- Handle source piece - restore under_piece to source if it exists
         if src_hex.piece.under_piece then
             local underpiece = src_hex.piece.under_piece
-            src_hex.piece.under_piece = nil
+            src_hex.piece.under_piece = nil  -- Clear the link before moving
             src_hex.player_id = underpiece.player_id
             src_hex.piece = underpiece
         else
@@ -168,11 +171,23 @@ function Mosquito:move_piece(map, src_cube, dest_cube, active_player_id)
         
         return true
     else
-        -- Normal move
+        -- Normal move - move mosquito without its under_piece
         dest_hex.piece = src_hex.piece
         dest_hex.player_id = src_hex.player_id
-        src_hex.piece = nil
-        src_hex.player_id = nil
+        
+        -- Handle source hex
+        if src_hex.piece.under_piece then
+            -- Mosquito was on top - restore the under_piece and clear the link
+            local underpiece = src_hex.piece.under_piece
+            dest_hex.piece.under_piece = nil  -- Clear mosquito's under_piece link
+            src_hex.piece = underpiece
+            src_hex.player_id = underpiece.player_id
+        else
+            -- Mosquito was on ground
+            src_hex.piece = nil
+            src_hex.player_id = nil
+        end
+        
         return true
     end
 end

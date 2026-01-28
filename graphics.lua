@@ -57,6 +57,14 @@ function drawAddedPieces(map, canvas, grid, camera_x, camera_y, zoom)
                 love.graphics.print(tostring(height), hx-3*zoom, hy+5*zoom, 0, zoom, zoom)
             end
             
+            -- Draw border for pieces that moved last turn
+            if hex.piece.has_moved_last_turn then
+                love.graphics.setColor(1, 0, 0, 0.8)  -- Red border
+                love.graphics.setLineWidth(3 * zoom)
+                drawHexagon(hx, hy, grid.piecesize * zoom, grid.pointyTopped, false)
+                love.graphics.setLineWidth(1)
+            end
+            
             love.graphics.setColor(1, 1, 1, 1)
         end
     end

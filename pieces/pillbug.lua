@@ -68,44 +68,50 @@ function Pillbug:get_pickable_pieces(map, src_cube)
         if hex and hex.piece and not hex.piece.under_piece then
             print("  Checking piece at [" .. neighbor_cube.x .. "," .. neighbor_cube.y .. "," .. neighbor_cube.z .. "]: " .. hex.piece.name)
             
-            -- Check if picking up this piece would break the hive
-            local tmp_piece = hex.piece
-            local tmp_player_id = hex.player_id
-            hex.piece = nil
-            hex.player_id = nil
-            
-            clear_all_neighbours(map, map.w, map.h)
-            local first_cube = firstPieceCoords(map)
-            local can_pick = true
-            
-            if first_cube then
-                flood_neighbours(map, first_cube)
-                
-                for _, check_hex in pairs(map.hexes) do
-                    if check_hex.piece and not check_hex.neighbour then
-                        can_pick = false
-                        print("    Would break hive - disconnected piece at [" .. check_hex.cube.x .. "," .. check_hex.cube.y .. "," .. check_hex.cube.z .. "]")
-                        break
-                    end
-                end
-            end
-            
-            hex.piece = tmp_piece
-            hex.player_id = tmp_player_id
-            clear_all_neighbours(map, map.w, map.h)
-            
-            if can_pick then
-                -- Check freedom to move while target is temporarily removed
+            -- Check if the piece moved last turn - cannot be moved by Pillbug
+            if hex.piece.has_moved_last_turn then
+                print("    SKIPPED: Piece moved last turn, cannot be picked")
+            else
+                -- Check if picking up this piece would break the hive
+                local tmp_piece = hex.piece
+                local tmp_player_id = hex.player_id
                 hex.piece = nil
                 hex.player_id = nil
-                local can_move = self:can_move_through_gap(map, neighbor_cube, src_cube)
+                
+                clear_all_neighbours(map, map.w, map.h)
+                local first_cube = firstPieceCoords(map)
+                local can_pick = true
+                
+                if first_cube then
+                    flood_neighbours(map, first_cube)
+                    
+                    for _, check_hex in pairs(map.hexes) do
+                        if check_hex.piece and not check_hex.neighbour then
+                            can_pick = false
+                            print("    Would break hive - disconnected piece at [" .. check_hex.cube.x .. "," .. check_hex.cube.y .. "," .. check_hex.cube.z .. "]")
+                            break
+                        end
+                    end
+                end
+                
                 hex.piece = tmp_piece
                 hex.player_id = tmp_player_id
+                clear_all_neighbours(map, map.w, map.h)
                 
-                print("    Can pick: " .. tostring(can_pick) .. ", can_move_through_gap: " .. tostring(can_move))
-                if can_move then
-                    table.insert(pickable, neighbor_cube)
-                    print("    PICKABLE!")
+                if can_pick then
+                    -- Check freedom to move while target is temporarily removed
+                    -- Use height-based gate rule since piece will be at height 1
+                    hex.piece = nil
+                    hex.player_id = nil
+                    local can_move = self:can_move_through_gap_at_height_1(map, neighbor_cube, src_cube)
+                    hex.piece = tmp_piece
+                    hex.player_id = tmp_player_id
+                    
+                    print("    Can pick: " .. tostring(can_pick) .. ", can_move_through_gap_at_height_1: " .. tostring(can_move))
+                    if can_move then
+                        table.insert(pickable, neighbor_cube)
+                        print("    PICKABLE!")
+                    end
                 end
             end
         end
@@ -178,6 +184,70 @@ function Pillbug:can_move_through_gap(map, from_cube, to_cube)
     
     -- If at least one neighbor is empty, the piece can move through
     print("    SUCCESS: At least one neighbor empty, can move through gap")
+    return true
+end
+
+-- Check if piece can move through gap when at height 1 (Pillbug special ability)
+-- Uses beetle gate rule: both neighbors must be height 2+ to block
+function Pillbug:can_move_through_gap_at_height_1(map, from_cube, to_cube)
+    print("  can_move_through_gap_at_height_1: from [" .. from_cube.x .. "," .. from_cube.y .. "," .. from_cube.z .. "] to [" .. to_cube.x .. "," .. to_cube.y .. "," .. to_cube.z .. "]")
+    
+    -- Get the two hexes that are common neighbors of both from and to
+    local from_neighbors = cubecoords.all_neighbors(from_cube)
+    local to_neighbors = cubecoords.all_neighbors(to_cube)
+    
+    local common_neighbors = {}
+    for _, fn in ipairs(from_neighbors) do
+        for _, tn in ipairs(to_neighbors) do
+            if cubecoords.equals(fn, tn) then
+                table.insert(common_neighbors, fn)
+            end
+        end
+    end
+    
+    print("    Found " .. #common_neighbors .. " common neighbors")
+    
+    -- For adjacent hexes, there should be exactly 2 common neighbors
+    if #common_neighbors ~= 2 then
+        print("    FAIL: Should have exactly 2 common neighbors, has " .. #common_neighbors)
+        return false
+    end
+    
+    -- Get stack heights of the common neighbors
+    local cn1_hex = map_get_hex(map, common_neighbors[1])
+    local cn2_hex = map_get_hex(map, common_neighbors[2])
+    
+    if not cn1_hex or not cn2_hex then
+        print("    FAIL: Common neighbor hex doesn't exist")
+        return false
+    end
+    
+    -- Calculate stack heights (similar to beetle gate rule)
+    local function get_stack_height(hex)
+        if not hex.piece then return 0 end
+        local height = 1
+        local current = hex.piece.under_piece
+        while current do
+            height = height + 1
+            current = current.under_piece
+        end
+        return height
+    end
+    
+    local height1 = get_stack_height(cn1_hex)
+    local height2 = get_stack_height(cn2_hex)
+    
+    print("    Common neighbor 1 height: " .. height1)
+    print("    Common neighbor 2 height: " .. height2)
+    
+    -- Piece is at height 1 (conceptually on top of Pillbug)
+    -- Both neighbors must be height 2+ to block (beetle gate rule)
+    if height1 >= 2 and height2 >= 2 then
+        print("    FAIL: Both neighbors are height 2+, blocking movement (beetle gate)")
+        return false
+    end
+    
+    print("    SUCCESS: At least one neighbor is height < 2, can move through")
     return true
 end
 
@@ -290,17 +360,18 @@ function Pillbug:can_use_special_ability(map, pillbug_cube, target_cube, dest_cu
     end
     
     -- Check freedom to move for picking up (between target and Pillbug)
-    -- Temporarily remove target to check the gap properly
+    -- Piece is conceptually lifted to height 1, so use beetle gate rule
     target_hex.piece = nil
     target_hex.player_id = nil
-    if not self:can_move_through_gap(map, target_cube, pillbug_cube) then
+    if not self:can_move_through_gap_at_height_1(map, target_cube, pillbug_cube) then
         target_hex.piece = tmp_piece
         target_hex.player_id = tmp_player_id
         return false  -- Cannot pick up through narrow gap
     end
     
     -- Check freedom to move for placing down (between Pillbug and destination)
-    if not self:can_move_through_gap(map, pillbug_cube, dest_cube) then
+    -- Piece is at height 1 on Pillbug, moving to destination
+    if not self:can_move_through_gap_at_height_1(map, pillbug_cube, dest_cube) then
         target_hex.piece = tmp_piece
         target_hex.player_id = tmp_player_id
         return false  -- Cannot place through narrow gap
