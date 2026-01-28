@@ -155,6 +155,25 @@ function Beetle:move_piece(map, src_cube, dest_cube, active_player_id)
     return true
 end
 
+function Beetle:get_legal_moves(map, src_cube)
+    -- Beetle can move to adjacent hexes and climb on top of pieces
+    -- For beetles, we only check adjacent hexes to avoid expensive computations
+    local moves = {}
+    local neighbors = cubecoords.all_neighbors(src_cube)
+    
+    for _, neighbor_cube in ipairs(neighbors) do
+        local dest_hex = map_get_hex(map, neighbor_cube)
+        if dest_hex then
+            -- Beetle can move to any adjacent hex (empty or occupied)
+            if self:try_to_move(map, src_cube, neighbor_cube) then
+                table.insert(moves, neighbor_cube)
+            end
+        end
+    end
+    
+    return moves
+end
+
 function Beetle:mark_legal_moves(map, src_cube)
     print("Testing Beetle adjacent moves")
     
@@ -196,6 +215,10 @@ function Beetle:mark_legal_moves(map, src_cube)
             
             if has_nearby or not hex.piece then
                 if try_move_piece_on_map(map, src_cube, hex.cube) then
+                    -- Mark if this is a beetle-type move (climbing on top of stack)
+                    if hex.piece then
+                        hex.is_beetle_move = true
+                    end
                     table.insert(legal_moves, hex)
                 end
             end

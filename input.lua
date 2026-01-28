@@ -104,6 +104,59 @@ function Input.mousepressed(x, y, button, istouch)
     if button == 1 then
         local mouseX, mouseY = love.mouse.getPosition()
         
+        -- Check if mosquito choice popup is active
+        if mosquito_choice_popup then
+            local choice = checkMosquitoChoicePopupClick(mouseX, mouseY, mosquito_popup_x, mosquito_popup_y)
+            if choice == "beetle" then
+                -- Execute beetle move (climbing on top)
+                print("Mosquito using Beetle power to climb")
+                local selected_cube = cubecoords.from_offset(selected_piece_x, selected_piece_y)
+                local did_move = move_piece_on_map(map, selected_cube, mosquito_choice_dest)
+                clear_all_neighbours(map, w, h)
+                move_mode = 0
+                mosquito_choice_popup = false
+                mosquito_choice_dest = nil
+                if did_move == true then
+                    pass_turn(active_player_id)
+                end
+                return
+            elseif choice == "pillbug" then
+                -- Switch to pillbug special ability mode
+                print("Mosquito using Pillbug power")
+                local selected_cube = cubecoords.from_offset(selected_piece_x, selected_piece_y)
+                local selected_hex = map_get_hex(map, selected_cube)
+                
+                pillbug_special_mode = true
+                pillbug_cube = selected_cube
+                pillbug_target_cube = mosquito_choice_dest
+                mosquito_choice_popup = false
+                mosquito_choice_dest = nil
+                
+                -- Clear current highlights and show drop locations
+                clear_all_neighbours(map, w, h)
+                
+                -- Get and mark valid drop locations
+                local drop_locations = selected_hex.piece:get_drop_locations_as_pillbug(map, pillbug_cube, pillbug_target_cube)
+                print("Found " .. #drop_locations .. " drop locations")
+                for _, dest_cube in ipairs(drop_locations) do
+                    local hex = map_get_hex(map, dest_cube)
+                    if hex then
+                        hex.can_move = true
+                        print("  DROP LOCATION: [" .. dest_cube.x .. "," .. dest_cube.y .. "," .. dest_cube.z .. "]")
+                    end
+                end
+                return
+            else
+                -- Click outside popup cancels
+                mosquito_choice_popup = false
+                mosquito_choice_dest = nil
+                move_mode = 0
+                highlight = 0
+                clear_all_neighbours(map, w, h)
+                return
+            end
+        end
+        
         -- Check if clicking on piece selector first (use centered position)
         local piece_count = #player[active_player_id].pieces
         local piece_size = 30
@@ -172,7 +225,7 @@ function Input.mousepressed(x, y, button, istouch)
             -- Check if clicking on a legal move hex (for normal movement) FIRST
             -- This allows normal movement to work alongside special abilities
             if result_hex and result_hex.can_move and not result_hex.can_special then
-                local did_move = move_piece_on_map(map, selected_piece_x, selected_piece_y, resultX, resultY)
+                local did_move = move_piece_on_map(map, selected_cube, result_cube)
                 clear_all_neighbours(map, w, h)
                 move_mode = 0
                 if did_move == true then
@@ -183,6 +236,20 @@ function Input.mousepressed(x, y, button, istouch)
             
             -- Check if clicking on a pickable piece (Pillbug or Mosquito mimicking Pillbug special ability phase 1)
             if result_hex and result_hex.can_special and selected_hex.piece and (selected_hex.piece.name == "Pillbug" or selected_hex.piece.name == "Mosquito") then
+                -- Check if mosquito has dual options (can also climb with beetle power)
+                if selected_hex.piece.name == "Mosquito" and result_hex.piece and not result_hex.piece.under_piece then
+                    -- Check if mosquito is adjacent to beetle
+                    local adjacent_types = selected_hex.piece:get_adjacent_piece_types(map, selected_cube)
+                    if adjacent_types[2] then  -- Has beetle adjacent
+                        print("Mosquito has dual options - showing popup")
+                        mosquito_choice_popup = true
+                        mosquito_choice_dest = result_cube
+                        mosquito_popup_x = mouseX
+                        mosquito_popup_y = mouseY
+                        return
+                    end
+                end
+                
                 local piece_name = selected_hex.piece.name
                 print(piece_name .. " special: Selected target piece at [" .. result_cube.x .. "," .. result_cube.y .. "," .. result_cube.z .. "]")
                 pillbug_special_mode = true

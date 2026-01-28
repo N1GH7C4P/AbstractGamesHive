@@ -79,6 +79,23 @@ function QueenBee:move_piece(map, src_cube, dest_cube, active_player_id)
     return true
 end
 
+function QueenBee:get_legal_moves(map, src_cube)
+    -- Queen moves one space to adjacent empty hexes
+    local moves = {}
+    local neighbors = cubecoords.all_neighbors(src_cube)
+    
+    for _, neighbor_cube in ipairs(neighbors) do
+        local dest_hex = map_get_hex(map, neighbor_cube)
+        if dest_hex and not dest_hex.piece then
+            if self:try_to_move(map, src_cube, neighbor_cube) then
+                table.insert(moves, neighbor_cube)
+            end
+        end
+    end
+    
+    return moves
+end
+
 function QueenBee:mark_legal_moves(map, src_cube)
     print("Testing Queen moves - checking adjacent hexes only")
     

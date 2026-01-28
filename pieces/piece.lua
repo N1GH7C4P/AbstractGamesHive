@@ -41,7 +41,31 @@ function Piece:remove()
     self.cube = nil
 end
 
--- Default implementation: returns tables of hexes to mark as legal moves
+-- Create a duplicate of this piece with a new owner
+function Piece:duplicate(new_owner)
+    -- Create new instance of the same class
+    local duplicate = getmetatable(self):new(new_owner)
+    -- Copy relevant properties (but not owner, cube, or placement state)
+    -- These are already set correctly by :new()
+    return duplicate
+end
+
+-- Get list of legal destination cubes for this piece
+-- Subclasses should override this to implement custom movement logic
+function Piece:get_legal_moves(map, src_cube)
+    -- Returns array of cube coordinates {cube1, cube2, ...}
+    -- Default: try adjacent hexes using try_to_move
+    local moves = {}
+    local neighbors = cubecoords.all_neighbors(src_cube)
+    for _, neighbor_cube in ipairs(neighbors) do
+        if self:try_to_move(map, src_cube, neighbor_cube) then
+            table.insert(moves, neighbor_cube)
+        end
+    end
+    return moves
+end
+
+-- Mark legal moves on the map (returns tables of hexes to highlight)
 -- Subclasses can override this to implement custom logic
 function Piece:mark_legal_moves(map, src_cube)
     -- Returns {normal_moves = {hex1, hex2, ...}, special_targets = {hex3, hex4, ...}}

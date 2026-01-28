@@ -39,6 +39,13 @@ function Globals.init()
     pillbug_cube = nil
     pillbug_target_cube = nil
     
+    -- Mosquito power choice popup state
+    mosquito_choice_popup = false
+    mosquito_choice_options = {}  -- List of {type="beetle"|"pillbug", dest_cube=...}
+    mosquito_choice_dest = nil
+    mosquito_popup_x = 0
+    mosquito_popup_y = 0
+    
     -- Mouse state
     mouseX = 0
     mouseY = 0

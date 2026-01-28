@@ -38,7 +38,7 @@ function Mosquito:try_to_move(map, src_cube, dest_cube)
     
     -- Try to move using any of the adjacent piece types
     for piece_type, _ in pairs(adjacent_types) do
-        local mimicked_piece = self:create_piece_by_type(piece_type)
+        local mimicked_piece = self:duplicate_adjacent_piece(map, src_cube, piece_type)
         if mimicked_piece and mimicked_piece.try_to_move then
             if mimicked_piece:try_to_move(map, src_cube, dest_cube) then
                 return true
@@ -68,20 +68,16 @@ function Mosquito:get_adjacent_piece_types(map, cube)
     return types
 end
 
--- Create a piece instance by ID for mimicking
-function Mosquito:create_piece_by_type(piece_id)
-    if piece_id == 1 then
-        return QueenBee:new(self.owner)
-    elseif piece_id == 2 then
-        return Beetle:new(self.owner)
-    elseif piece_id == 3 then
-        return Grasshopper:new(self.owner)
-    elseif piece_id == 4 then
-        return Spider:new(self.owner)
-    elseif piece_id == 5 then
-        return SoldierAnt:new(self.owner)
-    elseif piece_id == 6 then
-        return Ladybug:new(self.owner)
+-- Duplicate an adjacent piece for mimicking (with mosquito's owner)
+function Mosquito:duplicate_adjacent_piece(map, cube, piece_id)
+    -- Find an adjacent piece with this ID
+    local neighbors = cubecoords.all_neighbors(cube)
+    for _, neighbor_cube in ipairs(neighbors) do
+        local neighbor_hex = map_get_hex(map, neighbor_cube)
+        if neighbor_hex and neighbor_hex.piece and neighbor_hex.piece.id == piece_id then
+            -- Duplicate the piece with mosquito's owner
+            return neighbor_hex.piece:duplicate(self.owner)
+        end
     end
     return nil
 end
@@ -95,8 +91,7 @@ function Mosquito:get_legal_moves(map, src_cube)
     if src_hex and src_hex.piece and src_hex.piece.under_piece then
         print("  Mosquito is on top of hive - using Beetle movement only")
         local beetle = Beetle:new(self.owner)
-        -- Beetles don't have get_legal_moves, so we return empty and let the general logic handle it
-        return {}
+        return beetle:get_legal_moves(map, src_cube)
     end
     
     local all_moves = {}
@@ -113,38 +108,16 @@ function Mosquito:get_legal_moves(map, src_cube)
     
     -- Collect moves from each adjacent piece type
     for piece_id, _ in pairs(adjacent_types) do
-        local mimicked_piece = self:create_piece_by_type(piece_id)
+        local mimicked_piece = self:duplicate_adjacent_piece(map, src_cube, piece_id)
         if mimicked_piece then
             print("  Checking moves as " .. mimicked_piece.name)
+            local moves = mimicked_piece:get_legal_moves(map, src_cube)
             
-            -- If piece has get_legal_moves, use it
-            if mimicked_piece.get_legal_moves then
-                local moves = mimicked_piece:get_legal_moves(map, src_cube)
-                
-                for _, move_cube in ipairs(moves) do
-                    local key = cubecoords.to_key(move_cube)
-                    if not move_set[key] then
-                        move_set[key] = true
-                        table.insert(all_moves, move_cube)
-                    end
-                end
-            -- Otherwise, try all adjacent hexes with try_to_move (for Queen, Beetle)
-            elseif mimicked_piece.try_to_move then
-                local neighbors = cubecoords.all_neighbors(src_cube)
-                for _, neighbor_cube in ipairs(neighbors) do
-                    if mimicked_piece:try_to_move(map, src_cube, neighbor_cube) then
-                        local dest_hex = map_get_hex(map, neighbor_cube)
-                        
-                        -- Only allow stacking if mimicking a Beetle (id == 2)
-                        -- For other pieces, destination must be empty
-                        if piece_id == 2 or not (dest_hex and dest_hex.piece) then
-                            local key = cubecoords.to_key(neighbor_cube)
-                            if not move_set[key] then
-                                move_set[key] = true
-                                table.insert(all_moves, neighbor_cube)
-                            end
-                        end
-                    end
+            for _, move_cube in ipairs(moves) do
+                local key = cubecoords.to_key(move_cube)
+                if not move_set[key] then
+                    move_set[key] = true
+                    table.insert(all_moves, move_cube)
                 end
             end
         end
@@ -232,31 +205,38 @@ function Mosquito:mark_legal_moves(map, src_cube)
     
     local src_hex = map_get_hex(map, src_cube)
     
-    -- Check if piece can detach first (unless it's on top of the hive)
-    if not src_hex.piece.under_piece and not pieceCanDetach(map, src_cube) then
-        print("Mosquito cannot detach - would break hive")
-        return {normal_moves = {}, special_targets = {}}
-    end
-    
-    -- Check if mosquito is adjacent to a Pillbug
+    -- Check which powers are available
     local adjacent_types = self:get_adjacent_piece_types(map, src_cube)
     local has_pillbug = adjacent_types[8] == true  -- Check if Pillbug (id=8) is in the table
-    print("Mosquito adjacent piece types: " .. tostring(next(adjacent_types) ~= nil) .. ", has Pillbug: " .. tostring(has_pillbug))
+    local has_beetle = adjacent_types[2] == true   -- Check if Beetle (id=2) is in the table
+    print("Mosquito adjacent piece types: has Pillbug: " .. tostring(has_pillbug) .. ", has Beetle: " .. tostring(has_beetle))
     
     local normal_move_hexes = {}
     local special_target_hexes = {}
     
-    -- Get normal movement options
-    local mosquito_moves = self:get_legal_moves(map, src_cube)
-    print("Found " .. #mosquito_moves .. " potential normal moves")
+    -- Check if piece can detach for normal movement (unless it's on top of the hive)
+    local can_detach = src_hex.piece.under_piece or pieceCanDetach(map, src_cube)
     
-    for _, dest_cube in ipairs(mosquito_moves) do
-        if try_self_detach(map, src_cube, dest_cube) then
-            local hex = map_get_hex(map, dest_cube)
-            if hex then
-                table.insert(normal_move_hexes, hex)
+    if can_detach then
+        -- Get normal movement options
+        local mosquito_moves = self:get_legal_moves(map, src_cube)
+        print("Found " .. #mosquito_moves .. " potential normal moves")
+        
+        for _, dest_cube in ipairs(mosquito_moves) do
+            if try_self_detach(map, src_cube, dest_cube) then
+                local hex = map_get_hex(map, dest_cube)
+                if hex then
+                    -- Check if this destination is stacking (beetle power)
+                    local dest_hex = map_get_hex(map, dest_cube)
+                    if dest_hex.piece and has_beetle then
+                        hex.is_beetle_move = true
+                    end
+                    table.insert(normal_move_hexes, hex)
+                end
             end
         end
+    else
+        print("Mosquito cannot detach - no normal moves available")
     end
     
     -- If adjacent to Pillbug, also show special ability
@@ -268,6 +248,12 @@ function Mosquito:mark_legal_moves(map, src_cube)
         for _, piece_cube in ipairs(pickable) do
             local hex = map_get_hex(map, piece_cube)
             if hex then
+                -- Check if this piece can also be climbed with beetle power
+                if has_beetle and hex.piece and not hex.piece.under_piece then
+                    -- This hex has dual options
+                    hex.has_dual_option = true
+                    print("  Hex at [" .. piece_cube.x .. "," .. piece_cube.y .. "," .. piece_cube.z .. "] has dual options")
+                end
                 table.insert(special_target_hexes, hex)
             end
         end

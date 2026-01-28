@@ -172,6 +172,11 @@ function love.draw()
         end
     end
     
+    -- Draw mosquito power choice popup if active
+    if mosquito_choice_popup then
+        drawMosquitoChoicePopup(mosquito_popup_x, mosquito_popup_y)
+    end
+    
     -- Draw console on top of everything
     console.draw(10, 400, 600, 350)
 end

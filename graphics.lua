@@ -102,14 +102,31 @@ function drawSelected(map, x, y, grid, camera_x, camera_y, zoom)
         if hex.can_move then
             local cube = cubecoords.from_key(cube_key)
             local hX, hY = cubecoords.to_pixel(cube, grid.piecesize)
-            -- Orange highlight for normal moves - make it bright and opaque
-            drawHexagon(hX * zoom + camera_x, hY * zoom + camera_y, grid.piecesize * zoom, false, true, 1, 0.5, 0, 0.6)
+            
+            -- Check for beetle-specific move (climbing on top)
+            if hex.is_beetle_move then
+                -- Purple highlight for beetle climbing moves
+                drawHexagon(hX * zoom + camera_x, hY * zoom + camera_y, grid.piecesize * zoom, false, true, 0.6, 0.2, 0.8, 0.6)
+            else
+                -- Orange highlight for normal moves
+                drawHexagon(hX * zoom + camera_x, hY * zoom + camera_y, grid.piecesize * zoom, false, true, 1, 0.5, 0, 0.6)
+            end
         end
         -- Draw special ability targets (pickable pieces) in cyan
         if hex.can_special then
             local cube = cubecoords.from_key(cube_key)
             local hX, hY = cubecoords.to_pixel(cube, grid.piecesize)
-            drawHexagon(hX * zoom + camera_x, hY * zoom + camera_y, grid.piecesize * zoom, false, true, 0, 1, 1, 0.4)
+            
+            -- Check for dual option (can also be climbed with beetle)
+            if hex.has_dual_option then
+                -- Split hexagon: purple (beetle climb) on left, cyan (pillbug pick) on right
+                drawSplitHexagon(hX * zoom + camera_x, hY * zoom + camera_y, grid.piecesize * zoom, false,
+                                0.6, 0.2, 0.8, 0.5,  -- Purple for beetle climb
+                                0, 1, 1, 0.5)         -- Cyan for pillbug special
+            else
+                -- Regular cyan highlight for pillbug-only
+                drawHexagon(hX * zoom + camera_x, hY * zoom + camera_y, grid.piecesize * zoom, false, true, 0, 1, 1, 0.4)
+            end
         end
     end
     
@@ -221,6 +238,75 @@ function clickPieceSelector(player, player_id, mouseX, mouseY, x, y, size)
                 return i
             end
         end
+    end
+    
+    return nil
+end
+
+-- Draw mosquito power choice popup
+function drawMosquitoChoicePopup(mouseX, mouseY)
+    -- Draw popup background
+    local popup_x = mouseX + 20
+    local popup_y = mouseY - 40
+    local popup_width = 150
+    local popup_height = 80
+    
+    -- Draw background
+    love.graphics.setColor(0.2, 0.2, 0.2, 0.95)
+    love.graphics.rectangle("fill", popup_x, popup_y, popup_width, popup_height, 5, 5)
+    
+    -- Draw border
+    love.graphics.setColor(1, 1, 1, 1)
+    love.graphics.setLineWidth(2)
+    love.graphics.rectangle("line", popup_x, popup_y, popup_width, popup_height, 5, 5)
+    love.graphics.setLineWidth(1)
+    
+    -- Draw title
+    love.graphics.setColor(1, 1, 1, 1)
+    love.graphics.print("Choose Power:", popup_x + 10, popup_y + 10)
+    
+    -- Draw options
+    local option_y = popup_y + 35
+    
+    -- Beetle option (purple)
+    love.graphics.setColor(0.6, 0.2, 0.8, 1)
+    love.graphics.rectangle("fill", popup_x + 10, option_y, 15, 15)
+    love.graphics.setColor(1, 1, 1, 1)
+    love.graphics.print("Beetle (climb)", popup_x + 30, option_y)
+    
+    -- Pillbug option (cyan)
+    option_y = option_y + 25
+    love.graphics.setColor(0, 1, 1, 1)
+    love.graphics.rectangle("fill", popup_x + 10, option_y, 15, 15)
+    love.graphics.setColor(1, 1, 1, 1)
+    love.graphics.print("Pillbug (move)", popup_x + 30, option_y)
+    
+    love.graphics.setColor(1, 1, 1, 1)
+end
+
+-- Check which option is clicked in the popup (returns "beetle", "pillbug", or nil)
+function checkMosquitoChoicePopupClick(mouseX, mouseY, popup_mouse_x, popup_mouse_y)
+    local popup_x = popup_mouse_x + 20
+    local popup_y = popup_mouse_y - 40
+    local popup_width = 150
+    local popup_height = 80
+    
+    -- Check if click is within popup bounds
+    if mouseX < popup_x or mouseX > popup_x + popup_width or
+       mouseY < popup_y or mouseY > popup_y + popup_height then
+        return nil  -- Click outside popup
+    end
+    
+    -- Check beetle option
+    local beetle_y = popup_y + 35
+    if mouseY >= beetle_y and mouseY <= beetle_y + 15 then
+        return "beetle"
+    end
+    
+    -- Check pillbug option
+    local pillbug_y = popup_y + 60
+    if mouseY >= pillbug_y and mouseY <= pillbug_y + 15 then
+        return "pillbug"
     end
     
     return nil

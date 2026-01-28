@@ -451,7 +451,9 @@ function try_move_piece_on_map(map, src_cube, dest_cube)
     local dest_hex = map_get_hex(map, dest_cube)
     
     if not src_hex or not dest_hex then return false end
-    if dest_hex.piece and src_hex.piece.id ~= 2 then
+    
+    -- Only beetles (id == 2) and mosquitos (id == 7) can climb on top of pieces
+    if dest_hex.piece and src_hex.piece.id ~= 2 and src_hex.piece.id ~= 7 then
         return false
     end
     
@@ -463,10 +465,7 @@ function try_move_piece_on_map(map, src_cube, dest_cube)
     return false
 end
 
-function move_piece_on_map(map, src_col, src_row, dest_col, dest_row)
-    local src_cube = cubecoords.from_offset(src_col, src_row)
-    local dest_cube = cubecoords.from_offset(dest_col, dest_row)
-    
+function move_piece_on_map(map, src_cube, dest_cube)
     if not try_move_piece_on_map(map, src_cube, dest_cube) then
         return false
     end

@@ -259,11 +259,9 @@ function Network.handle_message(msg)
         print("Remote player moved piece from [" .. msg.from_x .. "," .. msg.from_y .. "," .. msg.from_z .. "] to [" .. msg.to_x .. "," .. msg.to_y .. "," .. msg.to_z .. "]")
         local from_cube = cubecoords.new(msg.from_x, msg.from_y, msg.from_z)
         local to_cube = cubecoords.new(msg.to_x, msg.to_y, msg.to_z)
-        local from_col, from_row = cubecoords.to_offset(from_cube)
-        local to_col, to_row = cubecoords.to_offset(to_cube)
         
         -- Move the piece
-        move_piece_on_map(map, from_col, from_row, to_col, to_row)
+        move_piece_on_map(map, from_cube, to_cube)
         pass_turn(msg.player_id)
         Network.is_local_turn = true
         

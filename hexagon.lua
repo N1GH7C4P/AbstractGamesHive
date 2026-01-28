@@ -35,6 +35,38 @@ function drawHexagon(x, y, piecesize, pointyTopped, fill, r, g ,b, a)
     love.graphics.setColor(1, 1, 1)
 end
 
+-- Draw a hexagon split diagonally with two colors (for showing multiple options)
+function drawSplitHexagon(x, y, piecesize, pointyTopped, r1, g1, b1, a1, r2, g2, b2, a2)
+    a1 = a1 or 1
+    a2 = a2 or 1
+    
+    -- Generate all vertices
+    local vertices = {}
+    if pointyTopped then
+        table.insert(vertices, {x, y + piecesize})
+        for i = 1, 5 do
+            table.insert(vertices, {x + piecesize * math.sin(i * math.pi / 3), y + piecesize * math.cos(i * math.pi / 3)})
+        end
+    else
+        table.insert(vertices, {x + piecesize, y})
+        for i = 1, 5 do
+            table.insert(vertices, {x + piecesize * math.cos(i * math.pi / 3), y + piecesize * math.sin(i * math.pi / 3)})
+        end
+    end
+    
+    -- Draw first half (top-left to bottom-right diagonal)
+    love.graphics.setColor(r1, g1, b1, a1)
+    local half1 = {x, y, vertices[1][1], vertices[1][2], vertices[2][1], vertices[2][2], vertices[3][1], vertices[3][2], x, y}
+    love.graphics.polygon("fill", half1)
+    
+    -- Draw second half
+    love.graphics.setColor(r2, g2, b2, a2)
+    local half2 = {x, y, vertices[3][1], vertices[3][2], vertices[4][1], vertices[4][2], vertices[5][1], vertices[5][2], vertices[6][1], vertices[6][2], x, y}
+    love.graphics.polygon("fill", half2)
+    
+    love.graphics.setColor(1, 1, 1, 1)
+end
+
 local function toHexagonCoordinatesHorizontal(x, y, grid)
     local piecesize = grid.piecesize
     local shifted = grid.shifted

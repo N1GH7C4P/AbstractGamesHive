@@ -40,7 +40,7 @@ function Pillbug:get_legal_moves(map, src_cube)
         if hex and not hex.piece then
             -- Check if this is a legal normal move
             if self:try_to_move(map, src_cube, neighbor_cube) then
-                table.insert(moves, {cube = neighbor_cube, type = "move"})
+                table.insert(moves, neighbor_cube)
             end
         end
     end
