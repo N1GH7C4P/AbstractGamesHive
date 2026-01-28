@@ -1,5 +1,6 @@
 require "player"
 require "game"
+local PiecesEnum = require("pieces.pieces_enum")
 
 -- Map using cube coordinates
 -- The map stores hexes using cube coordinate keys
@@ -452,8 +453,8 @@ function try_move_piece_on_map(map, src_cube, dest_cube)
     
     if not src_hex or not dest_hex then return false end
     
-    -- Only beetles (id == 2) and mosquitos (id == 7) can climb on top of pieces
-    if dest_hex.piece and src_hex.piece.id ~= 2 and src_hex.piece.id ~= 7 then
+    -- Only beetles and mosquitos can climb on top of pieces
+    if dest_hex.piece and src_hex.piece.id ~= PiecesEnum.BEETLE and src_hex.piece.id ~= PiecesEnum.MOSQUITO then
         return false
     end
     

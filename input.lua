@@ -2,6 +2,7 @@
 -- Uses global variables managed by globals.lua and modules loaded in main.lua
 
 local Input = {}
+local PiecesEnum = require("pieces.pieces_enum")
 
 function Input.keypressed(key)
     local maxPieceId = #Config.pieceInventory
@@ -240,7 +241,7 @@ function Input.mousepressed(x, y, button, istouch)
                 if selected_hex.piece.name == "Mosquito" and result_hex.piece and not result_hex.piece.under_piece then
                     -- Check if mosquito is adjacent to beetle
                     local adjacent_types = selected_hex.piece:get_adjacent_piece_types(map, selected_cube)
-                    if adjacent_types[2] then  -- Has beetle adjacent
+                    if adjacent_types[PiecesEnum.BEETLE] then  -- Has beetle adjacent
                         print("Mosquito has dual options - showing popup")
                         mosquito_choice_popup = true
                         mosquito_choice_dest = result_cube

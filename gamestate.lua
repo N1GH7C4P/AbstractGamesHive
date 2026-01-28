@@ -1,8 +1,11 @@
 -- Game state save/load functionality
 GameState = {}
 
--- Simple JSON encoder
-local function json_encode(obj)
+-- Simple JSON encoder with pretty-printing
+local function json_encode(obj, indent)
+    indent = indent or 0
+    local indent_str = string.rep("  ", indent)
+    local next_indent_str = string.rep("  ", indent + 1)
     local t = type(obj)
     
     if t == "table" then
@@ -19,16 +22,22 @@ local function json_encode(obj)
         if is_array then
             local parts = {}
             for i = 1, max_index do
-                parts[i] = json_encode(obj[i])
+                parts[i] = next_indent_str .. json_encode(obj[i], indent + 1)
             end
-            return "[" .. table.concat(parts, ",") .. "]"
+            if #parts == 0 then
+                return "[]"
+            end
+            return "[\n" .. table.concat(parts, ",\n") .. "\n" .. indent_str .. "]"
         else
             local parts = {}
             for k, v in pairs(obj) do
                 local key = type(k) == "string" and ('"' .. k .. '"') or tostring(k)
-                table.insert(parts, key .. ":" .. json_encode(v))
+                table.insert(parts, next_indent_str .. key .. ": " .. json_encode(v, indent + 1))
             end
-            return "{" .. table.concat(parts, ",") .. "}"
+            if #parts == 0 then
+                return "{}"
+            end
+            return "{\n" .. table.concat(parts, ",\n") .. "\n" .. indent_str .. "}"
         end
     elseif t == "string" then
         return '"' .. obj:gsub('\\', '\\\\'):gsub('"', '\\"'):gsub('\n', '\\n') .. '"'
@@ -174,13 +183,22 @@ function GameState.save(filename)
     save_data.board = {}
     for cube_key, hex in pairs(map.hexes) do
         if hex.piece then
-            table.insert(save_data.board, {
+            local piece_entry = {
                 cube = {x = hex.cube.x, y = hex.cube.y, z = hex.cube.z},
                 piece_id = hex.piece.id,
                 player_id = hex.player_id,
-                has_under_piece = hex.piece.under_piece ~= nil,
-                under_piece_id = hex.piece.under_piece and hex.piece.under_piece.id or nil
-            })
+                has_under_piece = hex.piece.under_piece ~= nil
+            }
+            
+            -- Save complete under_piece information if it exists
+            if hex.piece.under_piece then
+                piece_entry.under_piece = {
+                    id = hex.piece.under_piece.id,
+                    player_id = hex.piece.under_piece.player_id or hex.piece.under_piece.owner
+                }
+            end
+            
+            table.insert(save_data.board, piece_entry)
         end
     end
     
@@ -288,21 +306,31 @@ function GameState.load(filename)
             end
         end
         
-        -- Second pass: handle stacked pieces (beetles on top)
+        -- Second pass: handle stacked pieces (beetles, mosquitos on top)
         for _, piece_data in ipairs(save_data.board) do
-            if piece_data.has_under_piece then
+            if piece_data.has_under_piece and piece_data.under_piece then
                 local cube = cubecoords.new(piece_data.cube.x, piece_data.cube.y, piece_data.cube.z)
                 local hex = map_get_hex(map, cube)
                 
-                if hex and hex.piece then
-                    -- Create the beetle piece
-                    local beetle_template = piecesInventory[piece_data.piece_id]
-                    if beetle_template then
-                        local beetle_piece = beetle_template.class:new(piece_data.player_id)
-                        -- Set up stacking
-                        beetle_piece.under_piece = hex.piece
-                        hex.piece = beetle_piece
-                        hex.player_id = piece_data.player_id
+                if hex then
+                    -- First, create the piece that goes underneath
+                    local under_template = piecesInventory[piece_data.under_piece.id]
+                    if under_template then
+                        local under_piece = under_template.class:new(piece_data.under_piece.player_id)
+                        
+                        -- Then create the piece that goes on top
+                        local top_template = piecesInventory[piece_data.piece_id]
+                        if top_template then
+                            local top_piece = top_template.class:new(piece_data.player_id)
+                            
+                            -- Set up the stacking relationship
+                            top_piece.under_piece = under_piece
+                            under_piece.player_id = piece_data.under_piece.player_id
+                            
+                            -- Place on map
+                            hex.piece = top_piece
+                            hex.player_id = piece_data.player_id
+                        end
                     end
                 end
             end

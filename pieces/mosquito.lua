@@ -1,5 +1,6 @@
 local Piece = require("pieces.piece")
 local Pillbug = require("pieces.pillbug")
+local PiecesEnum = require("pieces.pieces_enum")
 
 -- Mosquito class - mimics adjacent pieces
 Mosquito = setmetatable({}, {__index = Piece})
@@ -32,7 +33,7 @@ function Mosquito:try_to_move(map, src_cube, dest_cube)
     local is_stacking = dest_hex and dest_hex.piece
     
     -- If trying to stack, must have a Beetle adjacent
-    if is_stacking and not adjacent_types[2] then
+    if is_stacking and not adjacent_types[PiecesEnum.BEETLE] then
         return false
     end
     
@@ -58,8 +59,8 @@ function Mosquito:get_adjacent_piece_types(map, cube)
         local neighbor_hex = map_get_hex(map, neighbor_cube)
         if neighbor_hex and neighbor_hex.piece then
             local piece_id = neighbor_hex.piece.id
-            -- Ignore other mosquitos (id 7)
-            if piece_id ~= 7 then
+            -- Ignore other mosquitos
+            if piece_id ~= PiecesEnum.MOSQUITO then
                 types[piece_id] = true
             end
         end
@@ -129,15 +130,7 @@ end
 
 -- Helper to get piece name by ID
 function Mosquito:get_piece_name(piece_id)
-    local names = {
-        [1] = "Queen Bee",
-        [2] = "Beetle",
-        [3] = "Grasshopper",
-        [4] = "Spider",
-        [5] = "Soldier Ant",
-        [6] = "Ladybug"
-    }
-    return names[piece_id] or "Unknown"
+    return PiecesEnum.ID_TO_NAME[piece_id] or "Unknown"
 end
 
 function Mosquito:move_piece(map, src_cube, dest_cube, active_player_id)
@@ -148,7 +141,7 @@ function Mosquito:move_piece(map, src_cube, dest_cube, active_player_id)
     
     -- Check if mimicking beetle and moving onto a piece
     local adjacent_types = self:get_adjacent_piece_types(map, src_cube)
-    local can_stack = adjacent_types[2]  -- Has beetle adjacent
+    local can_stack = adjacent_types[PiecesEnum.BEETLE]  -- Has beetle adjacent
     
     -- If mosquito is already on top or can act as beetle and destination has piece
     if (src_hex.piece.under_piece or can_stack) and dest_hex.piece then
@@ -207,8 +200,8 @@ function Mosquito:mark_legal_moves(map, src_cube)
     
     -- Check which powers are available
     local adjacent_types = self:get_adjacent_piece_types(map, src_cube)
-    local has_pillbug = adjacent_types[8] == true  -- Check if Pillbug (id=8) is in the table
-    local has_beetle = adjacent_types[2] == true   -- Check if Beetle (id=2) is in the table
+    local has_pillbug = adjacent_types[PiecesEnum.PILLBUG] == true
+    local has_beetle = adjacent_types[PiecesEnum.BEETLE] == true
     print("Mosquito adjacent piece types: has Pillbug: " .. tostring(has_pillbug) .. ", has Beetle: " .. tostring(has_beetle))
     
     local normal_move_hexes = {}

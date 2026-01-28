@@ -1,5 +1,6 @@
 local PlayerClass = require("player")
 local Config = require("config")
+local PiecesEnum = require("pieces.pieces_enum")
 
 function init_players()
     player = {}
@@ -44,7 +45,7 @@ function checkIfWin(map, w, h)
             
             -- Traverse the stack to find any Queen Bee
             while current_piece do
-                if current_piece.id == 1 then
+                if current_piece.id == PiecesEnum.QUEEN_BEE then
                     -- Found a Queen Bee in the stack
                     queen_player_id = current_piece.player_id
                     break
