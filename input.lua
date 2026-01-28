@@ -139,12 +139,15 @@ function Input.mousepressed(x, y, button, istouch)
             -- Check if we're in Pillbug special move mode (phase 2: selecting destination)
             if pillbug_special_mode and pillbug_target_cube then
                 if result_hex and result_hex.can_move then
-                    -- Execute Pillbug special ability
-                    if selected_hex.piece and selected_hex.piece.use_special_ability then
-                        local success = selected_hex.piece:use_special_ability(map, pillbug_cube, pillbug_target_cube, result_cube)
-                        if success then
-                            pass_turn(active_player_id)
-                        end
+                    -- Execute Pillbug or Mosquito special ability
+                    local success = false
+                    if selected_hex.piece.name == "Pillbug" and selected_hex.piece.use_special_ability then
+                        success = selected_hex.piece:use_special_ability(map, pillbug_cube, pillbug_target_cube, result_cube)
+                    elseif selected_hex.piece.name == "Mosquito" and selected_hex.piece.use_special_ability_as_pillbug then
+                        success = selected_hex.piece:use_special_ability_as_pillbug(map, pillbug_cube, pillbug_target_cube, result_cube)
+                    end
+                    if success then
+                        pass_turn(active_player_id)
                     end
                     -- Reset state
                     pillbug_special_mode = false
@@ -178,9 +181,10 @@ function Input.mousepressed(x, y, button, istouch)
                 return
             end
             
-            -- Check if clicking on a pickable piece (Pillbug special ability phase 1)
-            if result_hex and result_hex.can_special and selected_hex.piece and selected_hex.piece.id == 8 then
-                print("Pillbug special: Selected target piece at [" .. result_cube.x .. "," .. result_cube.y .. "," .. result_cube.z .. "]")
+            -- Check if clicking on a pickable piece (Pillbug or Mosquito mimicking Pillbug special ability phase 1)
+            if result_hex and result_hex.can_special and selected_hex.piece and (selected_hex.piece.name == "Pillbug" or selected_hex.piece.name == "Mosquito") then
+                local piece_name = selected_hex.piece.name
+                print(piece_name .. " special: Selected target piece at [" .. result_cube.x .. "," .. result_cube.y .. "," .. result_cube.z .. "]")
                 pillbug_special_mode = true
                 pillbug_cube = selected_cube
                 pillbug_target_cube = result_cube
@@ -189,7 +193,13 @@ function Input.mousepressed(x, y, button, istouch)
                 clear_all_neighbours(map, w, h)
                 
                 -- Get and mark valid drop locations
-                local drop_locations = selected_hex.piece:get_drop_locations(map, pillbug_cube, pillbug_target_cube)
+                local drop_locations
+                if selected_hex.piece.name == "Pillbug" then
+                    drop_locations = selected_hex.piece:get_drop_locations(map, pillbug_cube, pillbug_target_cube)
+                else
+                    -- Mosquito using Pillbug ability
+                    drop_locations = selected_hex.piece:get_drop_locations_as_pillbug(map, pillbug_cube, pillbug_target_cube)
+                end
                 print("Found " .. #drop_locations .. " drop locations")
                 for _, dest_cube in ipairs(drop_locations) do
                     local hex = map_get_hex(map, dest_cube)

@@ -155,4 +155,29 @@ function Ladybug:move_piece(map, src_cube, dest_cube, active_player_id)
     return true
 end
 
+function Ladybug:mark_legal_moves(map, src_cube)
+    print("Testing Ladybug moves - exactly 3 steps (2 on top, 1 down)")
+    
+    if not pieceCanDetach(map, src_cube) then
+        print("Ladybug cannot detach - would break hive")
+        return {normal_moves = {}, special_targets = {}}
+    end
+    
+    local ladybug_moves = self:get_legal_moves(map, src_cube)
+    print("Found " .. #ladybug_moves .. " potential moves")
+    
+    local legal_moves = {}
+    for _, dest_cube in ipairs(ladybug_moves) do
+        if try_self_detach(map, src_cube, dest_cube) then
+            local hex = map_get_hex(map, dest_cube)
+            if hex then
+                table.insert(legal_moves, hex)
+            end
+        end
+    end
+    
+    print("Total legal moves: " .. #legal_moves)
+    return {normal_moves = legal_moves, special_targets = {}}
+end
+
 return Ladybug

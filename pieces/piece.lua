@@ -41,4 +41,12 @@ function Piece:remove()
     self.cube = nil
 end
 
+-- Default implementation: returns tables of hexes to mark as legal moves
+-- Subclasses can override this to implement custom logic
+function Piece:mark_legal_moves(map, src_cube)
+    -- Returns {normal_moves = {hex1, hex2, ...}, special_targets = {hex3, hex4, ...}}
+    -- Default: no moves (subclasses should override)
+    return {normal_moves = {}, special_targets = {}}
+end
+
 return Piece

@@ -3,564 +3,2563 @@ Lua socket loaded successfully
 Center hex (0,0,0) exists: true
 Center hex key: 0,0,0
 Game loaded from: savegame.json
-CLICK: mouse=(560,453), camera=(512,384), pixel=(60,86.25), cube=[1,-2,1], hex_exists=true
-CLICK: mouse=(560,453), camera=(512,384), pixel=(60,86.25), cube=[1,-2,1], hex_exists=true
+CLICK: mouse=(469,401), camera=(636.875,287.625), pixel=(-152.61363636364,103.06818181818), cube=[-3,0,3], hex_exists=true
+CLICK: mouse=(469,401), camera=(636.875,287.625), pixel=(-152.61363636364,103.06818181818), cube=[-3,0,3], hex_exists=true
 === mark_legal_moves_for_piece called ===
-Source cube: [1,-2,1]
-Piece: Pillbug
-Checking Spider: piece.id=8, has get_legal_moves=true
-Testing Pillbug moves - normal movement and special ability
-  pieceCanDetach checking [1,-2,1]
+Source cube: [-3,0,3]
+Piece: Beetle
+Testing Beetle adjacent moves
+  pieceCanDetach checking [-3,0,3]
     SUCCESS: can detach without breaking hive
-  can_move_through_gap: from [1,-2,1] to [2,-3,1]
+  Neighbor 1: [-2,-1,3] -> true
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  Neighbor 2: [-2,0,2] -> true
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  Neighbor 3: [-3,1,2] -> true
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  Neighbor 4: [-4,1,3] -> false
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  Neighbor 5: [-4,0,4] -> false
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  Neighbor 6: [-3,-1,4] -> false
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+WARNING: Hit test limit!
+Tests: 201, Legal moves: 2
+Marked 2 normal moves and 0 special targets
+=== Complete ===
+CLICK: mouse=(530,351), camera=(636.875,287.625), pixel=(-97.159090909091,57.613636363636), cube=[-2,0,2], hex_exists=true
+  pieceCanDetach checking [-3,0,3]
+    SUCCESS: can detach without breaking hive
+CLICK: mouse=(634,155), camera=(636.875,287.625), pixel=(-2.6136363636364,-120.56818181818), cube=[0,2,-2], hex_exists=true
+=== mark_legal_moves_for_piece called ===
+Source cube: [0,2,-2]
+Piece: Beetle
+Testing Beetle adjacent moves
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  Neighbor 1: [1,1,-2] -> true
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  Neighbor 2: [1,2,-3] -> false
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  Neighbor 3: [0,3,-3] -> false
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  Neighbor 4: [-1,3,-2] -> false
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  Neighbor 5: [-1,2,-1] -> true
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  Neighbor 6: [0,1,-1] -> true
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+WARNING: Hit test limit!
+Tests: 201, Legal moves: 3
+Marked 3 normal moves and 0 special targets
+=== Complete ===
+CLICK: mouse=(634,158), camera=(636.875,287.625), pixel=(-2.6136363636364,-117.84090909091), cube=[0,2,-2], hex_exists=true
+CLICK: mouse=(632,226), camera=(636.875,287.625), pixel=(-4.4318181818182,-56.022727272727), cube=[0,1,-1], hex_exists=true
+=== mark_legal_moves_for_piece called ===
+Source cube: [0,1,-1]
+Piece: Beetle
+Testing Beetle adjacent moves
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  Neighbor 1: [1,0,-1] -> false
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  Neighbor 2: [1,1,-2] -> false
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  Neighbor 3: [0,2,-2] -> false
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  Neighbor 4: [-1,2,-1] -> false
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  Neighbor 5: [-1,1,0] -> false
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  Neighbor 6: [0,0,0] -> false
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+WARNING: Hit test limit!
+Tests: 201, Legal moves: 0
+Marked 0 normal moves and 0 special targets
+=== Complete ===
+CLICK: mouse=(632,226), camera=(636.875,287.625), pixel=(-4.4318181818182,-56.022727272727), cube=[0,1,-1], hex_exists=true
+CLICK: mouse=(674,322), camera=(636.875,287.625), pixel=(33.75,31.25), cube=[1,-1,0], hex_exists=true
+=== mark_legal_moves_for_piece called ===
+Source cube: [1,-1,0]
+Piece: Pillbug
+Testing Pillbug moves - normal movement and special ability
+  pieceCanDetach checking [1,-1,0]
+    SUCCESS: can detach without breaking hive
+  can_move_through_gap: from [1,-1,0] to [2,-2,0]
+    Found 2 common neighbors
+    Common neighbor 1 [2,-1,-1]: empty
+    Common neighbor 2 [1,-2,1]: empty
+    SUCCESS: At least one neighbor empty, can move through gap
+  can_move_through_gap: from [1,-1,0] to [2,-1,-1]
     Found 2 common neighbors
     Common neighbor 1 [2,-2,0]: empty
-    Common neighbor 2 [1,-3,2]: empty
+    Common neighbor 2 [1,0,-1]: OCCUPIED
     SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [1,-2,1] to [2,-2,0]
+  can_move_through_gap: from [1,-1,0] to [0,-1,1]
     Found 2 common neighbors
-    Common neighbor 1 [2,-3,1]: empty
-    Common neighbor 2 [1,-1,0]: OCCUPIED
+    Common neighbor 1 [0,0,0]: OCCUPIED
+    Common neighbor 2 [1,-2,1]: empty
     SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [1,-2,1] to [0,-2,2]
-    Found 2 common neighbors
-    Common neighbor 1 [0,-1,1]: OCCUPIED
-    Common neighbor 2 [1,-3,2]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [1,-2,1] to [1,-3,2]
-    Found 2 common neighbors
-    Common neighbor 1 [2,-3,1]: empty
-    Common neighbor 2 [0,-2,2]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-Found 4 normal moves
-  Checking move [2,-3,1]: hex_exists=true
-    try_self_detach: false
-  Checking move [2,-2,0]: hex_exists=true
-    try_self_detach: true
-    ADDED TO NORMAL MOVES LIST
-  Checking move [0,-2,2]: hex_exists=true
-    try_self_detach: true
-    ADDED TO NORMAL MOVES LIST
-  Checking move [1,-3,2]: hex_exists=true
-    try_self_detach: false
-Pillbug at [1,-2,1] checking pickable pieces
-  Checking piece at [1,-1,0]: Queen bee
   can_move_through_gap: from [1,-1,0] to [1,-2,1]
     Found 2 common neighbors
     Common neighbor 1 [2,-2,0]: empty
-    Common neighbor 2 [0,-1,1]: OCCUPIED
-    SUCCESS: At least one neighbor empty, can move through gap
-    Can pick: true, can_move_through_gap: true
-    PICKABLE!
-  Checking piece at [0,-1,1]: Soldier ant
-  can_move_through_gap: from [0,-1,1] to [1,-2,1]
-    Found 2 common neighbors
-    Common neighbor 1 [1,-1,0]: OCCUPIED
-    Common neighbor 2 [0,-2,2]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-    Can pick: true, can_move_through_gap: true
-    PICKABLE!
-Found 2 pickable pieces
-  PICKABLE: [1,-1,0]
-  PICKABLE: [0,-1,1]
-Marked 2 normal moves and 2 special targets
-=== Complete ===
-CLICK: mouse=(585,437), camera=(512,384), pixel=(91.25,66.25), cube=[2,-2,0], hex_exists=true
-  pieceCanDetach checking [1,-2,1]
-    SUCCESS: can detach without breaking hive
-  can_move_through_gap: from [1,-2,1] to [2,-2,0]
-    Found 2 common neighbors
-    Common neighbor 1 [2,-3,1]: empty
-    Common neighbor 2 [1,-1,0]: OCCUPIED
-    SUCCESS: At least one neighbor empty, can move through gap
-CLICK: mouse=(520,340), camera=(512,384), pixel=(10,-55), cube=[0,1,-1], hex_exists=true
-=== mark_legal_moves_for_piece called ===
-Source cube: [0,1,-1]
-Piece: Pillbug
-Checking Spider: piece.id=8, has get_legal_moves=true
-Testing Pillbug moves - normal movement and special ability
-  pieceCanDetach checking [0,1,-1]
-    SUCCESS: can detach without breaking hive
-  can_move_through_gap: from [0,1,-1] to [1,0,-1]
-    Found 2 common neighbors
-    Common neighbor 1 [1,1,-2]: empty
-    Common neighbor 2 [0,0,0]: OCCUPIED
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [0,1,-1] to [1,1,-2]
-    Found 2 common neighbors
-    Common neighbor 1 [1,0,-1]: empty
-    Common neighbor 2 [0,2,-2]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [0,1,-1] to [0,2,-2]
-    Found 2 common neighbors
-    Common neighbor 1 [1,1,-2]: empty
-    Common neighbor 2 [-1,2,-1]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [0,1,-1] to [-1,2,-1]
-    Found 2 common neighbors
-    Common neighbor 1 [0,2,-2]: empty
-    Common neighbor 2 [-1,1,0]: OCCUPIED
+    Common neighbor 2 [0,-1,1]: empty
     SUCCESS: At least one neighbor empty, can move through gap
 Found 4 normal moves
-  Checking move [1,0,-1]: hex_exists=true
-    try_self_detach: true
-    ADDED TO NORMAL MOVES LIST
-  Checking move [1,1,-2]: hex_exists=true
-    try_self_detach: false
-  Checking move [0,2,-2]: hex_exists=true
-    try_self_detach: false
-  Checking move [-1,2,-1]: hex_exists=true
-    try_self_detach: true
-    ADDED TO NORMAL MOVES LIST
-Pillbug at [0,1,-1] checking pickable pieces
-  Checking piece at [-1,1,0]: Soldier ant
-  can_move_through_gap: from [-1,1,0] to [0,1,-1]
+Pillbug at [1,-1,0] checking pickable pieces
+  Checking piece at [1,0,-1]: Queen bee
+  can_move_through_gap: from [1,0,-1] to [1,-1,0]
     Found 2 common neighbors
-    Common neighbor 1 [0,0,0]: OCCUPIED
-    Common neighbor 2 [-1,2,-1]: empty
+    Common neighbor 1 [2,-1,-1]: empty
+    Common neighbor 2 [0,0,0]: OCCUPIED
     SUCCESS: At least one neighbor empty, can move through gap
     Can pick: true, can_move_through_gap: true
     PICKABLE!
-  Checking piece at [0,0,0]: Queen bee
-    Would break hive - disconnected piece at [0,1,-1]
+  Checking piece at [0,0,0]: Soldier ant
+    Would break hive - disconnected piece at [1,-1,0]
 Found 1 pickable pieces
-  PICKABLE: [-1,1,0]
+Marked 2 normal moves and 1 special targets
 Marked 2 normal moves and 1 special targets
 === Complete ===
-CLICK: mouse=(481,367), camera=(512,384), pixel=(-38.75,-21.25), cube=[-1,1,0], hex_exists=true
-Pillbug special: Selected target piece at [-1,1,0]
-  can_move_through_gap: from [-1,1,0] to [0,1,-1]
-    Found 2 common neighbors
-    Common neighbor 1 [0,0,0]: OCCUPIED
-    Common neighbor 2 [-1,2,-1]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [0,1,-1] to [1,0,-1]
-    Found 2 common neighbors
-    Common neighbor 1 [1,1,-2]: empty
-    Common neighbor 2 [0,0,0]: OCCUPIED
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [-1,1,0] to [0,1,-1]
-    Found 2 common neighbors
-    Common neighbor 1 [0,0,0]: OCCUPIED
-    Common neighbor 2 [-1,2,-1]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [0,1,-1] to [1,1,-2]
-    Found 2 common neighbors
-    Common neighbor 1 [1,0,-1]: empty
-    Common neighbor 2 [0,2,-2]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [-1,1,0] to [0,1,-1]
-    Found 2 common neighbors
-    Common neighbor 1 [0,0,0]: OCCUPIED
-    Common neighbor 2 [-1,2,-1]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [0,1,-1] to [0,2,-2]
-    Found 2 common neighbors
-    Common neighbor 1 [1,1,-2]: empty
-    Common neighbor 2 [-1,2,-1]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [-1,1,0] to [0,1,-1]
-    Found 2 common neighbors
-    Common neighbor 1 [0,0,0]: OCCUPIED
-    Common neighbor 2 [-1,2,-1]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [0,1,-1] to [-1,2,-1]
-    Found 2 common neighbors
-    Common neighbor 1 [0,2,-2]: empty
-    Common neighbor 2 [-1,1,0]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-Found 4 drop locations
-  DROP LOCATION: [1,0,-1]
-  DROP LOCATION: [1,1,-2]
-  DROP LOCATION: [0,2,-2]
-  DROP LOCATION: [-1,2,-1]
-CLICK: mouse=(555,362), camera=(512,384), pixel=(53.75,-27.5), cube=[1,0,-1], hex_exists=true
-  can_move_through_gap: from [-1,1,0] to [0,1,-1]
-    Found 2 common neighbors
-    Common neighbor 1 [0,0,0]: OCCUPIED
-    Common neighbor 2 [-1,2,-1]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [0,1,-1] to [1,0,-1]
-    Found 2 common neighbors
-    Common neighbor 1 [1,1,-2]: empty
-    Common neighbor 2 [0,0,0]: OCCUPIED
-    SUCCESS: At least one neighbor empty, can move through gap
-Pillbug moved piece from [-1,1,0] to [1,0,-1]
-CLICK: mouse=(601,440), camera=(512,384), pixel=(111.25,70), cube=[2,-2,0], hex_exists=true
+CLICK: mouse=(674,322), camera=(636.875,287.625), pixel=(33.75,31.25), cube=[1,-1,0], hex_exists=true
+CLICK: mouse=(693,256), camera=(636.875,287.625), pixel=(51.022727272727,-28.75), cube=[1,0,-1], hex_exists=true
 === mark_legal_moves_for_piece called ===
-Source cube: [2,-2,0]
-Piece: Pillbug
-Checking Spider: piece.id=8, has get_legal_moves=true
-Testing Pillbug moves - normal movement and special ability
-  pieceCanDetach checking [2,-2,0]
+Source cube: [1,0,-1]
+Piece: Queen bee
+Testing Queen moves - checking adjacent hexes only
+Found 6 adjacent hexes
+  pieceCanDetach checking [1,0,-1]
     SUCCESS: can detach without breaking hive
-  can_move_through_gap: from [2,-2,0] to [3,-3,0]
-    Found 2 common neighbors
-    Common neighbor 1 [3,-2,-1]: empty
-    Common neighbor 2 [2,-3,1]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [2,-2,0] to [3,-2,-1]
-    Found 2 common neighbors
-    Common neighbor 1 [3,-3,0]: empty
-    Common neighbor 2 [2,-1,-1]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [2,-2,0] to [2,-1,-1]
-    Found 2 common neighbors
-    Common neighbor 1 [3,-2,-1]: empty
-    Common neighbor 2 [1,-1,0]: OCCUPIED
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [2,-2,0] to [1,-2,1]
-    Found 2 common neighbors
-    Common neighbor 1 [1,-1,0]: OCCUPIED
-    Common neighbor 2 [2,-3,1]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [2,-2,0] to [2,-3,1]
-    Found 2 common neighbors
-    Common neighbor 1 [3,-3,0]: empty
-    Common neighbor 2 [1,-2,1]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-Found 5 normal moves
-  Checking move [3,-3,0]: hex_exists=true
-    try_self_detach: false
-  Checking move [3,-2,-1]: hex_exists=true
-    try_self_detach: false
-  Checking move [2,-1,-1]: hex_exists=true
-    try_self_detach: true
-    ADDED TO NORMAL MOVES LIST
-  Checking move [1,-2,1]: hex_exists=true
-    try_self_detach: true
-    ADDED TO NORMAL MOVES LIST
-  Checking move [2,-3,1]: hex_exists=true
-    try_self_detach: false
-Pillbug at [2,-2,0] checking pickable pieces
-  Checking piece at [1,-1,0]: Queen bee
-    Would break hive - disconnected piece at [2,-2,0]
-Found 0 pickable pieces
+  pieceCanDetach checking [1,0,-1]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [1,0,-1]
+    SUCCESS: can detach without breaking hive
+Total legal moves: 2
 Marked 2 normal moves and 0 special targets
 === Complete ===
-CLICK: mouse=(567,449), camera=(512,384), pixel=(68.75,81.25), cube=[1,-2,1], hex_exists=true
-  pieceCanDetach checking [2,-2,0]
-    SUCCESS: can detach without breaking hive
-  can_move_through_gap: from [2,-2,0] to [1,-2,1]
-    Found 2 common neighbors
-    Common neighbor 1 [1,-1,0]: OCCUPIED
-    Common neighbor 2 [2,-3,1]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-CLICK: mouse=(506,327), camera=(512,384), pixel=(-7.5,-71.25), cube=[0,1,-1], hex_exists=true
+CLICK: mouse=(693,255), camera=(636.875,287.625), pixel=(51.022727272727,-29.659090909091), cube=[1,0,-1], hex_exists=true
+CLICK: mouse=(693,255), camera=(636.875,287.625), pixel=(51.022727272727,-29.659090909091), cube=[1,0,-1], hex_exists=true
 === mark_legal_moves_for_piece called ===
-Source cube: [0,1,-1]
-Piece: Pillbug
-Checking Spider: piece.id=8, has get_legal_moves=true
-Testing Pillbug moves - normal movement and special ability
-  pieceCanDetach checking [0,1,-1]
+Source cube: [1,0,-1]
+Piece: Queen bee
+Testing Queen moves - checking adjacent hexes only
+Found 6 adjacent hexes
+  pieceCanDetach checking [1,0,-1]
     SUCCESS: can detach without breaking hive
-  can_move_through_gap: from [0,1,-1] to [1,1,-2]
+  pieceCanDetach checking [1,0,-1]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [1,0,-1]
+    SUCCESS: can detach without breaking hive
+Total legal moves: 2
+Marked 2 normal moves and 0 special targets
+=== Complete ===
+CLICK: mouse=(736,283), camera=(636.875,287.625), pixel=(90.113636363636,-4.2045454545455), cube=[2,-1,-1], hex_exists=true
+  pieceCanDetach checking [1,0,-1]
+    SUCCESS: can detach without breaking hive
+CLICK: mouse=(517,276), camera=(636.875,287.625), pixel=(-108.97727272727,-10.568181818182), cube=[-2,1,1], hex_exists=true
+=== mark_legal_moves_for_piece called ===
+Source cube: [-2,1,1]
+Piece: Pillbug
+Testing Pillbug moves - normal movement and special ability
+  pieceCanDetach checking [-2,1,1]
+    SUCCESS: can detach without breaking hive
+  can_move_through_gap: from [-2,1,1] to [-1,1,0]
     Found 2 common neighbors
-    Common neighbor 1 [1,0,-1]: OCCUPIED
-    Common neighbor 2 [0,2,-2]: empty
+    Common neighbor 1 [-1,0,1]: OCCUPIED
+    Common neighbor 2 [-2,2,0]: empty
     SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [0,1,-1] to [0,2,-2]
+  can_move_through_gap: from [-2,1,1] to [-2,2,0]
     Found 2 common neighbors
-    Common neighbor 1 [1,1,-2]: empty
-    Common neighbor 2 [-1,2,-1]: empty
+    Common neighbor 1 [-1,1,0]: empty
+    Common neighbor 2 [-3,2,1]: empty
     SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [0,1,-1] to [-1,2,-1]
+  can_move_through_gap: from [-2,1,1] to [-3,2,1]
     Found 2 common neighbors
-    Common neighbor 1 [0,2,-2]: empty
-    Common neighbor 2 [-1,1,0]: empty
+    Common neighbor 1 [-2,2,0]: empty
+    Common neighbor 2 [-3,1,2]: empty
     SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [0,1,-1] to [-1,1,0]
+  can_move_through_gap: from [-2,1,1] to [-3,1,2]
     Found 2 common neighbors
-    Common neighbor 1 [-1,2,-1]: empty
-    Common neighbor 2 [0,0,0]: OCCUPIED
+    Common neighbor 1 [-3,2,1]: empty
+    Common neighbor 2 [-2,0,2]: OCCUPIED
     SUCCESS: At least one neighbor empty, can move through gap
 Found 4 normal moves
-  Checking move [1,1,-2]: hex_exists=true
-    try_self_detach: true
-    ADDED TO NORMAL MOVES LIST
-  Checking move [0,2,-2]: hex_exists=true
-    try_self_detach: false
-  Checking move [-1,2,-1]: hex_exists=true
-    try_self_detach: false
-  Checking move [-1,1,0]: hex_exists=true
-    try_self_detach: true
-    ADDED TO NORMAL MOVES LIST
-Pillbug at [0,1,-1] checking pickable pieces
-  Checking piece at [1,0,-1]: Soldier ant
-  can_move_through_gap: from [1,0,-1] to [0,1,-1]
-    Found 2 common neighbors
-    Common neighbor 1 [1,1,-2]: empty
-    Common neighbor 2 [0,0,0]: OCCUPIED
-    SUCCESS: At least one neighbor empty, can move through gap
-    Can pick: true, can_move_through_gap: true
-    PICKABLE!
-  Checking piece at [0,0,0]: Queen bee
-  can_move_through_gap: from [0,0,0] to [0,1,-1]
-    Found 2 common neighbors
-    Common neighbor 1 [1,0,-1]: OCCUPIED
-    Common neighbor 2 [-1,1,0]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-    Can pick: true, can_move_through_gap: true
-    PICKABLE!
-Found 2 pickable pieces
-  PICKABLE: [1,0,-1]
-  PICKABLE: [0,0,0]
-Marked 2 normal moves and 2 special targets
+Pillbug at [-2,1,1] checking pickable pieces
+  Checking piece at [-1,0,1]: Soldier ant
+    Would break hive - disconnected piece at [-2,0,2]
+Found 0 pickable pieces
+Marked 2 normal moves and 0 special targets
+Marked 2 normal moves and 0 special targets
 === Complete ===
-CLICKED CENTER (0,0,0): pixel=(12.5,3.75), hex_exists=true
-CLICK: mouse=(522,387), camera=(512,384), pixel=(12.5,3.75), cube=[-0,0,0], hex_exists=true
-Pillbug special: Selected target piece at [-0,0,0]
-  can_move_through_gap: from [-0,0,0] to [0,1,-1]
-    Found 2 common neighbors
-    Common neighbor 1 [1,0,-1]: OCCUPIED
-    Common neighbor 2 [-1,1,0]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [0,1,-1] to [1,1,-2]
-    Found 2 common neighbors
-    Common neighbor 1 [1,0,-1]: OCCUPIED
-    Common neighbor 2 [0,2,-2]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [-0,0,0] to [0,1,-1]
-    Found 2 common neighbors
-    Common neighbor 1 [1,0,-1]: OCCUPIED
-    Common neighbor 2 [-1,1,0]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [0,1,-1] to [0,2,-2]
-    Found 2 common neighbors
-    Common neighbor 1 [1,1,-2]: empty
-    Common neighbor 2 [-1,2,-1]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [-0,0,0] to [0,1,-1]
-    Found 2 common neighbors
-    Common neighbor 1 [1,0,-1]: OCCUPIED
-    Common neighbor 2 [-1,1,0]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [0,1,-1] to [-1,2,-1]
-    Found 2 common neighbors
-    Common neighbor 1 [0,2,-2]: empty
-    Common neighbor 2 [-1,1,0]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [-0,0,0] to [0,1,-1]
-    Found 2 common neighbors
-    Common neighbor 1 [1,0,-1]: OCCUPIED
-    Common neighbor 2 [-1,1,0]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [0,1,-1] to [-1,1,0]
-    Found 2 common neighbors
-    Common neighbor 1 [-1,2,-1]: empty
-    Common neighbor 2 [0,0,0]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-Found 4 drop locations
-  DROP LOCATION: [1,1,-2]
-  DROP LOCATION: [0,2,-2]
-  DROP LOCATION: [-1,2,-1]
-  DROP LOCATION: [-1,1,0]
-CLICK: mouse=(505,291), camera=(512,384), pixel=(-8.75,-116.25), cube=[0,2,-2], hex_exists=true
-  can_move_through_gap: from [-0,0,0] to [0,1,-1]
-    Found 2 common neighbors
-    Common neighbor 1 [1,0,-1]: OCCUPIED
-    Common neighbor 2 [-1,1,0]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [0,1,-1] to [0,2,-2]
-    Found 2 common neighbors
-    Common neighbor 1 [1,1,-2]: empty
-    Common neighbor 2 [-1,2,-1]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-Pillbug moved piece from [-0,0,0] to [0,2,-2]
-CLICK: mouse=(571,463), camera=(512,384), pixel=(73.75,98.75), cube=[1,-2,1], hex_exists=true
-=== mark_legal_moves_for_piece called ===
-Source cube: [1,-2,1]
-Piece: Pillbug
-Checking Spider: piece.id=8, has get_legal_moves=true
-Testing Pillbug moves - normal movement and special ability
-  pieceCanDetach checking [1,-2,1]
+CLICK: mouse=(486,320), camera=(636.875,287.625), pixel=(-137.15909090909,29.431818181818), cube=[-3,1,2], hex_exists=true
+  pieceCanDetach checking [-2,1,1]
     SUCCESS: can detach without breaking hive
-  can_move_through_gap: from [1,-2,1] to [2,-3,1]
+  can_move_through_gap: from [-2,1,1] to [-3,1,2]
     Found 2 common neighbors
-    Common neighbor 1 [2,-2,0]: empty
-    Common neighbor 2 [1,-3,2]: empty
+    Common neighbor 1 [-3,2,1]: empty
+    Common neighbor 2 [-2,0,2]: OCCUPIED
     SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [1,-2,1] to [2,-2,0]
-    Found 2 common neighbors
-    Common neighbor 1 [2,-3,1]: empty
-    Common neighbor 2 [1,-1,0]: OCCUPIED
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [1,-2,1] to [0,-2,2]
-    Found 2 common neighbors
-    Common neighbor 1 [0,-1,1]: OCCUPIED
-    Common neighbor 2 [1,-3,2]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [1,-2,1] to [1,-3,2]
-    Found 2 common neighbors
-    Common neighbor 1 [2,-3,1]: empty
-    Common neighbor 2 [0,-2,2]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-Found 4 normal moves
-  Checking move [2,-3,1]: hex_exists=true
-    try_self_detach: false
-  Checking move [2,-2,0]: hex_exists=true
-    try_self_detach: true
-    ADDED TO NORMAL MOVES LIST
-  Checking move [0,-2,2]: hex_exists=true
-    try_self_detach: true
-    ADDED TO NORMAL MOVES LIST
-  Checking move [1,-3,2]: hex_exists=true
-    try_self_detach: false
-Pillbug at [1,-2,1] checking pickable pieces
-  Checking piece at [1,-1,0]: Queen bee
-    Would break hive - disconnected piece at [1,0,-1]
-  Checking piece at [0,-1,1]: Soldier ant
-  can_move_through_gap: from [0,-1,1] to [1,-2,1]
-    Found 2 common neighbors
-    Common neighbor 1 [1,-1,0]: OCCUPIED
-    Common neighbor 2 [0,-2,2]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-    Can pick: true, can_move_through_gap: true
-    PICKABLE!
-Found 1 pickable pieces
-  PICKABLE: [0,-1,1]
-Marked 2 normal moves and 1 special targets
-=== Complete ===
-CLICK: mouse=(520,439), camera=(512,384), pixel=(10,68.75), cube=[0,-1,1], hex_exists=true
-Pillbug special: Selected target piece at [0,-1,1]
-  can_move_through_gap: from [0,-1,1] to [1,-2,1]
-    Found 2 common neighbors
-    Common neighbor 1 [1,-1,0]: OCCUPIED
-    Common neighbor 2 [0,-2,2]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [1,-2,1] to [2,-3,1]
-    Found 2 common neighbors
-    Common neighbor 1 [2,-2,0]: empty
-    Common neighbor 2 [1,-3,2]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [0,-1,1] to [1,-2,1]
-    Found 2 common neighbors
-    Common neighbor 1 [1,-1,0]: OCCUPIED
-    Common neighbor 2 [0,-2,2]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [1,-2,1] to [2,-2,0]
-    Found 2 common neighbors
-    Common neighbor 1 [2,-3,1]: empty
-    Common neighbor 2 [1,-1,0]: OCCUPIED
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [0,-1,1] to [1,-2,1]
-    Found 2 common neighbors
-    Common neighbor 1 [1,-1,0]: OCCUPIED
-    Common neighbor 2 [0,-2,2]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [1,-2,1] to [0,-2,2]
-    Found 2 common neighbors
-    Common neighbor 1 [0,-1,1]: empty
-    Common neighbor 2 [1,-3,2]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [0,-1,1] to [1,-2,1]
-    Found 2 common neighbors
-    Common neighbor 1 [1,-1,0]: OCCUPIED
-    Common neighbor 2 [0,-2,2]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [1,-2,1] to [1,-3,2]
-    Found 2 common neighbors
-    Common neighbor 1 [2,-3,1]: empty
-    Common neighbor 2 [0,-2,2]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-Found 4 drop locations
-  DROP LOCATION: [2,-3,1]
-  DROP LOCATION: [2,-2,0]
-  DROP LOCATION: [0,-2,2]
-  DROP LOCATION: [1,-3,2]
-CLICK: mouse=(582,483), camera=(512,384), pixel=(87.5,123.75), cube=[2,-3,1], hex_exists=true
-  can_move_through_gap: from [0,-1,1] to [1,-2,1]
-    Found 2 common neighbors
-    Common neighbor 1 [1,-1,0]: OCCUPIED
-    Common neighbor 2 [0,-2,2]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [1,-2,1] to [2,-3,1]
-    Found 2 common neighbors
-    Common neighbor 1 [2,-2,0]: empty
-    Common neighbor 2 [1,-3,2]: empty
-    SUCCESS: At least one neighbor empty, can move through gap
-Pillbug moved piece from [0,-1,1] to [2,-3,1]
-CLICK: mouse=(520,345), camera=(512,384), pixel=(10,-48.75), cube=[0,1,-1], hex_exists=true
+CLICK: mouse=(537,350), camera=(636.875,287.625), pixel=(-90.795454545455,56.704545454545), cube=[-2,0,2], hex_exists=true
+Player 	1	 has no piece 	Beetle	 in stock.
+CLICK: mouse=(691,302), camera=(636.875,287.625), pixel=(49.204545454545,13.068181818182), cube=[1,-1,0], hex_exists=true
 === mark_legal_moves_for_piece called ===
-Source cube: [0,1,-1]
+Source cube: [1,-1,0]
 Piece: Pillbug
-Checking Spider: piece.id=8, has get_legal_moves=true
 Testing Pillbug moves - normal movement and special ability
-  pieceCanDetach checking [0,1,-1]
+  pieceCanDetach checking [1,-1,0]
     FAIL: hive would break apart
 Pillbug cannot detach - no normal moves available
-Pillbug at [0,1,-1] checking pickable pieces
-  Checking piece at [1,0,-1]: Soldier ant
-    Would break hive - disconnected piece at [0,1,-1]
-  Checking piece at [0,2,-2]: Queen bee
-  can_move_through_gap: from [0,2,-2] to [0,1,-1]
+Pillbug at [1,-1,0] checking pickable pieces
+  Checking piece at [2,-1,-1]: Queen bee
+  can_move_through_gap: from [2,-1,-1] to [1,-1,0]
     Found 2 common neighbors
-    Common neighbor 1 [1,1,-2]: empty
-    Common neighbor 2 [-1,2,-1]: empty
+    Common neighbor 1 [1,0,-1]: empty
+    Common neighbor 2 [2,-2,0]: empty
     SUCCESS: At least one neighbor empty, can move through gap
     Can pick: true, can_move_through_gap: true
     PICKABLE!
+  Checking piece at [0,0,0]: Soldier ant
+    Would break hive - disconnected piece at [1,-1,0]
 Found 1 pickable pieces
-  PICKABLE: [0,2,-2]
+Marked 0 normal moves and 1 special targets
 Marked 0 normal moves and 1 special targets
 === Complete ===
-CLICK: mouse=(513,301), camera=(512,384), pixel=(1.25,-103.75), cube=[0,2,-2], hex_exists=true
-Pillbug special: Selected target piece at [0,2,-2]
-  can_move_through_gap: from [0,2,-2] to [0,1,-1]
+CLICK: mouse=(691,302), camera=(636.875,287.625), pixel=(49.204545454545,13.068181818182), cube=[1,-1,0], hex_exists=true
+CLICK: mouse=(691,302), camera=(636.875,287.625), pixel=(49.204545454545,13.068181818182), cube=[1,-1,0], hex_exists=true
+=== mark_legal_moves_for_piece called ===
+Source cube: [1,-1,0]
+Piece: Pillbug
+Testing Pillbug moves - normal movement and special ability
+  pieceCanDetach checking [1,-1,0]
+    FAIL: hive would break apart
+Pillbug cannot detach - no normal moves available
+Pillbug at [1,-1,0] checking pickable pieces
+  Checking piece at [2,-1,-1]: Queen bee
+  can_move_through_gap: from [2,-1,-1] to [1,-1,0]
     Found 2 common neighbors
-    Common neighbor 1 [1,1,-2]: empty
-    Common neighbor 2 [-1,2,-1]: empty
+    Common neighbor 1 [1,0,-1]: empty
+    Common neighbor 2 [2,-2,0]: empty
     SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [0,1,-1] to [1,1,-2]
+    Can pick: true, can_move_through_gap: true
+    PICKABLE!
+  Checking piece at [0,0,0]: Soldier ant
+    Would break hive - disconnected piece at [1,-1,0]
+Found 1 pickable pieces
+Marked 0 normal moves and 1 special targets
+Marked 0 normal moves and 1 special targets
+=== Complete ===
+CLICK: mouse=(691,302), camera=(636.875,287.625), pixel=(49.204545454545,13.068181818182), cube=[1,-1,0], hex_exists=true
+Game saved to: savegame.json
+CLICK: mouse=(693,319), camera=(636.875,287.625), pixel=(51.022727272727,28.522727272727), cube=[1,-1,0], hex_exists=true
+=== mark_legal_moves_for_piece called ===
+Source cube: [1,-1,0]
+Piece: Pillbug
+Testing Pillbug moves - normal movement and special ability
+  pieceCanDetach checking [1,-1,0]
+    FAIL: hive would break apart
+Pillbug cannot detach - no normal moves available
+Pillbug at [1,-1,0] checking pickable pieces
+  Checking piece at [2,-1,-1]: Queen bee
+  can_move_through_gap: from [2,-1,-1] to [1,-1,0]
     Found 2 common neighbors
-    Common neighbor 1 [1,0,-1]: OCCUPIED
-    Common neighbor 2 [0,2,-2]: empty
+    Common neighbor 1 [1,0,-1]: empty
+    Common neighbor 2 [2,-2,0]: empty
     SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [0,2,-2] to [0,1,-1]
+    Can pick: true, can_move_through_gap: true
+    PICKABLE!
+  Checking piece at [0,0,0]: Soldier ant
+    Would break hive - disconnected piece at [1,-1,0]
+Found 1 pickable pieces
+Marked 0 normal moves and 1 special targets
+Marked 0 normal moves and 1 special targets
+=== Complete ===
+CLICK: mouse=(692,319), camera=(636.875,287.625), pixel=(50.113636363636,28.522727272727), cube=[1,-1,0], hex_exists=true
+CLICK: mouse=(638,240), camera=(636.875,287.625), pixel=(1.0227272727273,-43.295454545455), cube=[0,1,-1], hex_exists=true
+=== mark_legal_moves_for_piece called ===
+Source cube: [0,1,-1]
+Piece: Beetle
+Testing Beetle adjacent moves
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  Neighbor 1: [1,0,-1] -> false
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  Neighbor 2: [1,1,-2] -> false
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  Neighbor 3: [0,2,-2] -> false
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  Neighbor 4: [-1,2,-1] -> false
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  Neighbor 5: [-1,1,0] -> false
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  Neighbor 6: [0,0,0] -> false
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [0,1,-1]
+    FAIL: hive would break apart
+WARNING: Hit test limit!
+Tests: 201, Legal moves: 0
+Marked 0 normal moves and 0 special targets
+=== Complete ===
+CLICK: mouse=(639,240), camera=(636.875,287.625), pixel=(1.9318181818182,-43.295454545455), cube=[0,1,-1], hex_exists=true
+CLICK: mouse=(521,347), camera=(636.875,287.625), pixel=(-105.34090909091,53.977272727273), cube=[-2,0,2], hex_exists=true
+Player 	1	 has no piece 	Beetle	 in stock.
+CLICK: mouse=(636,140), camera=(636.875,287.625), pixel=(-0.79545454545455,-134.20454545455), cube=[0,2,-2], hex_exists=true
+=== mark_legal_moves_for_piece called ===
+Source cube: [0,2,-2]
+Piece: Beetle
+Testing Beetle adjacent moves
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  Neighbor 1: [1,1,-2] -> true
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  Neighbor 2: [1,2,-3] -> false
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  Neighbor 3: [0,3,-3] -> false
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  Neighbor 4: [-1,3,-2] -> false
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  Neighbor 5: [-1,2,-1] -> true
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  Neighbor 6: [0,1,-1] -> true
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [0,2,-2]
+    SUCCESS: can detach without breaking hive
+WARNING: Hit test limit!
+Tests: 201, Legal moves: 3
+Marked 3 normal moves and 0 special targets
+=== Complete ===
+CLICK: mouse=(640,151), camera=(636.875,287.625), pixel=(2.8409090909091,-124.20454545455), cube=[0,2,-2], hex_exists=true
+CLICK: mouse=(692,300), camera=(636.875,287.625), pixel=(50.113636363636,11.25), cube=[1,-1,0], hex_exists=true
+=== mark_legal_moves_for_piece called ===
+Source cube: [1,-1,0]
+Piece: Pillbug
+Testing Pillbug moves - normal movement and special ability
+  pieceCanDetach checking [1,-1,0]
+    FAIL: hive would break apart
+Pillbug cannot detach - no normal moves available
+Pillbug at [1,-1,0] checking pickable pieces
+  Checking piece at [2,-1,-1]: Queen bee
+  can_move_through_gap: from [2,-1,-1] to [1,-1,0]
     Found 2 common neighbors
-    Common neighbor 1 [1,1,-2]: empty
-    Common neighbor 2 [-1,2,-1]: empty
+    Common neighbor 1 [1,0,-1]: empty
+    Common neighbor 2 [2,-2,0]: empty
     SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [0,1,-1] to [-1,2,-1]
+    Can pick: true, can_move_through_gap: true
+    PICKABLE!
+  Checking piece at [0,0,0]: Soldier ant
+    Would break hive - disconnected piece at [1,-1,0]
+Found 1 pickable pieces
+Marked 0 normal moves and 1 special targets
+Marked 0 normal moves and 1 special targets
+=== Complete ===
+CLICK: mouse=(741,297), camera=(636.875,287.625), pixel=(94.659090909091,8.5227272727273), cube=[2,-1,-1], hex_exists=true
+Pillbug special: Selected target piece at [2,-1,-1]
+  can_move_through_gap: from [2,-1,-1] to [1,-1,0]
     Found 2 common neighbors
-    Common neighbor 1 [0,2,-2]: empty
-    Common neighbor 2 [-1,1,0]: empty
+    Common neighbor 1 [1,0,-1]: empty
+    Common neighbor 2 [2,-2,0]: empty
     SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [0,2,-2] to [0,1,-1]
+  can_move_through_gap: from [1,-1,0] to [2,-2,0]
     Found 2 common neighbors
-    Common neighbor 1 [1,1,-2]: empty
-    Common neighbor 2 [-1,2,-1]: empty
+    Common neighbor 1 [2,-1,-1]: empty
+    Common neighbor 2 [1,-2,1]: empty
     SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [0,1,-1] to [-1,1,0]
+  can_move_through_gap: from [2,-1,-1] to [1,-1,0]
     Found 2 common neighbors
-    Common neighbor 1 [-1,2,-1]: empty
-    Common neighbor 2 [0,0,0]: empty
+    Common neighbor 1 [1,0,-1]: empty
+    Common neighbor 2 [2,-2,0]: empty
     SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [0,2,-2] to [0,1,-1]
+  can_move_through_gap: from [1,-1,0] to [1,0,-1]
     Found 2 common neighbors
-    Common neighbor 1 [1,1,-2]: empty
-    Common neighbor 2 [-1,2,-1]: empty
+    Common neighbor 1 [2,-1,-1]: empty
+    Common neighbor 2 [0,0,0]: OCCUPIED
     SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [0,1,-1] to [0,0,0]
+  can_move_through_gap: from [2,-1,-1] to [1,-1,0]
     Found 2 common neighbors
-    Common neighbor 1 [1,0,-1]: OCCUPIED
-    Common neighbor 2 [-1,1,0]: empty
+    Common neighbor 1 [1,0,-1]: empty
+    Common neighbor 2 [2,-2,0]: empty
+    SUCCESS: At least one neighbor empty, can move through gap
+  can_move_through_gap: from [1,-1,0] to [0,-1,1]
+    Found 2 common neighbors
+    Common neighbor 1 [0,0,0]: OCCUPIED
+    Common neighbor 2 [1,-2,1]: empty
+    SUCCESS: At least one neighbor empty, can move through gap
+  can_move_through_gap: from [2,-1,-1] to [1,-1,0]
+    Found 2 common neighbors
+    Common neighbor 1 [1,0,-1]: empty
+    Common neighbor 2 [2,-2,0]: empty
+    SUCCESS: At least one neighbor empty, can move through gap
+  can_move_through_gap: from [1,-1,0] to [1,-2,1]
+    Found 2 common neighbors
+    Common neighbor 1 [2,-2,0]: empty
+    Common neighbor 2 [0,-1,1]: empty
     SUCCESS: At least one neighbor empty, can move through gap
 Found 4 drop locations
-  DROP LOCATION: [1,1,-2]
-  DROP LOCATION: [-1,2,-1]
-  DROP LOCATION: [-1,1,0]
-  DROP LOCATION: [0,0,0]
-CLICKED CENTER (0,0,0): pixel=(21.25,-2.5), hex_exists=true
-CLICK: mouse=(529,382), camera=(512,384), pixel=(21.25,-2.5), cube=[-0,0,0], hex_exists=true
-  can_move_through_gap: from [0,2,-2] to [0,1,-1]
+  DROP LOCATION: [2,-2,0]
+  DROP LOCATION: [1,0,-1]
+  DROP LOCATION: [0,-1,1]
+  DROP LOCATION: [1,-2,1]
+CLICK: mouse=(688,317), camera=(636.875,287.625), pixel=(46.477272727273,26.704545454545), cube=[1,-1,0], hex_exists=true
+CLICK: mouse=(687,264), camera=(636.875,287.625), pixel=(45.568181818182,-21.477272727273), cube=[1,0,-1], hex_exists=true
+isNextToFriendly: checking cube [1,0,-1]
+  active_player_id=1, turn_number[1]=7
+  Neighbors: enemy=0, friendly=4
+  Normal placement - must have friendly neighbors and no enemies
+  APPROVED
+CLICK: mouse=(459,372), camera=(636.875,287.625), pixel=(-161.70454545455,76.704545454545), cube=[-3,0,3], hex_exists=true
+isNextToFriendly: checking cube [-3,0,3]
+  active_player_id=2, turn_number[2]=7
+  Neighbors: enemy=0, friendly=2
+  Normal placement - must have friendly neighbors and no enemies
+  APPROVED
+CLICK: mouse=(696,256), camera=(636.875,287.625), pixel=(53.75,-28.75), cube=[1,0,-1], hex_exists=true
+=== mark_legal_moves_for_piece called ===
+Source cube: [1,0,-1]
+Piece: Mosquito
+Testing Mosquito moves - mimics adjacent pieces
+  pieceCanDetach checking [1,0,-1]
+    SUCCESS: can detach without breaking hive
+Mosquito adjacent piece types: true, has Pillbug: true
+Mosquito:get_legal_moves starting from [1,0,-1]
+  Adjacent piece types: 
+    - Queen Bee (id: 1)
+    - Beetle (id: 2)
+    - Soldier Ant (id: 5)
+    - Unknown (id: 8)
+  Checking moves as Queen bee
+  Checking moves as Beetle
+  Checking moves as Soldier ant
+Total unique destinations found: 24
+Found 24 potential normal moves
+Mosquito can mimic Pillbug special ability
+Pillbug at [1,0,-1] checking pickable pieces
+  Checking piece at [2,-1,-1]: Queen bee
+  can_move_through_gap: from [2,-1,-1] to [1,0,-1]
     Found 2 common neighbors
-    Common neighbor 1 [1,1,-2]: empty
-    Common neighbor 2 [-1,2,-1]: empty
+    Common neighbor 1 [2,0,-2]: empty
+    Common neighbor 2 [1,-1,0]: OCCUPIED
     SUCCESS: At least one neighbor empty, can move through gap
-  can_move_through_gap: from [0,1,-1] to [-0,0,0]
+    Can pick: true, can_move_through_gap: true
+    PICKABLE!
+  Checking piece at [0,1,-1]: Beetle
+    Would break hive - disconnected piece at [0,2,-2]
+  Checking piece at [0,0,0]: Soldier ant
+    Would break hive - disconnected piece at [1,-1,0]
+  Checking piece at [1,-1,0]: Pillbug
+  can_move_through_gap: from [1,-1,0] to [1,0,-1]
     Found 2 common neighbors
-    Common neighbor 1 [1,0,-1]: OCCUPIED
-    Common neighbor 2 [-1,1,0]: empty
+    Common neighbor 1 [2,-1,-1]: OCCUPIED
+    Common neighbor 2 [0,0,0]: OCCUPIED
+    FAIL: Both neighbors occupied (gate blocking)
+    Can pick: true, can_move_through_gap: false
+Found 1 pickable pieces
+Marked 24 normal moves and 1 special targets
+Marked 24 normal moves and 1 special targets
+=== Complete ===
+CLICK: mouse=(698,256), camera=(636.875,287.625), pixel=(55.568181818182,-28.75), cube=[1,0,-1], hex_exists=true
+CLICK: mouse=(698,256), camera=(636.875,287.625), pixel=(55.568181818182,-28.75), cube=[1,0,-1], hex_exists=true
+=== mark_legal_moves_for_piece called ===
+Source cube: [1,0,-1]
+Piece: Mosquito
+Testing Mosquito moves - mimics adjacent pieces
+  pieceCanDetach checking [1,0,-1]
+    SUCCESS: can detach without breaking hive
+Mosquito adjacent piece types: true, has Pillbug: true
+Mosquito:get_legal_moves starting from [1,0,-1]
+  Adjacent piece types: 
+    - Queen Bee (id: 1)
+    - Beetle (id: 2)
+    - Soldier Ant (id: 5)
+    - Unknown (id: 8)
+  Checking moves as Queen bee
+  Checking moves as Beetle
+  Checking moves as Soldier ant
+Total unique destinations found: 24
+Found 24 potential normal moves
+Mosquito can mimic Pillbug special ability
+Pillbug at [1,0,-1] checking pickable pieces
+  Checking piece at [2,-1,-1]: Queen bee
+  can_move_through_gap: from [2,-1,-1] to [1,0,-1]
+    Found 2 common neighbors
+    Common neighbor 1 [2,0,-2]: empty
+    Common neighbor 2 [1,-1,0]: OCCUPIED
     SUCCESS: At least one neighbor empty, can move through gap
-Pillbug moved piece from [0,2,-2] to [-0,0,0]
+    Can pick: true, can_move_through_gap: true
+    PICKABLE!
+  Checking piece at [0,1,-1]: Beetle
+    Would break hive - disconnected piece at [0,2,-2]
+  Checking piece at [0,0,0]: Soldier ant
+    Would break hive - disconnected piece at [1,-1,0]
+  Checking piece at [1,-1,0]: Pillbug
+  can_move_through_gap: from [1,-1,0] to [1,0,-1]
+    Found 2 common neighbors
+    Common neighbor 1 [2,-1,-1]: OCCUPIED
+    Common neighbor 2 [0,0,0]: OCCUPIED
+    FAIL: Both neighbors occupied (gate blocking)
+    Can pick: true, can_move_through_gap: false
+Found 1 pickable pieces
+Marked 24 normal moves and 1 special targets
+Marked 24 normal moves and 1 special targets
+=== Complete ===
+CLICK: mouse=(698,254), camera=(636.875,287.625), pixel=(55.568181818182,-30.568181818182), cube=[1,0,-1], hex_exists=true
+CLICK: mouse=(698,253), camera=(636.875,287.625), pixel=(55.568181818182,-31.477272727273), cube=[1,0,-1], hex_exists=true
+=== mark_legal_moves_for_piece called ===
+Source cube: [1,0,-1]
+Piece: Mosquito
+Testing Mosquito moves - mimics adjacent pieces
+  pieceCanDetach checking [1,0,-1]
+    SUCCESS: can detach without breaking hive
+Mosquito adjacent piece types: true, has Pillbug: true
+Mosquito:get_legal_moves starting from [1,0,-1]
+  Adjacent piece types: 
+    - Queen Bee (id: 1)
+    - Beetle (id: 2)
+    - Soldier Ant (id: 5)
+    - Unknown (id: 8)
+  Checking moves as Queen bee
+  Checking moves as Beetle
+  Checking moves as Soldier ant
+Total unique destinations found: 24
+Found 24 potential normal moves
+Mosquito can mimic Pillbug special ability
+Pillbug at [1,0,-1] checking pickable pieces
+  Checking piece at [2,-1,-1]: Queen bee
+  can_move_through_gap: from [2,-1,-1] to [1,0,-1]
+    Found 2 common neighbors
+    Common neighbor 1 [2,0,-2]: empty
+    Common neighbor 2 [1,-1,0]: OCCUPIED
+    SUCCESS: At least one neighbor empty, can move through gap
+    Can pick: true, can_move_through_gap: true
+    PICKABLE!
+  Checking piece at [0,1,-1]: Beetle
+    Would break hive - disconnected piece at [0,2,-2]
+  Checking piece at [0,0,0]: Soldier ant
+    Would break hive - disconnected piece at [1,-1,0]
+  Checking piece at [1,-1,0]: Pillbug
+  can_move_through_gap: from [1,-1,0] to [1,0,-1]
+    Found 2 common neighbors
+    Common neighbor 1 [2,-1,-1]: OCCUPIED
+    Common neighbor 2 [0,0,0]: OCCUPIED
+    FAIL: Both neighbors occupied (gate blocking)
+    Can pick: true, can_move_through_gap: false
+Found 1 pickable pieces
+Marked 24 normal moves and 1 special targets
+Marked 24 normal moves and 1 special targets
+=== Complete ===
+CLICK: mouse=(691,258), camera=(636.875,287.625), pixel=(49.204545454545,-26.931818181818), cube=[1,0,-1], hex_exists=true
+Game saved to: savegame.json

@@ -155,4 +155,55 @@ function Beetle:move_piece(map, src_cube, dest_cube, active_player_id)
     return true
 end
 
+function Beetle:mark_legal_moves(map, src_cube)
+    print("Testing Beetle adjacent moves")
+    
+    local legal_moves = {}
+    local tests_run = 0
+    local max_tests = 200
+    
+    -- Test immediate neighbors
+    local neighbors = cubecoords.all_neighbors(src_cube)
+    for i, neighbor_cube in ipairs(neighbors) do
+        local can_move = try_move_piece_on_map(map, src_cube, neighbor_cube)
+        print("  Neighbor " .. i .. ": [" .. neighbor_cube.x .. "," .. neighbor_cube.y .. "," .. neighbor_cube.z .. "] -> " .. tostring(can_move))
+    end
+    
+    -- Test all hexes in map (beetles can climb)
+    for _, hex in pairs(map.hexes) do
+        if not cubecoords.equals(hex.cube, src_cube) then
+            tests_run = tests_run + 1
+            
+            if tests_run > max_tests then
+                print("WARNING: Hit test limit!")
+                break
+            end
+            
+            -- Only test if destination is near other pieces
+            local has_nearby = false
+            mark_neighbours_on_map_cube(map, hex.cube)
+            for _, nhex in pairs(map.hexes) do
+                if nhex.neighbour and nhex.piece then
+                    has_nearby = true
+                    break
+                end
+            end
+            
+            -- Clear only neighbour flags
+            for _, h in pairs(map.hexes) do
+                h.neighbour = nil
+            end
+            
+            if has_nearby or not hex.piece then
+                if try_move_piece_on_map(map, src_cube, hex.cube) then
+                    table.insert(legal_moves, hex)
+                end
+            end
+        end
+    end
+    
+    print("Tests: " .. tests_run .. ", Legal moves: " .. #legal_moves)
+    return {normal_moves = legal_moves, special_targets = {}}
+end
+
 return Beetle

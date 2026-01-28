@@ -320,4 +320,40 @@ function Pillbug:use_special_ability(map, pillbug_cube, target_cube, dest_cube)
     return true
 end
 
+function Pillbug:mark_legal_moves(map, src_cube)
+    print("Testing Pillbug moves - normal movement and special ability")
+    
+    local normal_move_hexes = {}
+    local special_target_hexes = {}
+    
+    -- Get normal movement options (only if can detach)
+    if pieceCanDetach(map, src_cube) then
+        local pillbug_moves = self:get_legal_moves(map, src_cube)
+        print("Found " .. #pillbug_moves .. " normal moves")
+        
+        for _, move_data in ipairs(pillbug_moves) do
+            local hex = map_get_hex(map, move_data.cube)
+            if hex and try_self_detach(map, src_cube, move_data.cube) then
+                table.insert(normal_move_hexes, hex)
+            end
+        end
+    else
+        print("Pillbug cannot detach - no normal moves available")
+    end
+    
+    -- Get pickable pieces for special ability (always available)
+    local pickable = self:get_pickable_pieces(map, src_cube)
+    print("Found " .. #pickable .. " pickable pieces")
+    
+    for _, piece_cube in ipairs(pickable) do
+        local hex = map_get_hex(map, piece_cube)
+        if hex then
+            table.insert(special_target_hexes, hex)
+        end
+    end
+    
+    print("Marked " .. #normal_move_hexes .. " normal moves and " .. #special_target_hexes .. " special targets")
+    return {normal_moves = normal_move_hexes, special_targets = special_target_hexes}
+end
+
 return Pillbug

@@ -1,4 +1,5 @@
 local Piece = require("pieces.piece")
+local Pillbug = require("pieces.pillbug")
 
 -- Mosquito class - mimics adjacent pieces
 Mosquito = setmetatable({}, {__index = Piece})
@@ -10,6 +11,7 @@ function Mosquito:new(owner)
     instance.initials = "Mo"
     instance.color = {0.5, 0.5, 0.5, 1}  -- Gray
     instance.id = 7
+    instance.image_path = "img/mosquito.png"
     return instance
 end
 
@@ -207,6 +209,72 @@ function Mosquito:move_piece(map, src_cube, dest_cube, active_player_id)
         src_hex.player_id = nil
         return true
     end
+end
+
+-- Mosquito can use Pillbug's special ability if adjacent to a Pillbug
+function Mosquito:get_pickable_pieces_as_pillbug(map, src_cube)
+    local pillbug = Pillbug:new(self.owner)
+    return pillbug:get_pickable_pieces(map, src_cube)
+end
+
+function Mosquito:get_drop_locations_as_pillbug(map, src_cube, target_cube)
+    local pillbug = Pillbug:new(self.owner)
+    return pillbug:get_drop_locations(map, src_cube, target_cube)
+end
+
+function Mosquito:use_special_ability_as_pillbug(map, src_cube, target_cube, dest_cube)
+    local pillbug = Pillbug:new(self.owner)
+    return pillbug:use_special_ability(map, src_cube, target_cube, dest_cube)
+end
+
+function Mosquito:mark_legal_moves(map, src_cube)
+    print("Testing Mosquito moves - mimics adjacent pieces")
+    
+    local src_hex = map_get_hex(map, src_cube)
+    
+    -- Check if piece can detach first (unless it's on top of the hive)
+    if not src_hex.piece.under_piece and not pieceCanDetach(map, src_cube) then
+        print("Mosquito cannot detach - would break hive")
+        return {normal_moves = {}, special_targets = {}}
+    end
+    
+    -- Check if mosquito is adjacent to a Pillbug
+    local adjacent_types = self:get_adjacent_piece_types(map, src_cube)
+    local has_pillbug = adjacent_types[8] == true  -- Check if Pillbug (id=8) is in the table
+    print("Mosquito adjacent piece types: " .. tostring(next(adjacent_types) ~= nil) .. ", has Pillbug: " .. tostring(has_pillbug))
+    
+    local normal_move_hexes = {}
+    local special_target_hexes = {}
+    
+    -- Get normal movement options
+    local mosquito_moves = self:get_legal_moves(map, src_cube)
+    print("Found " .. #mosquito_moves .. " potential normal moves")
+    
+    for _, dest_cube in ipairs(mosquito_moves) do
+        if try_self_detach(map, src_cube, dest_cube) then
+            local hex = map_get_hex(map, dest_cube)
+            if hex then
+                table.insert(normal_move_hexes, hex)
+            end
+        end
+    end
+    
+    -- If adjacent to Pillbug, also show special ability
+    if has_pillbug and self.get_pickable_pieces_as_pillbug then
+        print("Mosquito can mimic Pillbug special ability")
+        local pickable = self:get_pickable_pieces_as_pillbug(map, src_cube)
+        print("Found " .. #pickable .. " pickable pieces")
+        
+        for _, piece_cube in ipairs(pickable) do
+            local hex = map_get_hex(map, piece_cube)
+            if hex then
+                table.insert(special_target_hexes, hex)
+            end
+        end
+    end
+    
+    print("Marked " .. #normal_move_hexes .. " normal moves and " .. #special_target_hexes .. " special targets")
+    return {normal_moves = normal_move_hexes, special_targets = special_target_hexes}
 end
 
 return Mosquito

@@ -79,4 +79,36 @@ function QueenBee:move_piece(map, src_cube, dest_cube, active_player_id)
     return true
 end
 
+function QueenBee:mark_legal_moves(map, src_cube)
+    print("Testing Queen moves - checking adjacent hexes only")
+    
+    mark_neighbours_on_map_cube(map, src_cube)
+    local adjacent_positions = {}
+    
+    for _, hex in pairs(map.hexes) do
+        if hex.neighbour and not cubecoords.equals(hex.cube, src_cube) then
+            table.insert(adjacent_positions, hex)
+        end
+    end
+    
+    -- Clear neighbour flags (not can_move/can_special)
+    for _, hex in pairs(map.hexes) do
+        hex.neighbour = nil
+    end
+    
+    print("Found " .. #adjacent_positions .. " adjacent hexes")
+    local legal_moves = {}
+    
+    for _, hex in ipairs(adjacent_positions) do
+        if not hex.piece then
+            if pieceCanDetach(map, src_cube) and try_self_detach(map, src_cube, hex.cube) then
+                table.insert(legal_moves, hex)
+            end
+        end
+    end
+    
+    print("Total legal moves: " .. #legal_moves)
+    return {normal_moves = legal_moves, special_targets = {}}
+end
+
 return QueenBee
