@@ -189,6 +189,9 @@ function Pillbug:move_piece(map, src_cube, dest_cube, active_player_id)
         return false
     end
     
+    -- Mark piece as moved this turn
+    src_hex.piece.has_moved_last_turn = true
+    
     -- Move the piece
     dest_hex.piece = src_hex.piece
     dest_hex.player_id = src_hex.player_id
@@ -208,6 +211,11 @@ function Pillbug:can_use_special_ability(map, pillbug_cube, target_cube, dest_cu
     
     if pillbug_hex.piece.under_piece then
         return false  -- Pillbug is covered
+    end
+    
+    -- Check if Pillbug moved in its last turn
+    if pillbug_hex.piece.has_moved_last_turn then
+        return false  -- Pillbug cannot use special ability if it moved last turn
     end
     
     -- Check if target is adjacent to Pillbug
@@ -231,6 +239,11 @@ function Pillbug:can_use_special_ability(map, pillbug_cube, target_cube, dest_cu
     -- Check if target piece is covered (stacked with 2+ pieces)
     if target_hex.piece.under_piece then
         return false  -- Target is covered, cannot move it
+    end
+    
+    -- Check if target piece moved in the last turn
+    if target_hex.piece.has_moved_last_turn then
+        return false  -- Cannot move a piece that moved last turn
     end
     
     -- Check if destination is empty
@@ -309,6 +322,9 @@ function Pillbug:use_special_ability(map, pillbug_cube, target_cube, dest_cube)
     local target_hex = map_get_hex(map, target_cube)
     local dest_hex = map_get_hex(map, dest_cube)
     
+    -- Mark target piece as moved (it physically moved to a new hex)
+    target_hex.piece.has_moved_last_turn = true
+    
     -- Move the piece
     dest_hex.piece = target_hex.piece
     dest_hex.player_id = target_hex.player_id
@@ -331,9 +347,9 @@ function Pillbug:mark_legal_moves(map, src_cube)
         local pillbug_moves = self:get_legal_moves(map, src_cube)
         print("Found " .. #pillbug_moves .. " normal moves")
         
-        for _, move_data in ipairs(pillbug_moves) do
-            local hex = map_get_hex(map, move_data.cube)
-            if hex and try_self_detach(map, src_cube, move_data.cube) then
+        for _, move_cube in ipairs(pillbug_moves) do
+            local hex = map_get_hex(map, move_cube)
+            if hex and try_self_detach(map, src_cube, move_cube) then
                 table.insert(normal_move_hexes, hex)
             end
         end

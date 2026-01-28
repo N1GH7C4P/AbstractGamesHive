@@ -193,6 +193,9 @@ function Spider:move_piece(map, src_cube, dest_cube, active_player_id)
     
     if not src_hex or not dest_hex then return false end
     
+    -- Mark piece as moved this turn
+    src_hex.piece.has_moved_last_turn = true
+    
     dest_hex.piece = src_hex.piece
     dest_hex.player_id = src_hex.player_id
     src_hex.piece = nil

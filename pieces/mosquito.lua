@@ -189,7 +189,15 @@ function Mosquito:get_drop_locations_as_pillbug(map, src_cube, target_cube)
 end
 
 function Mosquito:use_special_ability_as_pillbug(map, src_cube, target_cube, dest_cube)
+    -- Check if mosquito moved last turn (same restriction as pillbug)
+    local mosquito_hex = map_get_hex(map, src_cube)
+    if mosquito_hex and mosquito_hex.piece and mosquito_hex.piece.has_moved_last_turn then
+        return false
+    end
+    
     local pillbug = Pillbug:new(self.owner)
+    -- Pillbug's use_special_ability will mark the target piece as moved
+    -- The mosquito itself doesn't physically move, so don't mark it
     return pillbug:use_special_ability(map, src_cube, target_cube, dest_cube)
 end
 

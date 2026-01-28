@@ -1,189 +1,18 @@
 {
-  "players": [
-    {
-      "pieces": [
-        {
-          "id": 1,
-          "inStock": 0,
-          "name": "Queen bee"
-        },
-        {
-          "id": 2,
-          "inStock": 1,
-          "name": "Beetle"
-        },
-        {
-          "id": 3,
-          "inStock": 3,
-          "name": "Grasshopper"
-        },
-        {
-          "id": 4,
-          "inStock": 2,
-          "name": "Spider"
-        },
-        {
-          "id": 5,
-          "inStock": 3,
-          "name": "Soldier ant"
-        },
-        {
-          "id": 6,
-          "inStock": 1,
-          "name": "Ladybug"
-        },
-        {
-          "id": 7,
-          "inStock": 0,
-          "name": "Mosquito"
-        },
-        {
-          "id": 8,
-          "inStock": 0,
-          "name": "Pillbug"
-        }
-      ],
-      "id": 1
-    },
-    {
-      "pieces": [
-        {
-          "id": 1,
-          "inStock": 0,
-          "name": "Queen bee"
-        },
-        {
-          "id": 2,
-          "inStock": 1,
-          "name": "Beetle"
-        },
-        {
-          "id": 3,
-          "inStock": 3,
-          "name": "Grasshopper"
-        },
-        {
-          "id": 4,
-          "inStock": 2,
-          "name": "Spider"
-        },
-        {
-          "id": 5,
-          "inStock": 3,
-          "name": "Soldier ant"
-        },
-        {
-          "id": 6,
-          "inStock": 1,
-          "name": "Ladybug"
-        },
-        {
-          "id": 7,
-          "inStock": 0,
-          "name": "Mosquito"
-        },
-        {
-          "id": 8,
-          "inStock": 0,
-          "name": "Pillbug"
-        }
-      ],
-      "id": 2
-    }
-  ],
-  "map": {
-    "current_radius": 10
-  },
-  "board": [
-    {
-      "cube": {
-        "z": 0,
-        "x": 0,
-        "y": 0
-      },
-      "has_under_piece": false,
-      "player_id": 1,
-      "piece_id": 7
-    },
-    {
-      "cube": {
-        "z": 1,
-        "x": -1,
-        "y": 0
-      },
-      "has_under_piece": false,
-      "player_id": 1,
-      "piece_id": 8
-    },
-    {
-      "cube": {
-        "z": 0,
-        "x": 1,
-        "y": -1
-      },
-      "has_under_piece": false,
-      "player_id": 1,
-      "piece_id": 1
-    },
-    {
-      "cube": {
-        "z": -1,
-        "x": 1,
-        "y": 0
-      },
-      "has_under_piece": false,
-      "player_id": 1,
-      "piece_id": 2
-    },
-    {
-      "cube": {
-        "z": 0,
-        "x": -2,
-        "y": 2
-      },
-      "piece_id": 7,
-      "has_under_piece": true,
-      "under_piece": {
-        "player_id": 2,
-        "id": 2
-      },
-      "player_id": 2
-    },
-    {
-      "cube": {
-        "z": 1,
-        "x": -2,
-        "y": 1
-      },
-      "has_under_piece": false,
-      "player_id": 2,
-      "piece_id": 1
-    },
-    {
-      "cube": {
-        "z": 1,
-        "x": -3,
-        "y": 2
-      },
-      "has_under_piece": false,
-      "player_id": 2,
-      "piece_id": 8
-    }
-  ],
   "game_state": {
-    "active_piece_id": 8,
+    "active_piece_id": 7,
     "turn_number": [
-      6,
-      6
+      7,
+      7
     ],
-    "highlight": 1,
-    "move_mode": 0,
-    "selected_piece_x": -1,
-    "selected_piece_y": 0,
     "who_won": [
       0,
       0
     ],
+    "highlight": 0,
+    "move_mode": 0,
+    "selected_piece_x": 3,
+    "selected_piece_y": 0,
     "active_player_id": 1,
     "game_over": false
   },
@@ -191,5 +20,162 @@
     "zoom": 0.8,
     "x": 512,
     "y": 384
+  },
+  "players": [
+    {
+      "id": 1,
+      "pieces": [
+        {
+          "id": 1,
+          "name": "Queen bee",
+          "inStock": 0
+        },
+        {
+          "id": 2,
+          "name": "Beetle",
+          "inStock": 2
+        },
+        {
+          "id": 3,
+          "name": "Grasshopper",
+          "inStock": 3
+        },
+        {
+          "id": 4,
+          "name": "Spider",
+          "inStock": 2
+        },
+        {
+          "id": 5,
+          "name": "Soldier ant",
+          "inStock": 3
+        },
+        {
+          "id": 6,
+          "name": "Ladybug",
+          "inStock": 1
+        },
+        {
+          "id": 7,
+          "name": "Mosquito",
+          "inStock": 0
+        },
+        {
+          "id": 8,
+          "name": "Pillbug",
+          "inStock": 0
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "pieces": [
+        {
+          "id": 1,
+          "name": "Queen bee",
+          "inStock": 0
+        },
+        {
+          "id": 2,
+          "name": "Beetle",
+          "inStock": 2
+        },
+        {
+          "id": 3,
+          "name": "Grasshopper",
+          "inStock": 3
+        },
+        {
+          "id": 4,
+          "name": "Spider",
+          "inStock": 2
+        },
+        {
+          "id": 5,
+          "name": "Soldier ant",
+          "inStock": 3
+        },
+        {
+          "id": 6,
+          "name": "Ladybug",
+          "inStock": 1
+        },
+        {
+          "id": 7,
+          "name": "Mosquito",
+          "inStock": 0
+        },
+        {
+          "id": 8,
+          "name": "Pillbug",
+          "inStock": 0
+        }
+      ]
+    }
+  ],
+  "board": [
+    {
+      "cube": {
+        "z": 0,
+        "x": 0,
+        "y": 0
+      },
+      "piece_id": 7,
+      "has_under_piece": false,
+      "player_id": 1
+    },
+    {
+      "cube": {
+        "z": 0,
+        "x": 1,
+        "y": -1
+      },
+      "piece_id": 1,
+      "has_under_piece": false,
+      "player_id": 1
+    },
+    {
+      "cube": {
+        "z": 0,
+        "x": 2,
+        "y": -2
+      },
+      "piece_id": 8,
+      "has_under_piece": false,
+      "player_id": 2
+    },
+    {
+      "cube": {
+        "z": -2,
+        "x": 2,
+        "y": 0
+      },
+      "piece_id": 1,
+      "has_under_piece": false,
+      "player_id": 2
+    },
+    {
+      "cube": {
+        "z": -1,
+        "x": 3,
+        "y": -2
+      },
+      "piece_id": 7,
+      "has_under_piece": false,
+      "player_id": 2
+    },
+    {
+      "cube": {
+        "z": -2,
+        "x": 3,
+        "y": -1
+      },
+      "piece_id": 8,
+      "has_under_piece": false,
+      "player_id": 1
+    }
+  ],
+  "map": {
+    "current_radius": 10
   }
 }

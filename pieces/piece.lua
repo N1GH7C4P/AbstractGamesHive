@@ -12,6 +12,7 @@ function Piece:new(owner)
     instance.image_path = nil  -- Path to piece image
     instance.image = nil  -- Loaded image (lazy loaded)
     instance.image_load_attempted = false  -- Track if we already tried loading
+    instance.has_moved_last_turn = false  -- Track if piece moved in last turn (for Pillbug restrictions)
     return instance
 end
 

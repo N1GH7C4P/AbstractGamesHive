@@ -122,6 +122,9 @@ function Beetle:move_piece(map, src_cube, dest_cube, active_player_id)
     
     if not src_hex or not dest_hex then return false end
     
+    -- Mark piece as moved this turn
+    src_hex.piece.has_moved_last_turn = true
+    
     local tempPiece = nil
     if dest_hex.piece then
         tempPiece = dest_hex.piece

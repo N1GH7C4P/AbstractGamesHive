@@ -89,10 +89,26 @@ function pass_turn(active_piece_id)
         move_mode = 0
         active_player_id = 2
         turn_number[1] = turn_number[1] + 1
+        
+        -- Clear movement flags for player 2 pieces from their previous turn
+        -- (Player 2's turn is starting, so clear their old flags)
+        for _, hex in pairs(map.hexes) do
+            if hex.piece and hex.player_id == 2 then
+                hex.piece.has_moved_last_turn = false
+            end
+        end
     elseif (active_player_id == 2) then
         move_mode = 0
         active_player_id = 1
         turn_number[2] = turn_number[2] + 1
+        
+        -- Clear movement flags for player 1 pieces from their previous turn
+        -- (Player 1's turn is starting, so clear their old flags)
+        for _, hex in pairs(map.hexes) do
+            if hex.piece and hex.player_id == 1 then
+                hex.piece.has_moved_last_turn = false
+            end
+        end
     end
     checkIfWin(map, w, h)
 end
