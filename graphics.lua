@@ -199,7 +199,7 @@ function drawPieceSelector(player, player_id, x, y, size)
     end
 end
 
--- Get hover info for piece selector (returns piece index and name if hovering)
+-- Get hover info for piece selector (returns piece index, piece id, name and stock if hovering)
 function getPieceSelectorHover(player, player_id, mouseX, mouseY, x, y, size)
     size = size or 30
     local spacing = size * 2.5
@@ -213,11 +213,11 @@ function getPieceSelectorHover(player, player_id, mouseX, mouseY, x, y, size)
         local dist = math.sqrt(dx * dx + dy * dy)
         
         if dist < size then
-            return i, pieces[i].template.name, pieces[i].inStock
+            return i, pieces[i].template.id, pieces[i].template.name, pieces[i].inStock
         end
     end
     
-    return nil, nil, nil
+    return nil, nil, nil, nil
 end
 
 -- Check if mouse click is on piece selector and return selected piece

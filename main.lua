@@ -3,6 +3,7 @@ hexagon = require("hexagon")
 cubecoords = require("cubecoords")
 Config = require("config")
 globals = require("globals")
+PiecesEnum = require("pieces/pieces_enum")
 require "pieces"
 require "player"
 require "game"
@@ -105,13 +106,42 @@ function love.draw()
     drawPieceSelector(player, active_player_id, center_x, 20, piece_size)
     
     -- Show hover tooltip for piece selector
-    local hover_piece_id, hover_piece_name, hover_stock = getPieceSelectorHover(player, active_player_id, mouseX, mouseY, center_x, 20, piece_size)
+    local hover_piece_idx, hover_piece_id, hover_piece_name, hover_stock = getPieceSelectorHover(player, active_player_id, mouseX, mouseY, center_x, 20, piece_size)
     if hover_piece_id then
-        love.graphics.setColor(0, 0, 0, 0.8)
-        love.graphics.rectangle("fill", mouseX + 10, mouseY - 30, 150, 40)
+        -- Get rules text for this piece
+        local rules_text = PiecesEnum.RULES[hover_piece_id] or "No rules available."
+        
+        -- Wrap text to fit in tooltip
+        local max_width = 400
+        local font = love.graphics.getFont()
+        local _, wrapped_lines = font:getWrap(rules_text, max_width - 20)
+        local text_height = #wrapped_lines * font:getHeight() * font:getLineHeight()
+        
+        -- Position tooltip on left for rightmost 3 pieces to avoid going off-screen
+        local is_rightmost = hover_piece_idx > (piece_count - 3)
+        local tooltip_x = is_rightmost and (mouseX - max_width - 10) or (mouseX + 10)
+        local offset_x = is_rightmost and -max_width - 5 or 15
+        
+        -- Draw tooltip background
+        local tooltip_height = text_height + 60
+        love.graphics.setColor(0, 0, 0, 0.9)
+        love.graphics.rectangle("fill", tooltip_x, mouseY - 30, max_width, tooltip_height)
+        
+        -- Draw header
+        love.graphics.setColor(1, 1, 0.5, 1)
+        love.graphics.print(hover_piece_name, tooltip_x + 10, mouseY - 25)
+        love.graphics.setColor(1, 1, 1, 0.8)
+        love.graphics.print("In stock: " .. hover_stock, tooltip_x + 10, mouseY - 10)
+        
+        -- Draw separator line
+        love.graphics.setColor(0.5, 0.5, 0.5, 1)
+        love.graphics.line(tooltip_x + 10, mouseY + 10, tooltip_x + max_width - 10, mouseY + 10)
+        
+        -- Draw rules text
+        love.graphics.setColor(0.9, 0.9, 0.9, 1)
+        love.graphics.printf(rules_text, tooltip_x + 10, mouseY + 15, max_width - 20, "left")
+        
         love.graphics.setColor(1, 1, 1, 1)
-        love.graphics.print(hover_piece_name, mouseX + 15, mouseY - 25)
-        love.graphics.print("In stock: " .. hover_stock, mouseX + 15, mouseY - 10)
     end
     
     -- Draw cube coordinates if enabled
