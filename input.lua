@@ -4,6 +4,7 @@
 local Input = {}
 local PiecesEnum = require("pieces.pieces_enum")
 local cubecoords = require("cubecoords")
+local gamestate = require("gamestate")
 
 -- Key handler functions (Lua doesn't have switch-case, so we use a table-based dispatch)
 local keyHandlers = {
@@ -34,12 +35,12 @@ local keyHandlers = {
     
     ["d"] = function()
         -- Save game
-        gamestate.save("savegame.json")
+        gamestate.save("output/savegame.json")
     end,
     
     ["l"] = function()
         -- Load game
-        gamestate.load("savegame.json")
+        gamestate.load("output/savegame.json")
     end,
     
     ["h"] = function()
@@ -210,7 +211,7 @@ local function handle_pillbug_drop_click(result_cube, result_hex)
     local selected_cube = cubecoords.from_offset(G.selected_piece_x, G.selected_piece_y)
     local selected_hex = map_get_hex(G.map, selected_cube)
     
-    if result_hex and result_hex.can_move then
+    if result_hex and result_hex.can_drop then
         -- Execute Pillbug or Mosquito special ability
         local success = false
         if selected_hex.piece.name == "Pillbug" and selected_hex.piece.use_special_ability then
@@ -292,7 +293,7 @@ local function handle_pillbug_pickup_click(result_cube, result_hex, mouseX, mous
     for _, dest_cube in ipairs(drop_locations) do
         local hex = map_get_hex(G.map, dest_cube)
         if hex then
-            hex.can_move = true
+            hex.can_drop = true
             print("  DROP LOCATION: [" .. dest_cube.x .. "," .. dest_cube.y .. "," .. dest_cube.z .. "]")
         end
     end

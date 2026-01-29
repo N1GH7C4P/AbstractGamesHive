@@ -244,6 +244,7 @@ function clear_all_neighbours(map, w, h)
         hex.can_special = nil
         hex.is_beetle_move = nil
         hex.has_dual_option = nil
+        hex.can_drop = nil
     end
 end
 

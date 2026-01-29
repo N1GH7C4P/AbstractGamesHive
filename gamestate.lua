@@ -134,7 +134,7 @@ end
 
 -- Save complete game state to file
 function GameState.save(filename)
-    filename = filename or "savegame.json"
+    filename = filename or "output/savegame.json"
     
     local file = io.open(filename, "w")
     if not file then
@@ -218,7 +218,7 @@ end
 
 -- Load game state from file
 function GameState.load(filename)
-    filename = filename or "savegame.json"
+    filename = filename or "output/savegame.json"
     
     local file = io.open(filename, "r")
     if not file then

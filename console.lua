@@ -9,7 +9,7 @@ Console.log_file = nil
 -- Override print to capture messages
 function Console.init()
     -- Open log file
-    Console.log_file = io.open("debug.log", "w")
+    Console.log_file = io.open("output/debug.log", "w")
     if Console.log_file then
         Console.log_file:write("=== Debug Log Started ===\n")
         Console.log_file:flush()

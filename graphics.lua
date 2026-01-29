@@ -120,6 +120,13 @@ function drawSelected(map, x, y, grid, camera_x, camera_y, zoom)
                 hexagon.draw_hexagon(hX * zoom + camera_x, hY * zoom + camera_y, grid.piecesize * zoom, false, true, 1, 0.5, 0, 0.6)
             end
         end
+        -- Draw pillbug drop locations in red
+        if hex.can_drop then
+            local cube = cubecoords.from_key(cube_key)
+            local hX, hY = cubecoords.to_pixel(cube, grid.piecesize)
+            -- Red highlight for pillbug drop locations
+            hexagon.draw_hexagon(hX * zoom + camera_x, hY * zoom + camera_y, grid.piecesize * zoom, false, true, 1, 0, 0, 0.6)
+        end
         -- Draw special ability targets (pickable pieces) in cyan
         if hex.can_special then
             local cube = cubecoords.from_key(cube_key)
