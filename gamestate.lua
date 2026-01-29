@@ -1,6 +1,7 @@
 -- Game state save/load functionality
 local Globals = require("globals")
 local json = require("json")
+local map_module = require("map")
 
 GameState = {}
 
@@ -174,7 +175,7 @@ local function restoreBasePieces(board_data)
     for _, piece_data in ipairs(board_data) do
         if not piece_data.has_under_piece then
             local cube = cubecoords.new(piece_data.cube.x, piece_data.cube.y, piece_data.cube.z)
-            local hex = map_get_hex(G.map, cube)
+            local hex = map_module.get_hex(G.map, cube)
             
             if hex then
                 local piece_template = piecesInventory[piece_data.piece_id]
@@ -192,7 +193,7 @@ local function restoreStackedPieces(board_data)
     for _, piece_data in ipairs(board_data) do
         if piece_data.has_under_piece and piece_data.under_piece then
             local cube = cubecoords.new(piece_data.cube.x, piece_data.cube.y, piece_data.cube.z)
-            local hex = map_get_hex(G.map, cube)
+            local hex = map_module.get_hex(G.map, cube)
             
             if hex then
                 -- Create the piece that goes underneath
@@ -259,4 +260,8 @@ function GameState.load(filename)
     return true
 end
 
-return GameState
+-- Export module
+return {
+    save = GameState.save,
+    load = GameState.load,
+}

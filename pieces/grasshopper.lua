@@ -36,7 +36,7 @@ function Grasshopper:try_to_move(map, src_cube, dest_cube)
     
     -- Count pieces we're jumping over
     while true do
-        local hex = map_get_hex(map, current)
+        local hex = get_hex(map, current)
         if not hex then
             return false -- Out of bounds before finding empty space
         end
@@ -77,7 +77,7 @@ function Grasshopper:get_legal_moves(map, src_cube)
         
         -- Walk in this direction
         while true do
-            local hex = map_get_hex(map, current)
+            local hex = get_hex(map, current)
             if not hex then
                 print("    Out of bounds at [" .. current.x .. "," .. current.y .. "," .. current.z .. "]")
                 break -- Out of bounds
@@ -112,8 +112,8 @@ function Grasshopper:get_legal_moves(map, src_cube)
 end
 
 function Grasshopper:move_piece(map, src_cube, dest_cube, active_player_id)
-    local src_hex = map_get_hex(map, src_cube)
-    local dest_hex = map_get_hex(map, dest_cube)
+    local src_hex = get_hex(map, src_cube)
+    local dest_hex = get_hex(map, dest_cube)
     
     if not src_hex or not dest_hex then return false end
     
@@ -136,7 +136,7 @@ function Grasshopper:mark_legal_moves(map, src_cube)
     local legal_moves = {}
     for _, dest_cube in ipairs(grasshopper_moves) do
         if pieceCanDetach(map, src_cube) and try_self_detach(map, src_cube, dest_cube) then
-            local hex = map_get_hex(map, dest_cube)
+            local hex = get_hex(map, dest_cube)
             if hex then
                 table.insert(legal_moves, hex)
             end

@@ -9,6 +9,7 @@ local console = require("console")
 local network = require("network")
 local globals = require("globals")
 local game = require("game")
+local map_module = require("map")
 
 -- Key handler functions (Lua doesn't have switch-case, so we use a table-based dispatch)
 local keyHandlers = {
@@ -251,7 +252,7 @@ local function handle_multiple_option_click(mouseX, mouseY)
         -- Switch to pillbug special ability mode
         print("Mosquito using Pillbug power")
         local selected_cube = cubecoords.from_offset(G.selected_piece_x, G.selected_piece_y)
-        local selected_hex = map_get_hex(G.map, selected_cube)
+        local selected_hex = get_hex(G.map, selected_cube)
         
         G.pillbug_special_mode = true
         G.pillbug_cube = selected_cube
@@ -266,7 +267,7 @@ local function handle_multiple_option_click(mouseX, mouseY)
         local drop_locations = selected_hex.piece:get_drop_locations_as_pillbug(G.map, G.pillbug_cube, G.pillbug_target_cube)
         print("Found " .. #drop_locations .. " drop locations")
         for _, dest_cube in ipairs(drop_locations) do
-            local hex = map_get_hex(G.map, dest_cube)
+            local hex = get_hex(G.map, dest_cube)
             if hex then
                 hex.can_drop = true
                 print("  DROP LOCATION: [" .. dest_cube.x .. "," .. dest_cube.y .. "," .. dest_cube.z .. "]")
@@ -310,7 +311,7 @@ local function handle_drop_click(result_cube, result_hex)
     end
     
     local selected_cube = cubecoords.from_offset(G.selected_piece_x, G.selected_piece_y)
-    local selected_hex = map_get_hex(G.map, selected_cube)
+    local selected_hex = get_hex(G.map, selected_cube)
     
     if result_hex and result_hex.can_drop then
         -- Let the piece execute its own drop logic
@@ -355,7 +356,7 @@ local function handle_special_ability_click(result_cube, result_hex, mouseX, mou
     end
     
     local selected_cube = cubecoords.from_offset(G.selected_piece_x, G.selected_piece_y)
-    local selected_hex = map_get_hex(G.map, selected_cube)
+    local selected_hex = get_hex(G.map, selected_cube)
     
     if not selected_hex or not selected_hex.piece then
         return false
@@ -386,7 +387,7 @@ local function handle_piece_placement_click(result_cube, result_hex, resultX, re
         -- Place new piece from inventory
         local piece_info = G.player[G.active_player_id]:getPieceInfo(G.active_piece_id)
         if piece_info and piece_info.template then
-            if not tryAddPieceToMap(G.active_player_id, piece_info.template, G.map, result_cube) then
+            if not map_module.tryAddPieceToMap(G.active_player_id, piece_info.template, G.map, result_cube) then
                 return true
             end
             game.checkIfWin(G.map, G.w, G.h)
@@ -441,7 +442,7 @@ function Input.mousepressed(x, y, button, istouch)
         local pixel_x = (mouseX - G.camera_x) / G.camera_zoom
         local pixel_y = (mouseY - G.camera_y) / G.camera_zoom
         local result_cube = cubecoords.from_pixel(pixel_x, pixel_y, G.size)
-        local result_hex = map_get_hex(G.map, result_cube)
+        local result_hex = map_module.get_hex(G.map, result_cube)
          
         -- Convert cube to offset for compatibility
         local resultX, resultY = cubecoords.to_offset(result_cube)
@@ -528,4 +529,13 @@ function Input.update_mouse(dt)
     end
 end
 
-return Input
+-- Export module
+return {
+    mousepressed = Input.mousepressed,
+    mousereleased = Input.mousereleased,
+    wheelmoved = Input.wheelmoved,
+    update_mouse = Input.update_mouse,
+    keypressed = Input.keypressed,
+    keyreleased = Input.keyreleased,
+    draw_help_overlay = Input.draw_help_overlay,
+}

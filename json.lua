@@ -131,4 +131,8 @@ function Json.decode(str)
     return nil
 end
 
-return Json
+-- Export module
+return {
+    encode = Json.encode,
+    decode = Json.decode,
+}

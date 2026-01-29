@@ -4,7 +4,7 @@ local PiecesEnum = require("pieces.pieces_enum")
 local globals = require("globals")
 local hexagon = require("hexagon")
 local pieces = require("pieces")
-local map = require("map")
+local map_module = require("map")
 
 local Game = {}
 
@@ -25,7 +25,7 @@ function Game.init()
     G.grid = hexagon.grid(G.w, G.h, G.size, false, false)
     G.piecesInvetory = pieces.init_pieces()
     G.player = Game.init_players()
-    G.map = map.init_map()
+    G.map = map_module.init_map()
     
     -- Center camera
     G.camera_x = G.window_w / 2
@@ -65,7 +65,7 @@ local function countOccupiedNeighbors(map, cube)
     local occupied_count = 0
     
     for _, neighbor_cube in ipairs(neighbors) do
-        local neighbor_hex = map_get_hex(map, neighbor_cube)
+        local neighbor_hex = map_module.get_hex(map, neighbor_cube)
         if neighbor_hex and neighbor_hex.piece then
             occupied_count = occupied_count + 1
         end
@@ -118,7 +118,7 @@ function Game.checkIfWin(map, w, h)
 end
 
 function Game.selectPieceOnMap(map, cube, active_player_id)
-    local hex = map_get_hex(map, cube)
+    local hex = map_module.get_hex(map, cube)
     if hex and hex.player_id == active_player_id then
         return true
     end
@@ -128,7 +128,7 @@ end
 function Game.printSelectedPieceInfo(map, selected_piece_cube, move_mode, x, y, active_player_id)
     if move_mode == 1 and selected_piece_cube then
         if Game.selectPieceOnMap(map, selected_piece_cube, active_player_id) then
-            local hex = map_get_hex(map, selected_piece_cube)
+            local hex = map_module.get_hex(map, selected_piece_cube)
             if hex and hex.piece then
                 love.graphics.print("Selected piece: "..hex.piece.name.." ("..selected_piece_cube.x..", "..selected_piece_cube.y..", "..selected_piece_cube.z..")", x, y)
             end
@@ -164,4 +164,12 @@ function Game.pass_turn(active_piece_id)
     end
 end
 
-return Game
+-- Export module
+return {
+    init = Game.init,
+    init_players = Game.init_players,
+    checkIfWin = Game.checkIfWin,
+    selectPieceOnMap = Game.selectPieceOnMap,
+    printSelectedPieceInfo = Game.printSelectedPieceInfo,
+    pass_turn = Game.pass_turn,
+}

@@ -18,7 +18,7 @@ end
 
 function Mosquito:try_to_move(map, src_cube, dest_cube)
     -- Check if mosquito is on top of the hive
-    local src_hex = map_get_hex(map, src_cube)
+    local src_hex = get_hex(map, src_cube)
     if src_hex and src_hex.piece and src_hex.piece.under_piece then
         -- On top of hive - can only move as Beetle
         local beetle = Beetle:new(self.owner)
@@ -29,7 +29,7 @@ function Mosquito:try_to_move(map, src_cube, dest_cube)
     local adjacent_types = self:get_adjacent_piece_types(map, src_cube)
     
     -- Check if destination has a piece (stacking attempt)
-    local dest_hex = map_get_hex(map, dest_cube)
+    local dest_hex = get_hex(map, dest_cube)
     local is_stacking = dest_hex and dest_hex.piece
     
     -- If trying to stack, must have a Beetle adjacent
@@ -56,7 +56,7 @@ function Mosquito:get_adjacent_piece_types(map, cube)
     local neighbors = cubecoords.all_neighbors(cube)
     
     for _, neighbor_cube in ipairs(neighbors) do
-        local neighbor_hex = map_get_hex(map, neighbor_cube)
+        local neighbor_hex = get_hex(map, neighbor_cube)
         if neighbor_hex and neighbor_hex.piece then
             local piece_id = neighbor_hex.piece.id
             -- Ignore other mosquitos
@@ -74,7 +74,7 @@ function Mosquito:duplicate_adjacent_piece(map, cube, piece_id)
     -- Find an adjacent piece with this ID
     local neighbors = cubecoords.all_neighbors(cube)
     for _, neighbor_cube in ipairs(neighbors) do
-        local neighbor_hex = map_get_hex(map, neighbor_cube)
+        local neighbor_hex = get_hex(map, neighbor_cube)
         if neighbor_hex and neighbor_hex.piece and neighbor_hex.piece.id == piece_id then
             -- Duplicate the piece with mosquito's owner
             return neighbor_hex.piece:duplicate(self.owner)
@@ -88,7 +88,7 @@ function Mosquito:get_legal_moves(map, src_cube)
     print("Mosquito:get_legal_moves starting from [" .. src_cube.x .. "," .. src_cube.y .. "," .. src_cube.z .. "]")
     
     -- Check if on top of the hive
-    local src_hex = map_get_hex(map, src_cube)
+    local src_hex = get_hex(map, src_cube)
     if src_hex and src_hex.piece and src_hex.piece.under_piece then
         print("  Mosquito is on top of hive - using Beetle movement only")
         local beetle = Beetle:new(self.owner)
@@ -134,8 +134,8 @@ function Mosquito:get_piece_name(piece_id)
 end
 
 function Mosquito:move_piece(map, src_cube, dest_cube, active_player_id)
-    local src_hex = map_get_hex(map, src_cube)
-    local dest_hex = map_get_hex(map, dest_cube)
+    local src_hex = get_hex(map, src_cube)
+    local dest_hex = get_hex(map, dest_cube)
     
     if not src_hex or not dest_hex then return false end
     
@@ -152,7 +152,7 @@ function Mosquito:move_piece(map, src_cube, dest_cube, active_player_id)
         local tempPiece = dest_hex.piece
         tempPiece.player_id = dest_hex.player_id
         dest_hex.piece = src_hex.piece
-        dest_hex.player_id = active_player_id
+        dest_hex.player_id = src_hex.piece.owner
         
         -- Handle source piece - restore under_piece to source if it exists
         if src_hex.piece.under_piece then
@@ -173,7 +173,7 @@ function Mosquito:move_piece(map, src_cube, dest_cube, active_player_id)
     else
         -- Normal move - move mosquito without its under_piece
         dest_hex.piece = src_hex.piece
-        dest_hex.player_id = src_hex.player_id
+        dest_hex.player_id = src_hex.piece.owner
         
         -- Handle source hex
         if src_hex.piece.under_piece then
@@ -205,7 +205,7 @@ end
 
 function Mosquito:use_special_ability_as_pillbug(map, src_cube, target_cube, dest_cube)
     -- Check if mosquito moved last turn (same restriction as pillbug)
-    local mosquito_hex = map_get_hex(map, src_cube)
+    local mosquito_hex = get_hex(map, src_cube)
     if mosquito_hex and mosquito_hex.piece and mosquito_hex.piece.has_moved_last_turn then
         return false
     end
@@ -219,7 +219,7 @@ end
 function Mosquito:mark_legal_moves(map, src_cube)
     print("Testing Mosquito moves - mimics adjacent pieces")
     
-    local src_hex = map_get_hex(map, src_cube)
+    local src_hex = get_hex(map, src_cube)
     
     -- Check which powers are available
     local adjacent_types = self:get_adjacent_piece_types(map, src_cube)
@@ -241,11 +241,11 @@ function Mosquito:mark_legal_moves(map, src_cube)
         
         for _, dest_cube in ipairs(mosquito_moves) do
             if try_self_detach(map, src_cube, dest_cube) then
-                local hex = map_get_hex(map, dest_cube)
+                local hex = get_hex(map, dest_cube)
                 if hex then
                     table.insert(normal_move_hexes, hex)
                     -- Track if this destination is stacking (beetle power)
-                    local dest_hex = map_get_hex(map, dest_cube)
+                    local dest_hex = get_hex(map, dest_cube)
                     if dest_hex.piece and has_beetle then
                         table.insert(beetle_climb_hexes, hex)
                     end
@@ -268,7 +268,7 @@ function Mosquito:mark_legal_moves(map, src_cube)
         print("Found " .. #pickable .. " pickable pieces")
         
         for _, piece_cube in ipairs(pickable) do
-            local hex = map_get_hex(map, piece_cube)
+            local hex = get_hex(map, piece_cube)
             if hex then
                 -- Check if this piece can also be climbed with beetle power
                 -- Must verify it's actually in the beetle climb list (legal move)
@@ -298,7 +298,7 @@ end
 
 -- Handle special ability click (mimicking pillbug)
 function Mosquito:handle_special_click(map, src_cube, target_cube, mouseX, mouseY)
-    local target_hex = map_get_hex(map, target_cube)
+    local target_hex = get_hex(map, target_cube)
     
     -- Check if we have dual options (beetle climb AND pillbug special)
     if target_hex and target_hex.has_dual_option then
@@ -324,7 +324,7 @@ function Mosquito:handle_special_click(map, src_cube, target_cube, mouseX, mouse
     print("Found " .. #drop_locations .. " drop locations")
     
     for _, dest_cube in ipairs(drop_locations) do
-        local hex = map_get_hex(map, dest_cube)
+        local hex = get_hex(map, dest_cube)
         if hex then
             hex.can_drop = true
             print("  DROP LOCATION: [" .. dest_cube.x .. "," .. dest_cube.y .. "," .. dest_cube.z .. "]")

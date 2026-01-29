@@ -2,7 +2,7 @@
 -- In cube coordinates: x + y + z = 0
 -- This makes many hex operations simpler, especially directional movement
 
-CubeCoords = {}
+local CubeCoords = {}
 
 -- Create a new cube coordinate
 function CubeCoords.new(x, y, z)
@@ -244,4 +244,29 @@ function CubeCoords.from_key(key)
     return CubeCoords.new(tonumber(x), tonumber(y), tonumber(z))
 end
 
-return CubeCoords
+-- Export module
+return {
+    new = CubeCoords.new,
+    to_offset = CubeCoords.to_offset,
+    from_offset = CubeCoords.from_offset,
+    directions = CubeCoords.directions,
+    add = CubeCoords.add,
+    subtract = CubeCoords.subtract,
+    scale = CubeCoords.scale,
+    neighbor = CubeCoords.neighbor,
+    all_neighbors = CubeCoords.all_neighbors,
+    distance = CubeCoords.distance,
+    equals = CubeCoords.equals,
+    ring = CubeCoords.ring,
+    spiral = CubeCoords.spiral,
+    to_pixel = CubeCoords.to_pixel,
+    from_pixel = CubeCoords.from_pixel,
+    round = CubeCoords.round,
+    to_pixel_pointy = CubeCoords.to_pixel_pointy,
+    direction = CubeCoords.direction,
+    is_aligned = CubeCoords.is_aligned,
+    normalize_direction = CubeCoords.normalize_direction,
+    line_from = CubeCoords.line_from,
+    to_key = CubeCoords.to_key,
+    from_key = CubeCoords.from_key,
+}

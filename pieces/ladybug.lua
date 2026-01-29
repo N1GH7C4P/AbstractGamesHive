@@ -42,7 +42,7 @@ function Ladybug:find_path(map, current_cube, dest_cube, steps, visited)
     -- Try moving to each neighbor
     local neighbors = cubecoords.all_neighbors(current_cube)
     for _, next_cube in ipairs(neighbors) do
-        local next_hex = map_get_hex(map, next_cube)
+        local next_hex = get_hex(map, next_cube)
         local next_key = cubecoords.to_key(next_cube)
         
         if next_hex and not visited[next_key] then
@@ -116,7 +116,7 @@ function Ladybug:find_all_paths(map, current_cube, steps, visited, destinations,
     -- Try moving to each neighbor
     local neighbors = cubecoords.all_neighbors(current_cube)
     for _, next_cube in ipairs(neighbors) do
-        local next_hex = map_get_hex(map, next_cube)
+        local next_hex = get_hex(map, next_cube)
         local next_key = cubecoords.to_key(next_cube)
         
         if next_hex and not visited[next_key] then
@@ -143,8 +143,8 @@ function Ladybug:find_all_paths(map, current_cube, steps, visited, destinations,
 end
 
 function Ladybug:move_piece(map, src_cube, dest_cube, active_player_id)
-    local src_hex = map_get_hex(map, src_cube)
-    local dest_hex = map_get_hex(map, dest_cube)
+    local src_hex = get_hex(map, src_cube)
+    local dest_hex = get_hex(map, dest_cube)
     
     if not src_hex or not dest_hex then return false end
     
@@ -172,7 +172,7 @@ function Ladybug:mark_legal_moves(map, src_cube)
     local legal_moves = {}
     for _, dest_cube in ipairs(ladybug_moves) do
         if try_self_detach(map, src_cube, dest_cube) then
-            local hex = map_get_hex(map, dest_cube)
+            local hex = get_hex(map, dest_cube)
             if hex then
                 table.insert(legal_moves, hex)
             end

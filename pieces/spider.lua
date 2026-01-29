@@ -46,8 +46,8 @@ function Spider:can_move_through_gap(map, from_cube, to_cube)
     end
     
     -- Check if both sides are blocked (if so, cannot move through)
-    local hex1 = map_get_hex(map, common_neighbors[1])
-    local hex2 = map_get_hex(map, common_neighbors[2])
+    local hex1 = get_hex(map, common_neighbors[1])
+    local hex2 = get_hex(map, common_neighbors[2])
     
     local blocked1 = hex1 and hex1.piece ~= nil
     local blocked2 = hex2 and hex2.piece ~= nil
@@ -76,7 +76,7 @@ function Spider:find_path(map, current_cube, dest_cube, steps, visited)
     -- Try moving to each neighbor
     local neighbors = cubecoords.all_neighbors(current_cube)
     for _, next_cube in ipairs(neighbors) do
-        local next_hex = map_get_hex(map, next_cube)
+        local next_hex = get_hex(map, next_cube)
         local next_key = cubecoords.to_key(next_cube)
         
         -- Check if this hex is valid:
@@ -90,7 +90,7 @@ function Spider:find_path(map, current_cube, dest_cube, steps, visited)
             local has_adjacent_piece = false
             local next_neighbors = cubecoords.all_neighbors(next_cube)
             for _, nn in ipairs(next_neighbors) do
-                local nn_hex = map_get_hex(map, nn)
+                local nn_hex = get_hex(map, nn)
                 if nn_hex and nn_hex.piece then
                     has_adjacent_piece = true
                     break
@@ -160,7 +160,7 @@ function Spider:find_all_paths(map, current_cube, steps, visited, destinations, 
     -- Try moving to each neighbor
     local neighbors = cubecoords.all_neighbors(current_cube)
     for _, next_cube in ipairs(neighbors) do
-        local next_hex = map_get_hex(map, next_cube)
+        local next_hex = get_hex(map, next_cube)
         local next_key = cubecoords.to_key(next_cube)
         
         if next_hex and not next_hex.piece and not visited[next_key] then
@@ -170,7 +170,7 @@ function Spider:find_all_paths(map, current_cube, steps, visited, destinations, 
             for _, nn in ipairs(next_neighbors) do
                 -- Skip the starting position when checking for adjacent pieces
                 if not cubecoords.equals(nn, src_cube) then
-                    local nn_hex = map_get_hex(map, nn)
+                    local nn_hex = get_hex(map, nn)
                     if nn_hex and nn_hex.piece then
                         has_adjacent_piece = true
                         break
@@ -188,8 +188,8 @@ function Spider:find_all_paths(map, current_cube, steps, visited, destinations, 
 end
 
 function Spider:move_piece(map, src_cube, dest_cube, active_player_id)
-    local src_hex = map_get_hex(map, src_cube)
-    local dest_hex = map_get_hex(map, dest_cube)
+    local src_hex = get_hex(map, src_cube)
+    local dest_hex = get_hex(map, dest_cube)
     
     if not src_hex or not dest_hex then return false end
     
@@ -217,7 +217,7 @@ function Spider:mark_legal_moves(map, src_cube)
     local legal_moves = {}
     for _, dest_cube in ipairs(spider_moves) do
         if try_self_detach(map, src_cube, dest_cube) then
-            local hex = map_get_hex(map, dest_cube)
+            local hex = get_hex(map, dest_cube)
             if hex then
                 table.insert(legal_moves, hex)
             end

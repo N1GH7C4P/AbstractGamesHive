@@ -50,8 +50,8 @@ function QueenBee:can_move_through_gap(map, from_cube, to_cube)
     end
     
     -- Check if both sides are blocked (if so, cannot move through)
-    local hex1 = map_get_hex(map, common_neighbors[1])
-    local hex2 = map_get_hex(map, common_neighbors[2])
+    local hex1 = get_hex(map, common_neighbors[1])
+    local hex2 = get_hex(map, common_neighbors[2])
     
     local blocked1 = hex1 and hex1.piece ~= nil
     local blocked2 = hex2 and hex2.piece ~= nil
@@ -67,8 +67,8 @@ end
 
 function QueenBee:move_piece(map, src_cube, dest_cube, active_player_id)
     -- Simple move: transfer piece to destination
-    local src_hex = map_get_hex(map, src_cube)
-    local dest_hex = map_get_hex(map, dest_cube)
+    local src_hex = get_hex(map, src_cube)
+    local dest_hex = get_hex(map, dest_cube)
     
     if not src_hex or not dest_hex then return false end
     
@@ -88,7 +88,7 @@ function QueenBee:get_legal_moves(map, src_cube)
     local neighbors = cubecoords.all_neighbors(src_cube)
     
     for _, neighbor_cube in ipairs(neighbors) do
-        local dest_hex = map_get_hex(map, neighbor_cube)
+        local dest_hex = get_hex(map, neighbor_cube)
         if dest_hex and not dest_hex.piece then
             if self:try_to_move(map, src_cube, neighbor_cube) then
                 table.insert(moves, neighbor_cube)

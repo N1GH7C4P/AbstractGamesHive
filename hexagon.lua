@@ -286,7 +286,7 @@ function hexagon.toHexagonCoordinates(x, y, grid)
     end
 
     -- Don't check bounds - let the map determine if hex exists
-    -- The calling code should check if map_get_hex returns nil
+    -- The calling code should check if get_hex returns nil
     return resultX, resultY
 end
 

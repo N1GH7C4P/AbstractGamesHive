@@ -71,4 +71,10 @@ function Animation.is_animating_from(cube)
     return cubecoords.equals(G.animation_from_cube, cube)
 end
 
-return Animation
+-- Export module
+return {
+    start_move = Animation.start_move,
+    update = Animation.update,
+    get_animated_position = Animation.get_animated_position,
+    is_animating_from = Animation.is_animating_from,
+}

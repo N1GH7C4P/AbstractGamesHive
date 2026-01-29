@@ -135,22 +135,13 @@ function drawBackground(canvas, w, h)
     love.graphics.setColor(0,1,0,1)
 end
 
-function drawSelected(map, x, y, grid, camera_x, camera_y, zoom)
-    camera_x = camera_x or 0
-    camera_y = camera_y or 0
-    zoom = zoom or 1.0
-    
-    -- x, y are offset coordinates
-    -- Don't recalculate legal moves here - they should already be marked
-    -- when the piece was selected in the mouse handler
-    
-    -- Draw legal move indicators
+-- Draw highlights for legal move locations
+local function drawLegalMoveHighlights(map, grid, camera_x, camera_y, zoom)
     for cube_key, hex in pairs(map.hexes) do
         if hex.can_move then
             local cube = cubecoords.from_key(cube_key)
             local hX, hY = cubecoords.to_pixel(cube, grid.piecesize)
             
-            -- Check for beetle-specific move (climbing on top)
             if hex.is_beetle_move then
                 -- Purple highlight for beetle climbing moves
                 hexagon.draw_hexagon(hX * zoom + camera_x, hY * zoom + camera_y, grid.piecesize * zoom, false, true, 0.6, 0.2, 0.8, 0.6)
@@ -159,19 +150,28 @@ function drawSelected(map, x, y, grid, camera_x, camera_y, zoom)
                 hexagon.draw_hexagon(hX * zoom + camera_x, hY * zoom + camera_y, grid.piecesize * zoom, false, true, 1, 0.5, 0, 0.6)
             end
         end
-        -- Draw pillbug drop locations in red
+    end
+end
+
+-- Draw highlights for pillbug drop locations
+local function drawPillbugDropHighlights(map, grid, camera_x, camera_y, zoom)
+    for cube_key, hex in pairs(map.hexes) do
         if hex.can_drop then
             local cube = cubecoords.from_key(cube_key)
             local hX, hY = cubecoords.to_pixel(cube, grid.piecesize)
             -- Red highlight for pillbug drop locations
             hexagon.draw_hexagon(hX * zoom + camera_x, hY * zoom + camera_y, grid.piecesize * zoom, false, true, 1, 0, 0, 0.6)
         end
-        -- Draw special ability targets (pickable pieces) in cyan
+    end
+end
+
+-- Draw highlights for special ability targets
+local function drawSpecialAbilityHighlights(map, grid, camera_x, camera_y, zoom)
+    for cube_key, hex in pairs(map.hexes) do
         if hex.can_special then
             local cube = cubecoords.from_key(cube_key)
             local hX, hY = cubecoords.to_pixel(cube, grid.piecesize)
             
-            -- Check for dual option (can also be climbed with beetle)
             if hex.has_dual_option then
                 -- Split hexagon: purple (beetle climb) on left, cyan (pillbug pick) on right
                 hexagon.draw_split_hexagon(hX * zoom + camera_x, hY * zoom + camera_y, grid.piecesize * zoom, false,
@@ -183,11 +183,24 @@ function drawSelected(map, x, y, grid, camera_x, camera_y, zoom)
             end
         end
     end
-    
-    -- Draw selection indicator at source hex
+end
+
+-- Draw green selection indicator at source hex
+local function drawSelectionIndicator(x, y, grid, camera_x, camera_y, zoom)
     local selected_cube = cubecoords.from_offset(x, y)
     local hX, hY = cubecoords.to_pixel(selected_cube, grid.piecesize)
     hexagon.draw_hexagon(hX * zoom + camera_x, hY * zoom + camera_y, (grid.piecesize - 5) * zoom, false, false, 0, 1, 0, 1)
+end
+
+function drawSelected(map, x, y, grid, camera_x, camera_y, zoom)
+    camera_x = camera_x or 0
+    camera_y = camera_y or 0
+    zoom = zoom or 1.0
+    
+    drawLegalMoveHighlights(map, grid, camera_x, camera_y, zoom)
+    drawPillbugDropHighlights(map, grid, camera_x, camera_y, zoom)
+    drawSpecialAbilityHighlights(map, grid, camera_x, camera_y, zoom)
+    drawSelectionIndicator(x, y, grid, camera_x, camera_y, zoom)
 end
 
 -- Draw selection highlight for active piece
@@ -394,3 +407,39 @@ function printPlayerStock(player, player_id, x, y)
         end
     end
 end
+
+function setupCanvases()
+    love.graphics.setCanvas(G.canvas)
+    love.graphics.clear(0,0,0,0)
+    love.graphics.setCanvas(G.overlay)
+    love.graphics.clear(0,0,0,0)
+    love.graphics.setCanvas()
+end
+
+function drawGameBoard()
+    love.graphics.setColor(0,1,0,1)
+    drawBackground(G.canvas, G.window_w, G.window_h)
+    drawGridHexes(G.map, G.canvas, G.grid, G.camera_x, G.camera_y, G.camera_zoom)
+    drawAddedPieces(G.map, G.overlay, G.grid, G.camera_x, G.camera_y, G.camera_zoom)
+    love.graphics.draw(G.canvas)
+    love.graphics.draw(G.overlay)
+    if (G.highlight == 1 and G.move_mode == 1) then
+        drawSelected(G.map, G.selected_piece_x, G.selected_piece_y, G.grid, G.camera_x, G.camera_y, G.camera_zoom)
+    end
+end
+
+-- Export module
+return {
+    drawAddedPieces = drawAddedPieces,
+    drawGridHexes = drawGridHexes,
+    drawBackground = drawBackground,
+    drawSelected = drawSelected,
+    drawPieceSelector = drawPieceSelector,
+    getPieceSelectorHover = getPieceSelectorHover,
+    clickPieceSelector = clickPieceSelector,
+    drawMosquitoChoicePopup = drawMosquitoChoicePopup,
+    checkMosquitoChoicePopupClick = checkMosquitoChoicePopupClick,
+    printPlayerStock = printPlayerStock,
+    setupCanvases = setupCanvases,
+    drawGameBoard = drawGameBoard,
+}

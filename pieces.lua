@@ -54,4 +54,7 @@ function Pieces.init_pieces()
     return piecesInventory
 end
 
-return Pieces
+-- Export module
+return {
+    init_pieces = Pieces.init_pieces,
+}

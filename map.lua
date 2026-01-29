@@ -3,7 +3,12 @@ local PiecesEnum = require "pieces.pieces_enum"
 local animation = require("animation")
 local cubecoords = require "cubecoords"
 
-local Map = {}
+-- Forward declarations
+local mark_neighbours_on_map_cube
+local clear_all_neighbours
+local get_hex
+local expand_map
+local flood_neighbours
 
 -- Count nearby enemy and friendly pieces
 local function countNearbyPlayer(map, cube)
@@ -33,7 +38,7 @@ end
 local function addPieceToMap(player_nb, piece_template, map, cube)
     G.highlight = 0
     removePieceFromStock(player_nb, piece_template.id)
-    local hex = map_get_hex(map, cube)
+        local hex = get_hex(map, cube)
     if hex then
         hex.player_id = player_nb
         local new_piece = piece_template.class:new(player_nb)
@@ -88,13 +93,13 @@ local function isNextToFriendly(map, col, row)
     return false
 end
 
-function tryAddPieceToMap(player_nb, piece_template, map, cube)
+local function tryAddPieceToMap(player_nb, piece_template, map, cube)
     if getPiecesInStock(player_nb, piece_template.id) == 0 then
         print("Player ", player_nb, " has no piece ", piece_template.name, " in stock.")
         return false
     end
     
-    local hex = map_get_hex(map, cube)
+        local hex = get_hex(map, cube)
     
     if not hex then
         print("Hex out of bounds")
@@ -109,7 +114,7 @@ function tryAddPieceToMap(player_nb, piece_template, map, cube)
     if isMapEmpty(map) then
         -- Force first piece at center (0,0,0)
         local center_cube = cubecoords.new(0, 0, 0)
-        local center_hex = map_get_hex(map, center_cube)
+        local center_hex = get_hex(map, center_cube)
         if center_hex then
             G.highlight = 0
             removePieceFromStock(player_nb, piece_template.id)
@@ -147,7 +152,7 @@ function tryAddPieceToMap(player_nb, piece_template, map, cube)
     return true
 end
 
-function Map.init_map()
+local function init_map()
     local map = {}
     map.hexes = {}
     map.current_radius = 10  -- Track current grid radius
@@ -195,13 +200,13 @@ function expand_map(map)
 end
 
 -- Check if any neighbors of a cube are outside the map, and expand if needed
-function ensure_map_coverage(map, cube)
+local function ensure_map_coverage(map, cube)
     local neighbors = cubecoords.all_neighbors(cube)
     local needs_expansion = false
     
     for _, neighbor in ipairs(neighbors) do
-        local hex = map_get_hex(map, neighbor)
-        if not hex then
+        local hex = get_hex(map, neighbor)
+            if not get_hex(map, neighbor) then
             needs_expansion = true
             break
         end
@@ -213,13 +218,13 @@ function ensure_map_coverage(map, cube)
 end
 
 -- Helper to get hex by cube coordinates
-function map_get_hex(map, cube)
+function get_hex(map, cube)
     local key = cubecoords.to_key(cube)
     return map.hexes[key]
 end
 
 -- Helper to get hex by offset coordinates (backward compat)
-function map_get_hex_offset(map, col, row)
+local function get_hex_offset(map, col, row)
     if not map.offset_to_key[row] or not map.offset_to_key[row][col] then
         return nil
     end
@@ -230,7 +235,7 @@ end
 function mark_neighbours_on_map_cube(map, cube)
     local neighbors = cubecoords.all_neighbors(cube)
     for i, ncube in ipairs(neighbors) do
-        local hex = map_get_hex(map, ncube)
+            local hex = get_hex(map, ncube)
         if hex then
             hex.neighbour = true
         end
@@ -238,23 +243,23 @@ function mark_neighbours_on_map_cube(map, cube)
 end
 
 -- Backward compat wrapper
-function mark_neighbours_on_map(map, col, row, w, h)
+local function mark_neighbours_on_map(map, col, row, w, h)
     local cube = cubecoords.from_offset(col, row)
     mark_neighbours_on_map_cube(map, cube)
 end
 
-function mark_tmp_on_map(map, col, row, w, h)
+local function mark_tmp_on_map(map, col, row, w, h)
     local cube = cubecoords.from_offset(col, row)
     local neighbors = cubecoords.all_neighbors(cube)
     for _, ncube in ipairs(neighbors) do
-        local hex = map_get_hex(map, ncube)
+        local hex = get_hex(map, ncube)
         if hex then
             hex.tmp = true
         end
     end
 end
 
-function clear_all_tmp(map, w, h)
+local function clear_all_tmp(map, w, h)
     for _, hex in pairs(map.hexes) do
         hex.tmp = nil
     end
@@ -271,13 +276,13 @@ function clear_all_neighbours(map, w, h)
     end
 end
 
-function mark_legal_moves_for_piece(map, src_cube, w, h)
+local function mark_legal_moves_for_piece(map, src_cube, w, h)
     print("=== mark_legal_moves_for_piece called ===")
     print("Source cube: [" .. src_cube.x .. "," .. src_cube.y .. "," .. src_cube.z .. "]")
     
     clear_all_neighbours(map, w, h)
     
-    local src_hex = map_get_hex(map, src_cube)
+    local src_hex = get_hex(map, src_cube)
     
     if not src_hex or not src_hex.piece then
         print("ERROR: No piece at source!")
@@ -303,9 +308,9 @@ function mark_legal_moves_for_piece(map, src_cube, w, h)
     print("=== Complete ===")
 end
 
-function remove_piece_from_map(map, col, row)
+local function remove_piece_from_map(map, col, row)
     local cube = cubecoords.from_offset(col, row)
-    local hex = map_get_hex(map, cube)
+    local hex = get_hex(map, cube)
     if hex and hex.piece then
         print("Removed piece from: "..tostring(col)..", "..tostring(row))
         hex.piece = nil
@@ -315,7 +320,7 @@ function remove_piece_from_map(map, col, row)
     return false
 end
 
-function tmp_to_neighbor(map)
+local function tmp_to_neighbor(map)
     for _, hex in pairs(map.hexes) do
         if hex.tmp then
             hex.neighbour = true
@@ -323,7 +328,7 @@ function tmp_to_neighbor(map)
     end
 end
 
-function flood_neighbours_neighbours_jump(map, col, row, w, h)
+local function flood_neighbours_neighbours_jump(map, col, row, w, h)
     clear_all_tmp(map, w, h)
     for _, hex in pairs(map.hexes) do
         if hex.neighbour then
@@ -336,7 +341,7 @@ function flood_neighbours_neighbours_jump(map, col, row, w, h)
     clear_all_tmp(map, w, h)
 end
 
-function flood_neighbours_neighbours(map, col, row, w, h)
+local function flood_neighbours_neighbours(map, col, row, w, h)
     clear_all_tmp(map, w, h)
     for _, hex in pairs(map.hexes) do
         if hex.neighbour then
@@ -357,19 +362,19 @@ function flood_neighbours(map, cube)
     if flood_call_count > MAX_FLOOD_CALLS then
         print("ERROR: flood_neighbours called too many times! Infinite loop detected!")
         print("Current cube: " .. cubecoords.to_key(cube))
-        flood_call_count = 0  -- Reset to prevent spam
+        flood_call_count = flood_call_count - 1
         return
     end
-    
-    local hex = map_get_hex(map, cube)
-    if not hex then 
+
+    local hex = get_hex(map, cube)
+    if not hex then
         flood_call_count = flood_call_count - 1
-        return 
+        return
     end
-    
+
     local neighbors = cubecoords.all_neighbors(cube)
     for _, ncube in ipairs(neighbors) do
-        local nhex = map_get_hex(map, ncube)
+        local nhex = get_hex(map, ncube)
         if nhex and not nhex.neighbour then
             if nhex.piece then
                 nhex.neighbour = true
@@ -380,11 +385,10 @@ function flood_neighbours(map, cube)
             nhex.neighbour = true
         end
     end
-    
     flood_call_count = flood_call_count - 1
 end
 
-function firstPieceCoords(map)
+local function firstPieceCoords(map)
     for _, hex in pairs(map.hexes) do
         if hex.piece then
             return hex.cube
@@ -393,8 +397,8 @@ function firstPieceCoords(map)
     return nil
 end
 
-function pieceCanDetach(map, cube)
-    local hex = map_get_hex(map, cube)
+local function pieceCanDetach(map, cube)
+    local hex = get_hex(map, cube)
     if not hex then 
         return false 
     end
@@ -430,13 +434,13 @@ function pieceCanDetach(map, cube)
     return true
 end
 
-function try_self_detach(map, src_cube, dest_cube)
+local function try_self_detach(map, src_cube, dest_cube)
     -- Only clear neighbour flags, not can_move/can_special which are being set during move marking
     for _, hex in pairs(map.hexes) do
         hex.neighbour = nil
     end
     
-    local src_hex = map_get_hex(map, src_cube)
+    local src_hex = get_hex(map, src_cube)
     if not src_hex then return false end
     
     local tmp = src_hex.player_id
@@ -453,7 +457,7 @@ function try_self_detach(map, src_cube, dest_cube)
     return true
 end
 
-function try_move_piece_on_map(map, src_cube, dest_cube)
+local function try_move_piece_on_map(map, src_cube, dest_cube)
     if not pieceCanDetach(map, src_cube) then
         return false
     end
@@ -463,8 +467,8 @@ function try_move_piece_on_map(map, src_cube, dest_cube)
 
     clear_all_neighbours(map, map.w, map.h)
     
-    local src_hex = map_get_hex(map, src_cube)
-    local dest_hex = map_get_hex(map, dest_cube)
+    local src_hex = get_hex(map, src_cube)
+    local dest_hex = get_hex(map, dest_cube)
     
     if not src_hex or not dest_hex then return false end
     
@@ -481,13 +485,13 @@ function try_move_piece_on_map(map, src_cube, dest_cube)
     return false
 end
 
-function move_piece_on_map(map, src_cube, dest_cube, on_complete_callback)
+local function move_piece_on_map(map, src_cube, dest_cube, on_complete_callback)
     if not try_move_piece_on_map(map, src_cube, dest_cube) then
         return false
     end
     
-    local src_hex = map_get_hex(map, src_cube)
-    local dest_hex = map_get_hex(map, dest_cube)
+    local src_hex = get_hex(map, src_cube)
+    local dest_hex = get_hex(map, dest_cube)
     
     -- Store piece reference for animation
     local moving_piece = src_hex.piece
@@ -495,8 +499,8 @@ function move_piece_on_map(map, src_cube, dest_cube, on_complete_callback)
     -- Start animation, then actually move the piece when animation completes
     animation.start_move(moving_piece, src_cube, dest_cube, function()
         -- This callback executes when animation completes
-        local src_hex = map_get_hex(map, src_cube)
-        local dest_hex = map_get_hex(map, dest_cube)
+        local src_hex = get_hex(map, src_cube)
+        local dest_hex = get_hex(map, dest_cube)
         
         if src_hex.piece and src_hex.piece.move_piece then
             src_hex.piece:move_piece(map, src_cube, dest_cube, G.active_player_id)
@@ -523,4 +527,19 @@ function move_piece_on_map(map, src_cube, dest_cube, on_complete_callback)
     return true
 end
 
-return Map
+-- Export module
+return {
+    init_map = init_map,
+    tryAddPieceToMap = tryAddPieceToMap,
+    move_piece_on_map = move_piece_on_map,
+    expand_map = expand_map,
+    get_hex = get_hex,
+    mark_neighbours_on_map_cube = mark_neighbours_on_map_cube,
+    clear_all_neighbours = clear_all_neighbours,
+    mark_legal_moves_for_piece = mark_legal_moves_for_piece,
+    flood_neighbours = flood_neighbours,
+    flood_neighbours_neighbours = flood_neighbours_neighbours,
+    pieceCanDetach = pieceCanDetach,
+    try_self_detach = try_self_detach,
+    try_move_piece_on_map = try_move_piece_on_map,
+}
