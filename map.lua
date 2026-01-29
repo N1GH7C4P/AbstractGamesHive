@@ -103,6 +103,12 @@ function tryAddPieceToMap(player_nb, piece_template, map, cube)
             removePieceFromStock(player_nb, piece_template.id)
             center_hex.player_id = player_nb
             center_hex.piece = piece_template.class:new(player_nb)
+            
+            -- Send network message if in multiplayer game
+            if network and network.mode ~= "none" and network.connected then
+                network.send_place(player_nb, piece_template.id, center_cube)
+            end
+            
             -- No need to expand for first piece at center
             return true
         end

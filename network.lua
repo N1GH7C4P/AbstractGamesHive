@@ -55,6 +55,7 @@ function Network.host(port)
     Network.server:listen(1)
     Network.mode = "server"
     Network.is_local_turn = true -- Server is player 1, goes first
+    Network.local_player_id = 1  -- Host is player 1
     active_player_id = 1
     
     print("Server started on port " .. port)
@@ -87,7 +88,8 @@ function Network.join(host, port)
     Network.mode = "client"
     Network.connected = true
     Network.is_local_turn = false -- Client is player 2, waits for server
-    active_player_id = 2
+    Network.local_player_id = 2  -- Client is player 2
+    active_player_id = 1  -- Game starts with player 1's turn
     
     -- Send connect message
     Network.send({type = MSG.CONNECT, player_id = 2})
@@ -249,7 +251,7 @@ function Network.handle_message(msg)
         local piece_info = player[msg.player_id]:getPieceInfo(msg.piece_id)
         if piece_info and piece_info.template then
             -- Place the piece
-            addPieceToMap(msg.player_id, piece_info.template, map, cube)
+            tryAddPieceToMap(msg.player_id, piece_info.template, map, cube)
             pass_turn(msg.player_id)
             Network.is_local_turn = true
         end

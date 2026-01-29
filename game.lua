@@ -41,24 +41,24 @@ function checkIfWin(map, w, h)
         if hex.piece then
             -- Check the entire stack for Queen Bees (including under other pieces)
             local current_piece = hex.piece
-            local queen_player_id = nil
+            local queen_owner = nil
             
             -- Traverse the stack to find any Queen Bee
             while current_piece do
                 if current_piece.id == PiecesEnum.QUEEN_BEE then
                     -- Found a Queen Bee in the stack
-                    queen_player_id = current_piece.player_id
+                    queen_owner = current_piece.owner
                     break
                 end
                 current_piece = current_piece.under_piece
             end
             
             -- If a Queen Bee was found, check if it's surrounded
-            if queen_player_id then
+            if queen_owner then
                 enemy, friend = countNearbyPlayer(map, hex.cube)
                 if enemy + friend == 6 then
                     game_over = true
-                    who_won[queen_player_id] = 1
+                    who_won[queen_owner] = 1
                 end
             end
         end

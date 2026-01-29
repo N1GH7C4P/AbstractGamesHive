@@ -159,15 +159,17 @@ function Input.mousepressed(x, y, button, istouch)
         end
         
         -- Check if clicking on piece selector first (use centered position)
-        local piece_count = #player[active_player_id].pieces
+        -- Use local_player_id in network games, otherwise use active_player_id
+        local display_player_id = (network and network.mode ~= "none" and network.local_player_id) or active_player_id
+        local piece_count = #player[display_player_id].pieces
         local piece_size = 30
         local piece_spacing = piece_size * 2.5
         local total_width = (piece_count - 1) * piece_spacing
         local center_x = (window_w - total_width) / 2
-        local selected_piece = clickPieceSelector(player, active_player_id, mouseX, mouseY, center_x, 20, piece_size)
+        local selected_piece = clickPieceSelector(player, display_player_id, mouseX, mouseY, center_x, 20, piece_size)
         if selected_piece then
             active_piece_id = selected_piece
-            print("Selected piece: " .. player[active_player_id].pieces[selected_piece].template.name)
+            print("Selected piece: " .. player[display_player_id].pieces[selected_piece].template.name)
             return
         end
         

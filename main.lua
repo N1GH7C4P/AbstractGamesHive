@@ -98,15 +98,17 @@ function love.draw()
     end
     
     -- Draw piece selector with visual buttons (centered at top)
-    local piece_count = #player[active_player_id].pieces
+    -- Use local_player_id in network games, otherwise use active_player_id
+    local display_player_id = (network and network.mode ~= "none" and network.local_player_id) or active_player_id
+    local piece_count = #player[display_player_id].pieces
     local piece_size = 30
     local piece_spacing = piece_size * 2.5
     local total_width = (piece_count - 1) * piece_spacing
     local center_x = (window_w - total_width) / 2
-    drawPieceSelector(player, active_player_id, center_x, 20, piece_size)
+    drawPieceSelector(player, display_player_id, center_x, 20, piece_size)
     
     -- Show hover tooltip for piece selector
-    local hover_piece_idx, hover_piece_id, hover_piece_name, hover_stock = getPieceSelectorHover(player, active_player_id, mouseX, mouseY, center_x, 20, piece_size)
+    local hover_piece_idx, hover_piece_id, hover_piece_name, hover_stock = getPieceSelectorHover(player, display_player_id, mouseX, mouseY, center_x, 20, piece_size)
     if hover_piece_id then
         -- Get rules text for this piece
         local rules_text = PiecesEnum.RULES[hover_piece_id] or "No rules available."
@@ -166,6 +168,60 @@ function love.draw()
         love.graphics.print("Out of grid", 0, window_h - 20)
     else
         love.graphics.print("Hexagon coordinates: ["..hover_cube.x..","..hover_cube.y..","..hover_cube.z.."]", 0, window_h - 20)
+        
+        -- Show stack contents if hovering over a stacked piece
+        if hover_hex.piece and hover_hex.piece.under_piece then
+            local stack_pieces = {}
+            local current = hover_hex.piece
+            
+            -- Collect all pieces in the stack from top to bottom
+            while current do
+                table.insert(stack_pieces, current)
+                current = current.under_piece
+            end
+            
+            -- Draw stack tooltip
+            local tooltip_width = 200
+            local line_height = 20
+            local tooltip_height = #stack_pieces * line_height + 30
+            local tooltip_x = mouseX + 15
+            local tooltip_y = mouseY + 15
+            
+            -- Adjust position if tooltip would go off-screen
+            if tooltip_x + tooltip_width > window_w then
+                tooltip_x = mouseX - tooltip_width - 15
+            end
+            if tooltip_y + tooltip_height > window_h - 100 then
+                tooltip_y = mouseY - tooltip_height - 15
+            end
+            
+            -- Draw background
+            love.graphics.setColor(0, 0, 0, 0.9)
+            love.graphics.rectangle("fill", tooltip_x, tooltip_y, tooltip_width, tooltip_height)
+            
+            -- Draw title
+            love.graphics.setColor(1, 1, 0.5, 1)
+            love.graphics.print("Stack (top to bottom):", tooltip_x + 5, tooltip_y + 5)
+            
+            -- Draw each piece in the stack
+            local y_offset = 25
+            for i, piece in ipairs(stack_pieces) do
+                local player_color = piece.owner == 1 and "P1: " or "P2: "
+                local piece_name = piece.name or "Unknown"
+                
+                -- Set color based on player
+                if piece.owner == 1 then
+                    love.graphics.setColor(0.3, 0.3, 0.3, 1)  -- Dark gray for player 1
+                else
+                    love.graphics.setColor(0.9, 0.9, 0.9, 1)  -- Light gray for player 2
+                end
+                
+                love.graphics.print(i .. ". " .. player_color .. piece_name, tooltip_x + 10, tooltip_y + y_offset)
+                y_offset = y_offset + line_height
+            end
+            
+            love.graphics.setColor(1, 1, 1, 1)
+        end
     end
     
     -- Display zoom level
