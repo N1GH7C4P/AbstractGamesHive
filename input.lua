@@ -261,17 +261,14 @@ local function handle_pillbug_pickup_click(result_cube, result_hex, mouseX, mous
         return false
     end
     
-    -- Check if mosquito has dual options (can also climb with beetle power)
-    if selected_hex.piece.name == "Mosquito" and result_hex.piece and not result_hex.piece.under_piece then
-        local adjacent_types = selected_hex.piece:get_adjacent_piece_types(G.map, selected_cube)
-        if adjacent_types[PiecesEnum.BEETLE] then
-            print("Mosquito has dual options - showing popup")
-            G.mosquito_choice_popup = true
-            G.mosquito_choice_dest = result_cube
-            G.mosquito_popup_x = mouseX
-            G.mosquito_popup_y = mouseY
-            return true
-        end
+    -- Check if this hex has dual options (both beetle climb AND pillbug special are valid)
+    if selected_hex.piece.name == "Mosquito" and result_hex.has_dual_option then
+        print("Mosquito has dual options - showing popup")
+        G.mosquito_choice_popup = true
+        G.mosquito_choice_dest = result_cube
+        G.mosquito_popup_x = mouseX
+        G.mosquito_popup_y = mouseY
+        return true
     end
     
     local piece_name = selected_hex.piece.name

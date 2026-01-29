@@ -271,8 +271,19 @@ function Mosquito:mark_legal_moves(map, src_cube)
             local hex = map_get_hex(map, piece_cube)
             if hex then
                 -- Check if this piece can also be climbed with beetle power
+                -- Must verify it's actually in the beetle climb list (legal move)
+                local is_beetle_climbable = false
                 if has_beetle and hex.piece and not hex.piece.under_piece then
-                    -- This hex has dual options
+                    -- Check if this hex is in the beetle climb hexes list
+                    for _, climb_hex in ipairs(beetle_climb_hexes) do
+                        if climb_hex == hex then
+                            is_beetle_climbable = true
+                            break
+                        end
+                    end
+                end
+                
+                if is_beetle_climbable then
                     hex.has_dual_option = true
                     print("  Hex at [" .. piece_cube.x .. "," .. piece_cube.y .. "," .. piece_cube.z .. "] has dual options")
                 end
