@@ -1,3 +1,5 @@
+cubecoords = require("cubecoords")  -- Global for piece modules
+
 -- Base Piece class
 Piece = {}
 Piece.__index = Piece

@@ -51,22 +51,3 @@ function init_pieces()
     
     return piecesInventory
 end
-
--- Create a new piece instance by type
-function createPieceByType(pieceType, owner)
-    if pieceType == "queenBee" or pieceType == 1 then
-        return QueenBee:new(owner)
-    elseif pieceType == "beetle" or pieceType == 2 then
-        return Beetle:new(owner)
-    elseif pieceType == "grasshopper" or pieceType == 3 then
-        return Grasshopper:new(owner)
-    elseif pieceType == "spider" or pieceType == 4 then
-        return Spider:new(owner)
-    elseif pieceType == "soldierAnt" or pieceType == 5 then
-        return SoldierAnt:new(owner)
-    elseif pieceType == "ladybug" or pieceType == 6 then
-        return Ladybug:new(owner)
-    elseif pieceType == "mosquito" or pieceType == 7 then
-        return Mosquito:new(owner)
-    end
-end

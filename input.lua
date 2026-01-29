@@ -3,6 +3,7 @@
 
 local Input = {}
 local PiecesEnum = require("pieces.pieces_enum")
+local cubecoords = require("cubecoords")
 
 -- Key handler functions (Lua doesn't have switch-case, so we use a table-based dispatch)
 local keyHandlers = {

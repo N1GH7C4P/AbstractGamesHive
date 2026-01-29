@@ -1,6 +1,7 @@
 local player =require "player"
 local game = require "game"
-local PiecesEnum = require("pieces.pieces_enum")
+local PiecesEnum = require "pieces.pieces_enum"
+local cubecoords = require "cubecoords"
 
 -- Map using cube coordinates
 -- The map stores hexes using cube coordinate keys
@@ -42,37 +43,25 @@ local function isNextToFriendly(map, col, row)
     local friendly_count = 0
     
     local cube = cubecoords.from_offset(col, row)
-    print("isNextToFriendly: checking cube [" .. cube.x .. "," .. cube.y .. "," .. cube.z .. "]")
-    print("  active_player_id=" .. G.active_player_id .. ", turn_number[" .. G.active_player_id .. "]=" .. G.turn_number[G.active_player_id])
-
     enemy_count, friendly_count = countNearbyPlayer(map, cube)
-    print("  Neighbors: enemy=" .. enemy_count .. ", friendly=" .. friendly_count)
     
     -- Check for first and second piece
     if (G.turn_number[G.active_player_id] == 1) then
-        print("  First turn for player " .. G.active_player_id)
         local not_active = 1
         if G.active_player_id == 1 then
             not_active = 2
         end
-        print("  Other player turn_number[" .. not_active .. "]=" .. G.turn_number[not_active])
         if (G.turn_number[not_active] == 2) then
-            print("  Second piece placement - must have exactly 1 enemy neighbor")
             if (enemy_count ~= 1) then
-                print("  REJECTED: enemy_count=" .. enemy_count .. " != 1")
                 return false
             end
-            print("  APPROVED: enemy_count=1")
         end
         return true
     end
     
-    print("  Normal placement - must have friendly neighbors and no enemies")
     if (friendly_count > 0 and enemy_count == 0) then
-        print("  APPROVED")
         return true
     end
-    print("  REJECTED: friendly=" .. friendly_count .. ", enemy=" .. enemy_count)
     return false
 end
 
