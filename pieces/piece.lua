@@ -76,4 +76,18 @@ function Piece:mark_legal_moves(map, src_cube)
     return {normal_moves = {}, special_targets = {}}
 end
 
+-- Handle a click on a special target when this piece is selected
+-- Returns true if the click was handled (and should not continue to other handlers)
+function Piece:handle_special_click(map, src_cube, target_cube, mouseX, mouseY)
+    -- Default: no special behavior
+    return false
+end
+
+-- Execute the drop phase of a special ability (for pieces like pillbug)
+-- Returns true if successful
+function Piece:execute_drop(map, src_cube, target_cube, drop_cube)
+    -- Default: no drop phase
+    return false
+end
+
 return Piece

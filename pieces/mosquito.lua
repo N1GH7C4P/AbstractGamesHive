@@ -296,4 +296,47 @@ function Mosquito:mark_legal_moves(map, src_cube)
     return {normal_moves = normal_move_hexes, special_targets = special_target_hexes}
 end
 
+-- Handle special ability click (mimicking pillbug)
+function Mosquito:handle_special_click(map, src_cube, target_cube, mouseX, mouseY)
+    local target_hex = map_get_hex(map, target_cube)
+    
+    -- Check if we have dual options (beetle climb AND pillbug special)
+    if target_hex and target_hex.has_dual_option then
+        print("Mosquito has dual options - showing popup")
+        G.mosquito_choice_popup = true
+        G.mosquito_choice_dest = target_cube
+        G.mosquito_popup_x = mouseX
+        G.mosquito_popup_y = mouseY
+        return true
+    end
+    
+    -- Otherwise handle like pillbug
+    print("Mosquito using Pillbug power: Selected target piece at [" .. target_cube.x .. "," .. target_cube.y .. "," .. target_cube.z .. "]")
+    
+    G.pillbug_special_mode = true
+    G.pillbug_cube = src_cube
+    G.pillbug_target_cube = target_cube
+    
+    -- Clear current highlights and show drop locations
+    clear_all_neighbours(G.map, G.w, G.h)
+    
+    local drop_locations = self:get_drop_locations_as_pillbug(map, src_cube, target_cube)
+    print("Found " .. #drop_locations .. " drop locations")
+    
+    for _, dest_cube in ipairs(drop_locations) do
+        local hex = map_get_hex(map, dest_cube)
+        if hex then
+            hex.can_drop = true
+            print("  DROP LOCATION: [" .. dest_cube.x .. "," .. dest_cube.y .. "," .. dest_cube.z .. "]")
+        end
+    end
+    
+    return true
+end
+
+-- Execute drop phase of special ability (mimicking pillbug)
+function Mosquito:execute_drop(map, src_cube, target_cube, drop_cube)
+    return self:use_special_ability_as_pillbug(map, src_cube, target_cube, drop_cube)
+end
+
 return Mosquito

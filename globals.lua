@@ -37,6 +37,7 @@ function Globals.init()
     G.who_won = {0, 0}
     G.show_cube_coords = false
     G.turn_number = {1, 1}
+    G.show_help = false
     
     -- Pillbug special move state
     G.pillbug_special_mode = false

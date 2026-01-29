@@ -5,6 +5,7 @@ local Input = {}
 local PiecesEnum = require("pieces.pieces_enum")
 local cubecoords = require("cubecoords")
 local gamestate = require("gamestate")
+local console = require("console")
 
 -- Key handler functions (Lua doesn't have switch-case, so we use a table-based dispatch)
 local keyHandlers = {
@@ -119,15 +120,96 @@ local keyHandlers = {
 keyHandlers["+"] = keyHandlers["="]
 keyHandlers["_"] = keyHandlers["-"]
 
+-- Help descriptions for each key
+local keyDescriptions = {
+    ["Left Click"] = "Select/move pieces, place pieces from inventory",
+    ["Right Click"] = "Deselect piece, cancel action",
+    ["Mouse Wheel"] = "Zoom in/out",
+    ["Drag"] = "Pan camera around the board",
+    ["Space"] = "Show this help screen",
+    ["h"] = "Toggle cube coordinate display",
+    ["c"] = "Toggle debug console",
+    ["x"] = "Clear console output",
+    ["d"] = "Save game to file",
+    ["l"] = "Load game from file",
+    ["n"] = "Host network game (port 12345)",
+    ["m"] = "Join network game (localhost:12345)",
+    ["q"] = "Quit/disconnect network game",
+    ["+/="] = "Zoom in",
+    ["-/_"] = "Zoom out",
+    ["0"] = "Reset zoom to 1.0x",
+}
+
+function Input.draw_help_overlay()
+    if not G.show_help then return end
+    
+    -- Semi-transparent dark background
+    love.graphics.setColor(0, 0, 0, 0.85)
+    love.graphics.rectangle("fill", 0, 0, G.window_w, G.window_h)
+    
+    -- Title
+    love.graphics.setColor(1, 1, 0.5, 1)
+    local title = "KEYBOARD & MOUSE CONTROLS"
+    local font = love.graphics.getFont()
+    local title_width = font:getWidth(title)
+    love.graphics.print(title, (G.window_w - title_width) / 2, 50)
+    
+    -- Controls list
+    love.graphics.setColor(1, 1, 1, 1)
+    local y = 100
+    local line_height = 25
+    local key_x = G.window_w / 2 - 250
+    local desc_x = G.window_w / 2 - 100
+    
+    -- Sort keys for consistent display
+    local sorted_keys = {}
+    for key, _ in pairs(keyDescriptions) do
+        table.insert(sorted_keys, key)
+    end
+    table.sort(sorted_keys)
+    
+    for _, key in ipairs(sorted_keys) do
+        local desc = keyDescriptions[key]
+        -- Draw key in yellow
+        love.graphics.setColor(1, 1, 0.5, 1)
+        love.graphics.print(key, key_x, y)
+        -- Draw description in white
+        love.graphics.setColor(1, 1, 1, 1)
+        love.graphics.print(desc, desc_x, y)
+        y = y + line_height
+    end
+    
+    -- Footer
+    love.graphics.setColor(0.7, 0.7, 0.7, 1)
+    local footer = "Release SPACE to close"
+    local footer_width = font:getWidth(footer)
+    love.graphics.print(footer, (G.window_w - footer_width) / 2, G.window_h - 50)
+    
+    love.graphics.setColor(1, 1, 1, 1)
+end
+
 function Input.keypressed(key)
+    -- Handle spacebar separately to show help
+    if key == "space" then
+        G.show_help = true
+        return
+    end
+    
     local handler = keyHandlers[key]
     if handler then
         handler()
     end
 end
 
--- Helper: Handle mosquito power choice popup click
-local function handle_mosquito_popup_click(mouseX, mouseY)
+function Input.keyreleased(key)
+    -- Hide help when spacebar is released
+    if key == "space" then
+        G.show_help = false
+    end
+end
+
+-- Helper: Handle multiple option popup click (e.g., mosquito choosing between beetle/pillbug)
+local function handle_multiple_option_click(mouseX, mouseY)
     if not G.mosquito_choice_popup then
         return false
     end
@@ -167,7 +249,7 @@ local function handle_mosquito_popup_click(mouseX, mouseY)
         for _, dest_cube in ipairs(drop_locations) do
             local hex = map_get_hex(G.map, dest_cube)
             if hex then
-                hex.can_move = true
+                hex.can_drop = true
                 print("  DROP LOCATION: [" .. dest_cube.x .. "," .. dest_cube.y .. "," .. dest_cube.z .. "]")
             end
         end
@@ -202,8 +284,8 @@ local function handle_piece_selector_click(mouseX, mouseY)
     return false
 end
 
--- Helper: Handle pillbug drop click (phase 2 of special ability)
-local function handle_pillbug_drop_click(result_cube, result_hex)
+-- Helper: Handle drop click (phase 2 of special ability)
+local function handle_drop_click(result_cube, result_hex)
     if not G.pillbug_special_mode or not G.pillbug_target_cube then
         return false
     end
@@ -212,13 +294,8 @@ local function handle_pillbug_drop_click(result_cube, result_hex)
     local selected_hex = map_get_hex(G.map, selected_cube)
     
     if result_hex and result_hex.can_drop then
-        -- Execute Pillbug or Mosquito special ability
-        local success = false
-        if selected_hex.piece.name == "Pillbug" and selected_hex.piece.use_special_ability then
-            success = selected_hex.piece:use_special_ability(G.map, G.pillbug_cube, G.pillbug_target_cube, result_cube)
-        elseif selected_hex.piece.name == "Mosquito" and selected_hex.piece.use_special_ability_as_pillbug then
-            success = selected_hex.piece:use_special_ability_as_pillbug(G.map, G.pillbug_cube, G.pillbug_target_cube, result_cube)
-        end
+        -- Let the piece execute its own drop logic
+        local success = selected_hex.piece:execute_drop(G.map, G.pillbug_cube, G.pillbug_target_cube, result_cube)
         if success then
             pass_turn(G.active_player_id)
         end
@@ -250,8 +327,8 @@ local function handle_normal_movement_click(result_cube, result_hex)
     return true
 end
 
--- Helper: Handle pillbug pickup click (phase 1 of special ability)
-local function handle_pillbug_pickup_click(result_cube, result_hex, mouseX, mouseY)
+-- Helper: Handle special ability click (phase 1 of special ability)
+local function handle_special_ability_click(result_cube, result_hex, mouseX, mouseY)
     if not result_hex or not result_hex.can_special then
         return false
     end
@@ -259,46 +336,12 @@ local function handle_pillbug_pickup_click(result_cube, result_hex, mouseX, mous
     local selected_cube = cubecoords.from_offset(G.selected_piece_x, G.selected_piece_y)
     local selected_hex = map_get_hex(G.map, selected_cube)
     
-    if not selected_hex.piece or (selected_hex.piece.name ~= "Pillbug" and selected_hex.piece.name ~= "Mosquito") then
+    if not selected_hex or not selected_hex.piece then
         return false
     end
     
-    -- Check if this hex has dual options (both beetle climb AND pillbug special are valid)
-    if selected_hex.piece.name == "Mosquito" and result_hex.has_dual_option then
-        print("Mosquito has dual options - showing popup")
-        G.mosquito_choice_popup = true
-        G.mosquito_choice_dest = result_cube
-        G.mosquito_popup_x = mouseX
-        G.mosquito_popup_y = mouseY
-        return true
-    end
-    
-    local piece_name = selected_hex.piece.name
-    print(piece_name .. " special: Selected target piece at [" .. result_cube.x .. "," .. result_cube.y .. "," .. result_cube.z .. "]")
-    G.pillbug_special_mode = true
-    G.pillbug_cube = selected_cube
-    G.pillbug_target_cube = result_cube
-    
-    -- Clear current highlights and show drop locations
-    clear_all_neighbours(G.map, G.w, G.h)
-    
-    -- Get and mark valid drop locations
-    local drop_locations
-    if selected_hex.piece.name == "Pillbug" then
-        drop_locations = selected_hex.piece:get_drop_locations(G.map, G.pillbug_cube, G.pillbug_target_cube)
-    else
-        drop_locations = selected_hex.piece:get_drop_locations_as_pillbug(G.map, G.pillbug_cube, G.pillbug_target_cube)
-    end
-    print("Found " .. #drop_locations .. " drop locations")
-    for _, dest_cube in ipairs(drop_locations) do
-        local hex = map_get_hex(G.map, dest_cube)
-        if hex then
-            hex.can_drop = true
-            print("  DROP LOCATION: [" .. dest_cube.x .. "," .. dest_cube.y .. "," .. dest_cube.z .. "]")
-        end
-    end
-    
-    return true
+    -- Let the piece handle its own special click logic
+    return selected_hex.piece:handle_special_click(G.map, selected_cube, result_cube, mouseX, mouseY)
 end
 
 -- Helper: Handle piece selection and placement from inventory
@@ -338,6 +381,11 @@ function Input.mousepressed(x, y, button, istouch)
         return
     end
     
+    -- Block input if help overlay is shown
+    if G.show_help then
+        return
+    end
+    
     -- Block input if in network game and not local player's turn
     if network and network.mode ~= "none" and not network.is_local_turn then
         print("Waiting for opponent's move...")
@@ -357,8 +405,8 @@ function Input.mousepressed(x, y, button, istouch)
     if button == 1 then
         local mouseX, mouseY = love.mouse.getPosition()
         
-        -- Handle mosquito popup if active
-        if handle_mosquito_popup_click(mouseX, mouseY) then
+        -- Handle multiple option popup if active
+        if handle_multiple_option_click(mouseX, mouseY) then
             return
         end
         
@@ -372,21 +420,15 @@ function Input.mousepressed(x, y, button, istouch)
         local pixel_y = (mouseY - G.camera_y) / G.camera_zoom
         local result_cube = cubecoords.from_pixel(pixel_x, pixel_y, G.size)
         local result_hex = map_get_hex(G.map, result_cube)
-        
-        if result_cube.x == 0 and result_cube.y == 0 and result_cube.z == 0 then
-            print("CLICKED CENTER (0,0,0): pixel=(" .. pixel_x .. "," .. pixel_y .. "), hex_exists=" .. tostring(result_hex ~= nil))
-        end
-        
-        print("CLICK: mouse=(" .. mouseX .. "," .. mouseY .. "), camera=(" .. G.camera_x .. "," .. G.camera_y .. "), pixel=(" .. pixel_x .. "," .. pixel_y .. "), cube=[" .. result_cube.x .. "," .. result_cube.y .. "," .. result_cube.z .. "], hex_exists=" .. tostring(result_hex ~= nil))
-        
+         
         -- Convert cube to offset for compatibility
         local resultX, resultY = cubecoords.to_offset(result_cube)
         
         if G.move_mode == 1 then
             -- Piece is selected - handle movement or special actions
             
-            -- Handle pillbug drop (phase 2)
-            if handle_pillbug_drop_click(result_cube, result_hex) then
+            -- Handle drop (phase 2)
+            if handle_drop_click(result_cube, result_hex) then
                 return
             end
             
@@ -395,8 +437,8 @@ function Input.mousepressed(x, y, button, istouch)
                 return
             end
             
-            -- Handle pillbug pickup (phase 1)
-            if handle_pillbug_pickup_click(result_cube, result_hex, mouseX, mouseY) then
+            -- Handle special ability (phase 1)
+            if handle_special_ability_click(result_cube, result_hex, mouseX, mouseY) then
                 return
             end
             

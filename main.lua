@@ -54,6 +54,10 @@ function love.keypressed(key)
     input.keypressed(key)
 end
 
+function love.keyreleased(key)
+    input.keyreleased(key)
+end
+
 function love.mousepressed(x, y, button, istouch)
     input.mousepressed(x, y, button, istouch)
 end
@@ -251,6 +255,24 @@ local function draw_mosquito_popup()
     drawMosquitoChoicePopup(G.mosquito_popup_x, G.mosquito_popup_y)
 end
 
+local function draw_help_hint()
+    if G.show_help then return end
+    
+    local hint_text = "Hold SPACE for controls"
+    local font = love.graphics.getFont()
+    local text_width = font:getWidth(hint_text)
+    local padding = 10
+    
+    -- Position in bottom right corner
+    local x = G.window_w - text_width - padding
+    local y = G.window_h - font:getHeight() - padding
+    
+    -- Draw with slight transparency
+    love.graphics.setColor(0.7, 0.7, 0.7, 0.8)
+    love.graphics.print(hint_text, x, y)
+    love.graphics.setColor(1, 1, 1, 1)
+end
+
 function love.draw()
     setup_canvases()
     draw_game_board()
@@ -265,6 +287,10 @@ function love.draw()
     draw_ui_status()
     draw_game_over_screen()
     draw_mosquito_popup()
+    draw_help_hint()
     
     console.draw(10, 400, 600, 350)
+    
+    -- Draw help overlay last (on top of everything)
+    input.draw_help_overlay()
 end
