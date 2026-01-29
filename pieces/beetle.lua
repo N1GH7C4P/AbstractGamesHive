@@ -1,4 +1,5 @@
 local Piece = require("pieces.piece")
+local map_module = require("map")
 
 -- Beetle class
 Beetle = setmetatable({}, {__index = Piece})
@@ -22,7 +23,7 @@ function Beetle:try_to_move(map, src_cube, dest_cube)
     end
     
     -- Check freedom to move rule (unless climbing on top of destination piece)
-    local dest_hex = get_hex(map, dest_cube)
+    local dest_hex = map_module.get_hex(map, dest_cube)
     if dest_hex and not dest_hex.piece then
         -- Moving to empty space, check freedom of movement
         local can_move = self:can_move_through_gap(map, src_cube, dest_cube)
@@ -58,8 +59,8 @@ function Beetle:can_move_through_gap(map, from_cube, to_cube)
     end
     
     -- Get stack heights for origin and destination
-    local from_hex = get_hex(map, from_cube)
-    local to_hex = get_hex(map, to_cube)
+    local from_hex = map_module.get_hex(map, from_cube)
+    local to_hex = map_module.get_hex(map, to_cube)
     
     -- Calculate height of origin (without the beetle on it)
     local from_height = 0
@@ -79,8 +80,8 @@ function Beetle:can_move_through_gap(map, from_cube, to_cube)
     end
     
     -- Check if both sides are blocked by stacks higher than origin and destination
-    local hex1 = get_hex(map, common_neighbors[1])
-    local hex2 = get_hex(map, common_neighbors[2])
+    local hex1 = map_module.get_hex(map, common_neighbors[1])
+    local hex2 = map_module.get_hex(map, common_neighbors[2])
     
     local height1 = 0
     if hex1 and hex1.piece then
@@ -117,8 +118,8 @@ end
 
 function Beetle:move_piece(map, src_cube, dest_cube, active_player_id)
     -- Beetle can move on top of other pieces
-    local src_hex = get_hex(map, src_cube)
-    local dest_hex = get_hex(map, dest_cube)
+    local src_hex = map_module.get_hex(map, src_cube)
+    local dest_hex = map_module.get_hex(map, dest_cube)
     
     if not src_hex or not dest_hex then return false end
     
@@ -165,7 +166,7 @@ function Beetle:get_legal_moves(map, src_cube)
     local neighbors = cubecoords.all_neighbors(src_cube)
     
     for _, neighbor_cube in ipairs(neighbors) do
-        local dest_hex = get_hex(map, neighbor_cube)
+        local dest_hex = map_module.get_hex(map, neighbor_cube)
         if dest_hex then
             -- Beetle can move to any adjacent hex (empty or occupied)
             if self:try_to_move(map, src_cube, neighbor_cube) then
@@ -184,14 +185,14 @@ function Beetle:mark_legal_moves(map, src_cube)
     local beetle_climb_moves = {}  -- Track which moves are climbs
     
     -- Check if beetle can detach (or is on top of stack)
-    local src_hex = get_hex(map, src_cube)
+    local src_hex = map_module.get_hex(map, src_cube)
     if not src_hex or not src_hex.piece then
         print("No piece at source location")
         return {normal_moves = {}, special_targets = {}}
     end
     
     -- Beetles on top of stack can always move, ground beetles need to check detachment
-    local can_move_from_here = src_hex.piece.under_piece or pieceCanDetach(map, src_cube)
+    local can_move_from_here = src_hex.piece.under_piece or map_module.pieceCanDetach(map, src_cube)
     if not can_move_from_here then
         print("Beetle cannot detach - would break hive")
         return {normal_moves = {}, special_targets = {}}
@@ -200,11 +201,11 @@ function Beetle:mark_legal_moves(map, src_cube)
     -- Test immediate neighbors only (beetle moves one space)
     local neighbors = cubecoords.all_neighbors(src_cube)
     for i, neighbor_cube in ipairs(neighbors) do
-        local can_move = try_move_piece_on_map(map, src_cube, neighbor_cube)
+        local can_move = map_module.try_move_piece_on_map(map, src_cube, neighbor_cube)
         print("  Neighbor " .. i .. ": [" .. neighbor_cube.x .. "," .. neighbor_cube.y .. "," .. neighbor_cube.z .. "] -> " .. tostring(can_move))
         
         if can_move then
-            local dest_hex = get_hex(map, neighbor_cube)
+            local dest_hex = map_module.get_hex(map, neighbor_cube)
             if dest_hex then
                 table.insert(legal_moves, dest_hex)
                 -- Track if this is a beetle-type move (climbing on top of stack)
@@ -215,7 +216,7 @@ function Beetle:mark_legal_moves(map, src_cube)
         end
     end
     
-    -- Now mark the flags AFTER all validation (so clear_all_neighbours doesn't erase them)
+    -- Now mark the flags AFTER all validation (so map_module.clear_all_neighbours doesn't erase them)
     for _, hex in ipairs(beetle_climb_moves) do
         hex.is_beetle_move = true
     end

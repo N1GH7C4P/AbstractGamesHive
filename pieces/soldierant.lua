@@ -1,4 +1,5 @@
 local Piece = require("pieces.piece")
+local map_module = require("map")
 
 -- SoldierAnt class
 SoldierAnt = setmetatable({}, {__index = Piece})
@@ -34,7 +35,7 @@ function SoldierAnt:try_to_move(map, src_cube, dest_cube)
         -- Try each neighbor
         local neighbors = cubecoords.all_neighbors(current)
         for _, next_cube in ipairs(neighbors) do
-            local next_hex = get_hex(map, next_cube)
+            local next_hex = map_module.get_hex(map, next_cube)
             local next_key = cubecoords.to_key(next_cube)
             
             if next_hex and not next_hex.piece and not visited[next_key] then
@@ -42,7 +43,7 @@ function SoldierAnt:try_to_move(map, src_cube, dest_cube)
                 local has_adjacent_piece = false
                 local next_neighbors = cubecoords.all_neighbors(next_cube)
                 for _, nn in ipairs(next_neighbors) do
-                    local nn_hex = get_hex(map, nn)
+                    local nn_hex = map_module.get_hex(map, nn)
                     if nn_hex and nn_hex.piece then
                         has_adjacent_piece = true
                         break
@@ -81,8 +82,8 @@ function SoldierAnt:can_move_through_gap(map, from_cube, to_cube)
     end
     
     -- Check if both sides are blocked (if so, cannot move through)
-    local hex1 = get_hex(map, common_neighbors[1])
-    local hex2 = get_hex(map, common_neighbors[2])
+    local hex1 = map_module.get_hex(map, common_neighbors[1])
+    local hex2 = map_module.get_hex(map, common_neighbors[2])
     
     local blocked1 = hex1 and hex1.piece ~= nil
     local blocked2 = hex2 and hex2.piece ~= nil
@@ -109,7 +110,7 @@ function SoldierAnt:get_legal_moves(map, src_cube)
         -- Try each neighbor
         local neighbors = cubecoords.all_neighbors(current)
         for _, next_cube in ipairs(neighbors) do
-            local next_hex = get_hex(map, next_cube)
+            local next_hex = map_module.get_hex(map, next_cube)
             local next_key = cubecoords.to_key(next_cube)
             
             if next_hex and not next_hex.piece and not visited[next_key] then
@@ -117,7 +118,7 @@ function SoldierAnt:get_legal_moves(map, src_cube)
                 local has_adjacent_piece = false
                 local next_neighbors = cubecoords.all_neighbors(next_cube)
                 for _, nn in ipairs(next_neighbors) do
-                    local nn_hex = get_hex(map, nn)
+                    local nn_hex = map_module.get_hex(map, nn)
                     if nn_hex and nn_hex.piece then
                         has_adjacent_piece = true
                         break
@@ -140,8 +141,8 @@ function SoldierAnt:get_legal_moves(map, src_cube)
 end
 
 function SoldierAnt:move_piece(map, src_cube, dest_cube, active_player_id)
-    local src_hex = get_hex(map, src_cube)
-    local dest_hex = get_hex(map, dest_cube)
+    local src_hex = map_module.get_hex(map, src_cube)
+    local dest_hex = map_module.get_hex(map, dest_cube)
     
     if not src_hex or not dest_hex then return false end
     
@@ -158,7 +159,7 @@ end
 function SoldierAnt:mark_legal_moves(map, src_cube)
     print("Testing Soldier Ant moves - unlimited movement with BFS")
     
-    if not pieceCanDetach(map, src_cube) then
+    if not map_module.pieceCanDetach(map, src_cube) then
         print("Soldier Ant cannot detach - would break hive")
         return {normal_moves = {}, special_targets = {}}
     end
@@ -168,8 +169,8 @@ function SoldierAnt:mark_legal_moves(map, src_cube)
     
     local legal_moves = {}
     for _, dest_cube in ipairs(ant_moves) do
-        if try_self_detach(map, src_cube, dest_cube) then
-            local hex = get_hex(map, dest_cube)
+        if map_module.try_self_detach(map, src_cube, dest_cube) then
+            local hex = map_module.get_hex(map, dest_cube)
             if hex then
                 table.insert(legal_moves, hex)
             end

@@ -237,10 +237,10 @@ local function handle_multiple_option_click(mouseX, mouseY)
         -- Execute beetle move (climbing on top)
         print("Mosquito using Beetle power to climb")
         local selected_cube = cubecoords.from_offset(G.selected_piece_x, G.selected_piece_y)
-        local did_move = move_piece_on_map(G.map, selected_cube, G.mosquito_choice_dest, function()
+        local did_move = map_module.move_piece_on_map(G.map, selected_cube, G.mosquito_choice_dest, function()
             game.checkIfWin(G.map, G.w, G.h)
         end)
-        clear_all_neighbours(G.map, G.w, G.h)
+        map_module.clear_all_neighbours(G.map, G.w, G.h)
         G.move_mode = 0
         G.mosquito_choice_popup = false
         G.mosquito_choice_dest = nil
@@ -252,7 +252,7 @@ local function handle_multiple_option_click(mouseX, mouseY)
         -- Switch to pillbug special ability mode
         print("Mosquito using Pillbug power")
         local selected_cube = cubecoords.from_offset(G.selected_piece_x, G.selected_piece_y)
-        local selected_hex = get_hex(G.map, selected_cube)
+        local selected_hex = map_module.get_hex(G.map, selected_cube)
         
         G.pillbug_special_mode = true
         G.pillbug_cube = selected_cube
@@ -261,13 +261,13 @@ local function handle_multiple_option_click(mouseX, mouseY)
         G.mosquito_choice_dest = nil
         
         -- Clear current highlights and show drop locations
-        clear_all_neighbours(G.map, G.w, G.h)
+        map_module.clear_all_neighbours(G.map, G.w, G.h)
         
         -- Get and mark valid drop locations
         local drop_locations = selected_hex.piece:get_drop_locations_as_pillbug(G.map, G.pillbug_cube, G.pillbug_target_cube)
         print("Found " .. #drop_locations .. " drop locations")
         for _, dest_cube in ipairs(drop_locations) do
-            local hex = get_hex(G.map, dest_cube)
+            local hex = map_module.get_hex(G.map, dest_cube)
             if hex then
                 hex.can_drop = true
                 print("  DROP LOCATION: [" .. dest_cube.x .. "," .. dest_cube.y .. "," .. dest_cube.z .. "]")
@@ -280,7 +280,7 @@ local function handle_multiple_option_click(mouseX, mouseY)
         G.mosquito_choice_dest = nil
         G.move_mode = 0
         G.highlight = 0
-        clear_all_neighbours(G.map, G.w, G.h)
+        map_module.clear_all_neighbours(G.map, G.w, G.h)
         return true
     end
 end
@@ -311,7 +311,7 @@ local function handle_drop_click(result_cube, result_hex)
     end
     
     local selected_cube = cubecoords.from_offset(G.selected_piece_x, G.selected_piece_y)
-    local selected_hex = get_hex(G.map, selected_cube)
+    local selected_hex = map_module.get_hex(G.map, selected_cube)
     
     if result_hex and result_hex.can_drop then
         -- Let the piece execute its own drop logic
@@ -327,7 +327,7 @@ local function handle_drop_click(result_cube, result_hex)
     G.pillbug_target_cube = nil
     G.move_mode = 0
     G.highlight = 0
-    clear_all_neighbours(G.map, G.w, G.h)
+    map_module.clear_all_neighbours(G.map, G.w, G.h)
     return true
 end
 
@@ -338,10 +338,10 @@ local function handle_normal_movement_click(result_cube, result_hex)
     end
     
     local selected_cube = cubecoords.from_offset(G.selected_piece_x, G.selected_piece_y)
-    local did_move = move_piece_on_map(G.map, selected_cube, result_cube, function()
+    local did_move = map_module.move_piece_on_map(G.map, selected_cube, result_cube, function()
         game.checkIfWin(G.map, G.w, G.h)
     end)
-    clear_all_neighbours(G.map, G.w, G.h)
+    map_module.clear_all_neighbours(G.map, G.w, G.h)
     G.move_mode = 0
     if did_move == true then
         game.pass_turn(G.active_player_id)
@@ -356,7 +356,7 @@ local function handle_special_ability_click(result_cube, result_hex, mouseX, mou
     end
     
     local selected_cube = cubecoords.from_offset(G.selected_piece_x, G.selected_piece_y)
-    local selected_hex = get_hex(G.map, selected_cube)
+    local selected_hex = map_module.get_hex(G.map, selected_cube)
     
     if not selected_hex or not selected_hex.piece then
         return false
@@ -375,8 +375,8 @@ local function handle_piece_placement_click(result_cube, result_hex, resultX, re
     if game.selectPieceOnMap(G.map, result_cube, G.active_player_id) then
         -- Select existing piece on map
         G.highlight = 1
-        clear_all_neighbours(G.map, G.w, G.h)
-        mark_legal_moves_for_piece(G.map, result_cube, G.w, G.h)
+        map_module.clear_all_neighbours(G.map, G.w, G.h)
+        map_module.mark_legal_moves_for_piece(G.map, result_cube, G.w, G.h)
         G.selected_piece_x = resultX
         G.selected_piece_y = resultY
         if G.player[G.active_player_id].pieces[1].inStock == 0 then
@@ -468,7 +468,7 @@ function Input.mousepressed(x, y, button, istouch)
             -- Clicking elsewhere cancels the selection
             G.move_mode = 0
             G.highlight = 0
-            clear_all_neighbours(G.map, G.w, G.h)
+            map_module.clear_all_neighbours(G.map, G.w, G.h)
             return
         else
             -- No piece selected - handle selection or placement

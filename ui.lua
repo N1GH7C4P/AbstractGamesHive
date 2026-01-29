@@ -1,6 +1,6 @@
 -- UI module - handles all user interface elements
 local cubecoords = require("cubecoords")
-local map = require("map")
+local map_module = require("map")
 
 local UI = {}
 
@@ -66,7 +66,7 @@ function UI.drawHoverCoordinates()
     local pixel_x = (G.mouseX - G.camera_x) / G.camera_zoom
     local pixel_y = (G.mouseY - G.camera_y) / G.camera_zoom
     local hover_cube = cubecoords.from_pixel(pixel_x, pixel_y, G.size)
-    local hover_hex = map.get_hex(G.map, hover_cube)
+    local hover_hex = map_module.get_hex(G.map, hover_cube)
     
     if not hover_hex then
         love.graphics.print("Out of grid", 0, G.window_h - 20)

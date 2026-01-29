@@ -265,7 +265,7 @@ function Network.handle_message(msg)
         local to_cube = cubecoords.new(msg.to_x, msg.to_y, msg.to_z)
         
         -- Move the piece
-        move_piece_on_map(G.map, from_cube, to_cube, function()
+        map_module.move_piece_on_map(G.map, from_cube, to_cube, function()
             game.checkIfWin(G.map, G.w, G.h)
         end)
         game.pass_turn(msg.player_id)

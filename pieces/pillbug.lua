@@ -1,4 +1,5 @@
 local Piece = require("pieces.piece")
+local map_module = require("map")
 
 -- Pillbug class
 Pillbug = setmetatable({}, {__index = Piece})
@@ -36,7 +37,7 @@ function Pillbug:get_legal_moves(map, src_cube)
     -- Add normal movement hexes (empty adjacent hexes)
     local neighbors = cubecoords.all_neighbors(src_cube)
     for _, neighbor_cube in ipairs(neighbors) do
-        local hex = get_hex(map, neighbor_cube)
+        local hex = map_module.get_hex(map, neighbor_cube)
         if hex and not hex.piece then
             -- Check if this is a legal normal move
             if self:try_to_move(map, src_cube, neighbor_cube) then
@@ -55,7 +56,7 @@ function Pillbug:get_pickable_pieces(map, src_cube)
     print("Pillbug at [" .. src_cube.x .. "," .. src_cube.y .. "," .. src_cube.z .. "] checking pickable pieces")
     
     -- Check if Pillbug is covered
-    local pillbug_hex = get_hex(map, src_cube)
+    local pillbug_hex = map_module.get_hex(map, src_cube)
     if not pillbug_hex or not pillbug_hex.piece or pillbug_hex.piece.under_piece then
         print("  Pillbug is covered or doesn't exist")
         return pickable
@@ -64,7 +65,7 @@ function Pillbug:get_pickable_pieces(map, src_cube)
     -- Check all adjacent hexes for pieces that can be picked up
     local neighbors = cubecoords.all_neighbors(src_cube)
     for _, neighbor_cube in ipairs(neighbors) do
-        local hex = get_hex(map, neighbor_cube)
+        local hex = map_module.get_hex(map, neighbor_cube)
         if hex and hex.piece and not hex.piece.under_piece then
             print("  Checking piece at [" .. neighbor_cube.x .. "," .. neighbor_cube.y .. "," .. neighbor_cube.z .. "]: " .. hex.piece.name)
             
@@ -78,8 +79,8 @@ function Pillbug:get_pickable_pieces(map, src_cube)
                 hex.piece = nil
                 hex.player_id = nil
                 
-                clear_all_neighbours(map, map.w, map.h)
-                local first_cube = firstPieceCoords(map)
+                map_module.clear_all_neighbours(map, map.w, map.h)
+                local first_cube = map_module.firstPieceCoords(map)
                 local can_pick = true
                 
                 if first_cube then
@@ -96,7 +97,7 @@ function Pillbug:get_pickable_pieces(map, src_cube)
                 
                 hex.piece = tmp_piece
                 hex.player_id = tmp_player_id
-                clear_all_neighbours(map, map.w, map.h)
+                map_module.clear_all_neighbours(map, map.w, map.h)
                 
                 if can_pick then
                     -- Check freedom to move while target is temporarily removed
@@ -163,8 +164,8 @@ function Pillbug:can_move_through_gap(map, from_cube, to_cube)
     end
     
     -- Check if both common neighbors are occupied (gate blocking)
-    local cn1_hex = get_hex(map, common_neighbors[1])
-    local cn2_hex = get_hex(map, common_neighbors[2])
+    local cn1_hex = map_module.get_hex(map, common_neighbors[1])
+    local cn2_hex = map_module.get_hex(map, common_neighbors[2])
     
     if not cn1_hex or not cn2_hex then
         print("    FAIL: Common neighbor hex doesn't exist")
@@ -214,8 +215,8 @@ function Pillbug:can_move_through_gap_at_height_1(map, from_cube, to_cube)
     end
     
     -- Get stack heights of the common neighbors
-    local cn1_hex = get_hex(map, common_neighbors[1])
-    local cn2_hex = get_hex(map, common_neighbors[2])
+    local cn1_hex = map_module.get_hex(map, common_neighbors[1])
+    local cn2_hex = map_module.get_hex(map, common_neighbors[2])
     
     if not cn1_hex or not cn2_hex then
         print("    FAIL: Common neighbor hex doesn't exist")
@@ -252,8 +253,8 @@ function Pillbug:can_move_through_gap_at_height_1(map, from_cube, to_cube)
 end
 
 function Pillbug:move_piece(map, src_cube, dest_cube, active_player_id)
-    local src_hex = get_hex(map, src_cube)
-    local dest_hex = get_hex(map, dest_cube)
+    local src_hex = map_module.get_hex(map, src_cube)
+    local dest_hex = map_module.get_hex(map, dest_cube)
     
     if not src_hex or not dest_hex then
         return false
@@ -274,7 +275,7 @@ end
 -- Special ability: Move an adjacent piece to another hex adjacent to the Pillbug
 function Pillbug:can_use_special_ability(map, pillbug_cube, target_cube, dest_cube)
     -- Check if Pillbug is not covered
-    local pillbug_hex = get_hex(map, pillbug_cube)
+    local pillbug_hex = map_module.get_hex(map, pillbug_cube)
     if not pillbug_hex or not pillbug_hex.piece then
         return false
     end
@@ -301,7 +302,7 @@ function Pillbug:can_use_special_ability(map, pillbug_cube, target_cube, dest_cu
     end
     
     -- Check if target hex has a piece
-    local target_hex = get_hex(map, target_cube)
+    local target_hex = map_module.get_hex(map, target_cube)
     if not target_hex or not target_hex.piece then
         return false  -- No piece to move
     end
@@ -317,7 +318,7 @@ function Pillbug:can_use_special_ability(map, pillbug_cube, target_cube, dest_cu
     end
     
     -- Check if destination is empty
-    local dest_hex = get_hex(map, dest_cube)
+    local dest_hex = map_module.get_hex(map, dest_cube)
     if not dest_hex or dest_hex.piece then
         return false  -- Destination not empty
     end
@@ -329,8 +330,8 @@ function Pillbug:can_use_special_ability(map, pillbug_cube, target_cube, dest_cu
     target_hex.player_id = nil
     
     -- Check hive connectivity after removing target
-    clear_all_neighbours(map, map.w, map.h)
-    local first_cube = firstPieceCoords(map)
+    map_module.clear_all_neighbours(map, map.w, map.h)
+    local first_cube = map_module.firstPieceCoords(map)
     
     if not first_cube then
         -- If no pieces left, restore and allow
@@ -339,7 +340,7 @@ function Pillbug:can_use_special_ability(map, pillbug_cube, target_cube, dest_cu
         return true
     end
     
-    flood_neighbours(map, first_cube)
+    map_module.flood_neighbours(map, first_cube)
     
     -- Check if any piece is disconnected
     local hive_connected = true
@@ -353,7 +354,7 @@ function Pillbug:can_use_special_ability(map, pillbug_cube, target_cube, dest_cu
     -- Restore the piece
     target_hex.piece = tmp_piece
     target_hex.player_id = tmp_player_id
-    clear_all_neighbours(map, map.w, map.h)
+    map_module.clear_all_neighbours(map, map.w, map.h)
     
     if not hive_connected then
         return false  -- Would break hive in step 1
@@ -390,8 +391,8 @@ function Pillbug:use_special_ability(map, pillbug_cube, target_cube, dest_cube)
         return false
     end
     
-    local target_hex = get_hex(map, target_cube)
-    local dest_hex = get_hex(map, dest_cube)
+    local target_hex = map_module.get_hex(map, target_cube)
+    local dest_hex = map_module.get_hex(map, dest_cube)
     
     -- Mark target piece as moved (it physically moved to a new hex)
     target_hex.piece.has_moved_last_turn = true
@@ -414,13 +415,13 @@ function Pillbug:mark_legal_moves(map, src_cube)
     local special_target_hexes = {}
     
     -- Get normal movement options (only if can detach)
-    if pieceCanDetach(map, src_cube) then
+    if map_module.pieceCanDetach(map, src_cube) then
         local pillbug_moves = self:get_legal_moves(map, src_cube)
         print("Found " .. #pillbug_moves .. " normal moves")
         
         for _, move_cube in ipairs(pillbug_moves) do
-            local hex = get_hex(map, move_cube)
-            if hex and try_self_detach(map, src_cube, move_cube) then
+            local hex = map_module.get_hex(map, move_cube)
+            if hex and map_module.try_self_detach(map, src_cube, move_cube) then
                 table.insert(normal_move_hexes, hex)
             end
         end
@@ -433,7 +434,7 @@ function Pillbug:mark_legal_moves(map, src_cube)
     print("Found " .. #pickable .. " pickable pieces")
     
     for _, piece_cube in ipairs(pickable) do
-        local hex = get_hex(map, piece_cube)
+        local hex = map_module.get_hex(map, piece_cube)
         if hex then
             table.insert(special_target_hexes, hex)
         end
@@ -453,13 +454,13 @@ function Pillbug:handle_special_click(map, src_cube, target_cube, mouseX, mouseY
     G.pillbug_target_cube = target_cube
     
     -- Clear current highlights and show drop locations
-    clear_all_neighbours(G.map, G.w, G.h)
+    map_module.clear_all_neighbours(G.map, G.w, G.h)
     
     local drop_locations = self:get_drop_locations(map, src_cube, target_cube)
     print("Found " .. #drop_locations .. " drop locations")
     
     for _, dest_cube in ipairs(drop_locations) do
-        local hex = get_hex(map, dest_cube)
+        local hex = map_module.get_hex(map, dest_cube)
         if hex then
             hex.can_drop = true
             print("  DROP LOCATION: [" .. dest_cube.x .. "," .. dest_cube.y .. "," .. dest_cube.z .. "]")
