@@ -1,6 +1,7 @@
 local hexagon = require "hexagon"
 local map = require "map"
 local cubecoords = require "cubecoords"
+local animation = require "animation"
 
 function drawAddedPieces(map, canvas, grid, camera_x, camera_y, zoom)
     camera_x = camera_x or 0
@@ -9,11 +10,19 @@ function drawAddedPieces(map, canvas, grid, camera_x, camera_y, zoom)
     
     love.graphics.setCanvas(canvas)
     
+    -- Draw animated piece separately
+    local anim_x, anim_y, anim_piece = animation.get_animated_position(grid.piecesize)
+    
     -- Iterate over all hexes using cube coordinates
     for cube_key, hex in pairs(map.hexes) do
         if hex.piece then
-            -- Convert cube coordinates directly to pixel coordinates
+            -- Skip drawing if this piece is being animated from this location
             local cube = cubecoords.from_key(cube_key)
+            if animation.is_animating_from(cube) then
+                goto continue
+            end
+            
+            -- Convert cube coordinates directly to pixel coordinates
             local hx, hy = cubecoords.to_pixel(cube, grid.piecesize)
             hx = hx * zoom + camera_x
             hy = hy * zoom + camera_y
@@ -66,7 +75,39 @@ function drawAddedPieces(map, canvas, grid, camera_x, camera_y, zoom)
             end
             
             love.graphics.setColor(1, 1, 1, 1)
+            
+            ::continue::
         end
+    end
+    
+    -- Draw animated piece on top if animation is active
+    if anim_x and anim_y and anim_piece then
+        local hx = anim_x * zoom + camera_x
+        local hy = anim_y * zoom + camera_y
+        
+        -- Draw hex background
+        if anim_piece.owner == 1 then
+            hexagon.draw_hexagon(hx, hy, grid.piecesize * zoom, grid.pointyTopped, true, 0.1, 0.1, 0.1)
+        else
+            hexagon.draw_hexagon(hx, hy, grid.piecesize * zoom, grid.pointyTopped, true, 0.9, 0.9, 0.9)
+        end
+        
+        -- Load and draw piece image
+        if anim_piece.loadImage then
+            anim_piece:loadImage()
+        end
+        
+        if anim_piece.image then
+            local image = anim_piece.image
+            local image_scale = (grid.piecesize * 1.6 * zoom) / image:getWidth()
+            love.graphics.setColor(1, 1, 1, 1)
+            love.graphics.draw(image, hx, hy, 0, image_scale, image_scale, image:getWidth()/2, image:getHeight()/2)
+        else
+            love.graphics.setColor(anim_piece.color)
+            love.graphics.print(anim_piece.initials, hx-8*zoom, hy-8*zoom, 0, zoom, zoom)
+        end
+        
+        love.graphics.setColor(1, 1, 1, 1)
     end
     
     love.graphics.setCanvas()

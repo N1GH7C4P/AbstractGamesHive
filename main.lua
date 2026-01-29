@@ -13,6 +13,7 @@ local console = require("console")
 local gamestate = require("gamestate")
 local input = require("input")
 local network = require("network")
+local animation = require("animation")
 
 function love.load()
     -- Initialize global variables
@@ -71,6 +72,7 @@ function love.wheelmoved(x, y)
 end
 
 function love.update(dt)
+    animation.update(dt)
     input.update_mouse(dt)
     network.update(dt)
 end

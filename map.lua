@@ -1,7 +1,6 @@
 local player =require "player"
 local game = require "game"
-local PiecesEnum = require "pieces.pieces_enum"
-local cubecoords = require "cubecoords"
+local PiecesEnum = require "pieces.pieces_enum"local animation = require("animation")local cubecoords = require "cubecoords"
 
 -- Map using cube coordinates
 -- The map stores hexes using cube coordinate keys
@@ -472,10 +471,18 @@ function move_piece_on_map(map, src_cube, dest_cube)
     local src_hex = map_get_hex(map, src_cube)
     local dest_hex = map_get_hex(map, dest_cube)
     
-    -- Call the piece's move_piece method if available
-    if src_hex.piece and src_hex.piece.move_piece then
-        local success = src_hex.piece:move_piece(map, src_cube, dest_cube, G.active_player_id)
-        if success then
+    -- Store piece reference for animation
+    local moving_piece = src_hex.piece
+    
+    -- Start animation, then actually move the piece when animation completes
+    animation.start_move(moving_piece, src_cube, dest_cube, function()
+        -- This callback executes when animation completes
+        local src_hex = map_get_hex(map, src_cube)
+        local dest_hex = map_get_hex(map, dest_cube)
+        
+        if src_hex.piece and src_hex.piece.move_piece then
+            src_hex.piece:move_piece(map, src_cube, dest_cube, G.active_player_id)
+            
             -- Check if piece moved to outermost ring and expand if so
             local center = cubecoords.new(0, 0, 0)
             local distance = cubecoords.distance(center, dest_cube)
@@ -488,8 +495,7 @@ function move_piece_on_map(map, src_cube, dest_cube)
                 G.network.send_move(G.active_player_id, src_cube, dest_cube)
             end
         end
-        return success
-    end
+    end)
     
-    return false
+    return true
 end

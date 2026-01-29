@@ -39,6 +39,15 @@ function Globals.init()
     G.turn_number = {1, 1}
     G.show_help = false
     
+    -- Animation state
+    G.animating = false
+    G.animation_piece = nil  -- The piece being animated
+    G.animation_from_cube = nil  -- Source cube
+    G.animation_to_cube = nil  -- Destination cube
+    G.animation_progress = 0  -- 0 to 1
+    G.animation_duration = 0.3  -- Seconds
+    G.animation_callback = nil  -- Function to call when animation completes
+    
     -- Pillbug special move state
     G.pillbug_special_mode = false
     G.pillbug_cube = nil
