@@ -1,6 +1,30 @@
 local player =require "player"
-local game = require "game"
-local PiecesEnum = require "pieces.pieces_enum"local animation = require("animation")local cubecoords = require "cubecoords"
+local PiecesEnum = require "pieces.pieces_enum"
+local animation = require("animation")
+local cubecoords = require "cubecoords"
+
+local Map = {}
+
+-- Count nearby enemy and friendly pieces
+local function countNearbyPlayer(map, cube)
+    local enemy_count = 0
+    local friendly_count = 0
+    
+    mark_neighbours_on_map_cube(map, cube)
+    
+    for _, hex in pairs(map.hexes) do
+        if hex.neighbour then
+            if hex.player_id == G.active_player_id then
+                friendly_count = friendly_count + 1
+            elseif hex.player_id then
+                enemy_count = enemy_count + 1
+            end
+        end
+    end
+    
+    clear_all_neighbours(map, G.w, G.h)
+    return enemy_count, friendly_count
+end
 
 -- Map using cube coordinates
 -- The map stores hexes using cube coordinate keys
@@ -123,7 +147,7 @@ function tryAddPieceToMap(player_nb, piece_template, map, cube)
     return true
 end
 
-function init_map()
+function Map.init_map()
     local map = {}
     map.hexes = {}
     map.current_radius = 10  -- Track current grid radius
@@ -499,3 +523,5 @@ function move_piece_on_map(map, src_cube, dest_cube)
     
     return true
 end
+
+return Map

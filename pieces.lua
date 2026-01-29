@@ -21,8 +21,10 @@ local pieceClasses = {
     Pillbug = Pillbug
 }
 
+local Pieces = {}
+
 -- Initialize piece templates from config
-function init_pieces()
+function Pieces.init_pieces()
     local Config = require("config")
     piecesInventory = {}
     
@@ -51,3 +53,5 @@ function init_pieces()
     
     return piecesInventory
 end
+
+return Pieces

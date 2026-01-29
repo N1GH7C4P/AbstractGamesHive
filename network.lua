@@ -1,5 +1,6 @@
 -- Network multiplayer module using lua socket
 local Network = {}
+local game = require("game")
 
 Network.socket = nil
 Network.server = nil
@@ -252,7 +253,7 @@ function Network.handle_message(msg)
         if piece_info and piece_info.template then
             -- Place the piece
             tryAddPieceToMap(msg.player_id, piece_info.template, G.map, cube)
-            pass_turn(msg.player_id)
+            game.pass_turn(msg.player_id)
             Network.is_local_turn = true
         end
         
@@ -264,7 +265,7 @@ function Network.handle_message(msg)
         
         -- Move the piece
         move_piece_on_map(G.map, from_cube, to_cube)
-        pass_turn(msg.player_id)
+        game.pass_turn(msg.player_id)
         Network.is_local_turn = true
         
     elseif msg.type == MSG.GAME_STATE then

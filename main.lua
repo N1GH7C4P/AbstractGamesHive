@@ -16,9 +16,6 @@ local network = require("network")
 local animation = require("animation")
 
 function love.load()
-    -- Initialize global variables
-    globals.init()
-    
     -- Initialize console to capture print statements
     console.init()
     console.visible = false  -- Start with console hidden
@@ -26,29 +23,12 @@ function love.load()
     -- Initialize network module
     network.init()
 
-    -- Load configuration into globals
-    G.menu_offset_x = Config.game.menuOffsetX
-    G.window_w = Config.game.windowWidth
-    G.window_h = Config.game.windowHeight
-    G.w = Config.game.mapWidth
-    G.h = Config.game.mapHeight
-    G.size = Config.game.hexSize
-    
-    love.window.setMode(G.window_w, G.window_h)
+    -- Set up window
+    love.window.setMode(Config.game.windowWidth, Config.game.windowHeight)
 	love.window.setTitle("hive")
 
-    G.grid = hexagon.grid(G.w, G.h, G.size, false, false)
-    G.piecesInvetory = init_pieces()
-    G.player = init_players()
-    G.map = init_map()
-    
-    -- Center camera so (0,0,0) cube coordinate appears in center of screen
-    -- Since we now use direct cube-to-pixel conversion, cube (0,0,0) is at pixel (0,0)
-    G.camera_x = G.window_w / 2
-    G.camera_y = G.window_h / 2
-
-    G.canvas = love.graphics.newCanvas(G.window_w, G.window_h)
-    G.overlay = love.graphics.newCanvas(G.window_w, G.window_h)
+    -- Initialize game state
+    game.init()
 end
 
 function love.keypressed(key)
@@ -241,15 +221,72 @@ end
 local function draw_game_over_screen()
     if not G.game_over then return end
     
-    love.graphics.setColor(1,0,0,1)
-    love.graphics.print("Game Over", G.window_w / 2, G.window_h / 2)
+    -- Semi-transparent dark overlay
+    love.graphics.setColor(0, 0, 0, 0.8)
+    love.graphics.rectangle("fill", 0, 0, G.window_w, G.window_h)
+    
+    -- Panel dimensions
+    local panel_width = 500
+    local panel_height = 300
+    local panel_x = (G.window_w - panel_width) / 2
+    local panel_y = (G.window_h - panel_height) / 2
+    
+    -- Draw panel background
+    love.graphics.setColor(0.15, 0.15, 0.2, 0.95)
+    love.graphics.rectangle("fill", panel_x, panel_y, panel_width, panel_height, 10, 10)
+    
+    -- Draw panel border
+    love.graphics.setColor(0.8, 0.6, 0.2, 1)
+    love.graphics.setLineWidth(4)
+    love.graphics.rectangle("line", panel_x, panel_y, panel_width, panel_height, 10, 10)
+    love.graphics.setLineWidth(1)
+    
+    -- Title
+    local font = love.graphics.getFont()
+    local title = "GAME OVER"
+    local title_scale = 2.5
+    local title_width = font:getWidth(title) * title_scale
+    
+    love.graphics.setColor(1, 0.3, 0.3, 1)
+    love.graphics.print(title, (G.window_w - title_width) / 2, panel_y + 40, 0, title_scale, title_scale)
+    
+    -- Winner text
+    local winner_text
+    local winner_color
     if G.who_won[1] == 1 and G.who_won[2] == 1 then
-        love.graphics.print("Draw", G.window_w / 2, G.window_h / 2 + 20)
+        winner_text = "IT'S A DRAW!"
+        winner_color = {0.9, 0.9, 0.2, 1}
     elseif G.who_won[1] == 1 then
-        love.graphics.print("Player 2 Wins", G.window_w / 2, G.window_h / 2 + 20)
+        winner_text = "PLAYER 2 WINS!"
+        winner_color = {0.9, 0.9, 0.9, 1}  -- White for player 2
     elseif G.who_won[2] == 1 then
-        love.graphics.print("Player 1 Wins", G.window_w / 2, G.window_h / 2 + 20)
+        winner_text = "PLAYER 1 WINS!"
+        winner_color = {0.3, 0.3, 0.3, 1}  -- Dark for player 1
     end
+    
+    local winner_scale = 2.0
+    local winner_width = font:getWidth(winner_text) * winner_scale
+    love.graphics.setColor(winner_color)
+    love.graphics.print(winner_text, (G.window_w - winner_width) / 2, panel_y + 120, 0, winner_scale, winner_scale)
+    
+    -- Instructions
+    love.graphics.setColor(0.7, 0.7, 0.7, 1)
+    local inst0 = "Press 'R' to restart game"
+    local inst1 = "Press 'L' to load saved game"
+    local inst2 = "Press 'N' to host new network game"
+    local inst3 = "Press 'M' to join network game"
+    local inst4 = "Press 'ESC' to quit"
+    
+    local inst_y = panel_y + 190
+    love.graphics.setColor(1, 1, 0.5, 1)
+    love.graphics.print(inst0, (G.window_w - font:getWidth(inst0)) / 2, inst_y)
+    love.graphics.setColor(0.7, 0.7, 0.7, 1)
+    love.graphics.print(inst1, (G.window_w - font:getWidth(inst1)) / 2, inst_y + 20)
+    love.graphics.print(inst2, (G.window_w - font:getWidth(inst2)) / 2, inst_y + 40)
+    love.graphics.print(inst3, (G.window_w - font:getWidth(inst3)) / 2, inst_y + 60)
+    love.graphics.print(inst4, (G.window_w - font:getWidth(inst4)) / 2, inst_y + 80)
+    
+    love.graphics.setColor(1, 1, 1, 1)
 end
 
 local function draw_mosquito_popup()

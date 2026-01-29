@@ -6,6 +6,9 @@ local PiecesEnum = require("pieces.pieces_enum")
 local cubecoords = require("cubecoords")
 local gamestate = require("gamestate")
 local console = require("console")
+local network = require("network")
+local globals = require("globals")
+local game = require("game")
 
 -- Key handler functions (Lua doesn't have switch-case, so we use a table-based dispatch)
 local keyHandlers = {
@@ -114,6 +117,18 @@ local keyHandlers = {
         G.camera_zoom = 1.0
         print("Zoom reset to 1.0")
     end,
+    
+    ["r"] = function()
+        -- Restart local game
+        print("Restarting game...")
+        game.init()
+        print("Game restarted")
+    end,
+    
+    ["escape"] = function()
+        -- Quit game
+        love.event.quit()
+    end,
 }
 
 -- Support "+" and "_" as aliases
@@ -127,6 +142,7 @@ local keyDescriptions = {
     ["Mouse Wheel"] = "Zoom in/out",
     ["Drag"] = "Pan camera around the board",
     ["Space"] = "Show this help screen",
+    ["r"] = "Restart game (local only)",
     ["h"] = "Toggle cube coordinate display",
     ["c"] = "Toggle debug console",
     ["x"] = "Clear console output",
@@ -138,6 +154,7 @@ local keyDescriptions = {
     ["+/="] = "Zoom in",
     ["-/_"] = "Zoom out",
     ["0"] = "Reset zoom to 1.0x",
+    ["Escape"] = "Quit game",
 }
 
 function Input.draw_help_overlay()
@@ -225,7 +242,7 @@ local function handle_multiple_option_click(mouseX, mouseY)
         G.mosquito_choice_popup = false
         G.mosquito_choice_dest = nil
         if did_move == true then
-            pass_turn(G.active_player_id)
+            game.pass_turn(G.active_player_id)
         end
         return true
     elseif choice == "pillbug" then
@@ -297,7 +314,7 @@ local function handle_drop_click(result_cube, result_hex)
         -- Let the piece execute its own drop logic
         local success = selected_hex.piece:execute_drop(G.map, G.pillbug_cube, G.pillbug_target_cube, result_cube)
         if success then
-            pass_turn(G.active_player_id)
+            game.pass_turn(G.active_player_id)
         end
     end
     
@@ -322,7 +339,7 @@ local function handle_normal_movement_click(result_cube, result_hex)
     clear_all_neighbours(G.map, G.w, G.h)
     G.move_mode = 0
     if did_move == true then
-        pass_turn(G.active_player_id)
+        game.pass_turn(G.active_player_id)
     end
     return true
 end
@@ -350,7 +367,7 @@ local function handle_piece_placement_click(result_cube, result_hex, resultX, re
         return false
     end
     
-    if selectPieceOnMap(G.map, result_cube, G.active_player_id) then
+    if game.selectPieceOnMap(G.map, result_cube, G.active_player_id) then
         -- Select existing piece on map
         G.highlight = 1
         clear_all_neighbours(G.map, G.w, G.h)
@@ -368,7 +385,7 @@ local function handle_piece_placement_click(result_cube, result_hex, resultX, re
             if not tryAddPieceToMap(G.active_player_id, piece_info.template, G.map, result_cube) then
                 return true
             end
-            pass_turn(G.active_player_id)
+            game.pass_turn(G.active_player_id)
             return true
         end
     end

@@ -1,8 +1,42 @@
 local PlayerClass = require("player")
 local Config = require("config")
 local PiecesEnum = require("pieces.pieces_enum")
+local globals = require("globals")
+local hexagon = require("hexagon")
+local pieces = require("pieces")
+local map = require("map")
 
-function init_players()
+local Game = {}
+
+function Game.init()
+    -- Initialize game state (called on startup and restart)
+    
+    globals.init()
+    
+    -- Load configuration into globals
+    G.menu_offset_x = Config.game.menuOffsetX
+    G.window_w = Config.game.windowWidth
+    G.window_h = Config.game.windowHeight
+    G.w = Config.game.mapWidth
+    G.h = Config.game.mapHeight
+    G.size = Config.game.hexSize
+    
+    -- Initialize game components
+    G.grid = hexagon.grid(G.w, G.h, G.size, false, false)
+    G.piecesInvetory = pieces.init_pieces()
+    G.player = Game.init_players()
+    G.map = map.init_map()
+    
+    -- Center camera
+    G.camera_x = G.window_w / 2
+    G.camera_y = G.window_h / 2
+    
+    -- Create canvas objects
+    G.canvas = love.graphics.newCanvas(G.window_w, G.window_h)
+    G.overlay = love.graphics.newCanvas(G.window_w, G.window_h)
+end
+
+function Game.init_players()
     G.player = {}
     
     -- Create two players with pieces from configuration
@@ -13,29 +47,7 @@ function init_players()
     return G.player
 end
 
-function countNearbyPlayer(map, cube)
-    local enemy_count = 0
-    local friendly_count = 0
-    
-    mark_neighbours_on_map_cube(map, cube)
-    
-    for _, hex in pairs(map.hexes) do
-        if hex.neighbour then
-            if hex.player_id == G.active_player_id then
-                friendly_count = friendly_count + 1
-            elseif hex.player_id then
-                enemy_count = enemy_count + 1
-            end
-        end
-    end
-    
-    clear_all_neighbours(map, G.w, G.h)
-    return enemy_count, friendly_count
-end
-
-function checkIfWin(map, w, h)
-    local enemy
-    local friend
+function Game.checkIfWin(map, w, h)
     local surrounded_queens = {}
 
     -- First pass: check all queens to see if any are surrounded
@@ -57,8 +69,21 @@ function checkIfWin(map, w, h)
             
             -- If a Queen Bee was found, check if it's surrounded
             if queen_owner then
-                enemy, friend = countNearbyPlayer(map, hex.cube)
-                if enemy + friend == 6 then
+                -- Count occupied neighbors (regardless of player)
+                local neighbors = cubecoords.all_neighbors(hex.cube)
+                local occupied_count = 0
+                
+                for _, neighbor_cube in ipairs(neighbors) do
+                    local neighbor_hex = map_get_hex(map, neighbor_cube)
+                    if neighbor_hex and neighbor_hex.piece then
+                        occupied_count = occupied_count + 1
+                    end
+                end
+                
+                print("Queen at [" .. hex.cube.x .. "," .. hex.cube.y .. "," .. hex.cube.z .. "] has " .. occupied_count .. " neighbors")
+                
+                if occupied_count == 6 then
+                    print("Player " .. queen_owner .. " Queen is surrounded!")
                     surrounded_queens[queen_owner] = true
                 end
             end
@@ -78,7 +103,7 @@ function checkIfWin(map, w, h)
     end
 end
 
-function selectPieceOnMap(map, cube, active_player_id)
+function Game.selectPieceOnMap(map, cube, active_player_id)
     local hex = map_get_hex(map, cube)
     if hex and hex.player_id == active_player_id then
         return true
@@ -86,9 +111,9 @@ function selectPieceOnMap(map, cube, active_player_id)
     return false
 end
 
-function printSelectedPieceInfo(map, selected_piece_cube, move_mode, x, y, active_player_id)
+function Game.printSelectedPieceInfo(map, selected_piece_cube, move_mode, x, y, active_player_id)
     if move_mode == 1 and selected_piece_cube then
-        if selectPieceOnMap(map, selected_piece_cube, active_player_id) then
+        if Game.selectPieceOnMap(map, selected_piece_cube, active_player_id) then
             local hex = map_get_hex(map, selected_piece_cube)
             if hex and hex.piece then
                 love.graphics.print("Selected piece: "..hex.piece.name.." ("..selected_piece_cube.x..", "..selected_piece_cube.y..", "..selected_piece_cube.z..")", x, y)
@@ -97,7 +122,7 @@ function printSelectedPieceInfo(map, selected_piece_cube, move_mode, x, y, activ
     end
 end
 
-function pass_turn(active_piece_id)
+function Game.pass_turn(active_piece_id)
     if (G.active_player_id == 1) then
         G.move_mode = 0
         G.active_player_id = 2
@@ -123,5 +148,7 @@ function pass_turn(active_piece_id)
             end
         end
     end
-    checkIfWin(G.map, G.w, G.h)
+    Game.checkIfWin(G.map, G.w, G.h)
 end
+
+return Game
