@@ -1,18 +1,18 @@
 -- Load modules
-hexagon = require("hexagon")
-cubecoords = require("cubecoords")
-Config = require("config")
-globals = require("globals")
-PiecesEnum = require("pieces/pieces_enum")
-require "pieces"
-require "player"
-require "game"
-require "graphics"
-require "map"
-console = require "console"
-gamestate = require "gamestate"
-input = require "input"
-network = require "network"
+local hexagon = require("hexagon")
+local cubecoords = require("cubecoords")
+local Config = require("config")
+local globals = require("globals")
+local PiecesEnum = require("pieces/pieces_enum")
+local pieces = require("pieces")
+local player = require("player")
+local game = require("game")
+local graphics = require("graphics")
+local map = require("map")
+local console = require("console")
+local gamestate = require("gamestate")
+local input = require("input")
+local network = require("network")
 
 function love.load()
     -- Initialize global variables

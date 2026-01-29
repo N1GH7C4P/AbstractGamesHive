@@ -1,6 +1,6 @@
-require "hexagon"
-require "map"
-require "cubecoords"
+local hexagon = require "hexagon"
+local map = require "map"
+local cubecoords = require "cubecoords"
 
 function drawAddedPieces(map, canvas, grid, camera_x, camera_y, zoom)
     camera_x = camera_x or 0

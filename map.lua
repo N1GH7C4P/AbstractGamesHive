@@ -1,5 +1,5 @@
-require "player"
-require "game"
+local player =require "player"
+local game = require "game"
 local PiecesEnum = require("pieces.pieces_enum")
 
 -- Map using cube coordinates
