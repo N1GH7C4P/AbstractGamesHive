@@ -1,6 +1,6 @@
 require "hexagon"
 require "map"
-cubecoords = require "cubecoords"
+require "cubecoords"
 
 function drawAddedPieces(map, canvas, grid, camera_x, camera_y, zoom)
     camera_x = camera_x or 0
@@ -20,9 +20,9 @@ function drawAddedPieces(map, canvas, grid, camera_x, camera_y, zoom)
             
             -- Draw hex background based on player
             if hex.player_id == 1 then
-                drawHexagon(hx, hy, grid.piecesize * zoom, grid.pointyTopped, true, 0.1, 0.1, 0.1)
+                hexagon.draw_hexagon(hx, hy, grid.piecesize * zoom, grid.pointyTopped, true, 0.1, 0.1, 0.1)
             else
-                drawHexagon(hx, hy, grid.piecesize * zoom, grid.pointyTopped, true, 0.9, 0.9, 0.9)
+                hexagon.draw_hexagon(hx, hy, grid.piecesize * zoom, grid.pointyTopped, true, 0.9, 0.9, 0.9)
             end
             
             -- Load piece image if needed
@@ -61,7 +61,7 @@ function drawAddedPieces(map, canvas, grid, camera_x, camera_y, zoom)
             if hex.piece.has_moved_last_turn then
                 love.graphics.setColor(1, 0, 0, 0.8)  -- Red border
                 love.graphics.setLineWidth(3 * zoom)
-                drawHexagon(hx, hy, grid.piecesize * zoom, grid.pointyTopped, false)
+                hexagon.draw_hexagon(hx, hy, grid.piecesize * zoom, grid.pointyTopped, false)
                 love.graphics.setLineWidth(1)
             end
             
@@ -84,7 +84,7 @@ function drawGridHexes(map, canvas, grid, camera_x, camera_y, zoom)
         local cube = cubecoords.from_key(cube_key)
         -- Convert cube coordinates directly to pixel coordinates
         local hx, hy = cubecoords.to_pixel(cube, grid.piecesize)
-        drawHexagon(hx * zoom + camera_x, hy * zoom + camera_y, grid.piecesize * zoom, grid.pointyTopped)
+        hexagon.draw_hexagon(hx * zoom + camera_x, hy * zoom + camera_y, grid.piecesize * zoom, grid.pointyTopped)
     end
     
     love.graphics.setCanvas()
@@ -114,10 +114,10 @@ function drawSelected(map, x, y, grid, camera_x, camera_y, zoom)
             -- Check for beetle-specific move (climbing on top)
             if hex.is_beetle_move then
                 -- Purple highlight for beetle climbing moves
-                drawHexagon(hX * zoom + camera_x, hY * zoom + camera_y, grid.piecesize * zoom, false, true, 0.6, 0.2, 0.8, 0.6)
+                hexagon.draw_hexagon(hX * zoom + camera_x, hY * zoom + camera_y, grid.piecesize * zoom, false, true, 0.6, 0.2, 0.8, 0.6)
             else
                 -- Orange highlight for normal moves
-                drawHexagon(hX * zoom + camera_x, hY * zoom + camera_y, grid.piecesize * zoom, false, true, 1, 0.5, 0, 0.6)
+                hexagon.draw_hexagon(hX * zoom + camera_x, hY * zoom + camera_y, grid.piecesize * zoom, false, true, 1, 0.5, 0, 0.6)
             end
         end
         -- Draw special ability targets (pickable pieces) in cyan
@@ -128,12 +128,12 @@ function drawSelected(map, x, y, grid, camera_x, camera_y, zoom)
             -- Check for dual option (can also be climbed with beetle)
             if hex.has_dual_option then
                 -- Split hexagon: purple (beetle climb) on left, cyan (pillbug pick) on right
-                drawSplitHexagon(hX * zoom + camera_x, hY * zoom + camera_y, grid.piecesize * zoom, false,
+                hexagon.draw_split_hexagon(hX * zoom + camera_x, hY * zoom + camera_y, grid.piecesize * zoom, false,
                                 0.6, 0.2, 0.8, 0.5,  -- Purple for beetle climb
                                 0, 1, 1, 0.5)         -- Cyan for pillbug special
             else
                 -- Regular cyan highlight for pillbug-only
-                drawHexagon(hX * zoom + camera_x, hY * zoom + camera_y, grid.piecesize * zoom, false, true, 0, 1, 1, 0.4)
+                hexagon.draw_hexagon(hX * zoom + camera_x, hY * zoom + camera_y, grid.piecesize * zoom, false, true, 0, 1, 1, 0.4)
             end
         end
     end
@@ -141,7 +141,7 @@ function drawSelected(map, x, y, grid, camera_x, camera_y, zoom)
     -- Draw selection indicator at source hex
     local selected_cube = cubecoords.from_offset(x, y)
     local hX, hY = cubecoords.to_pixel(selected_cube, grid.piecesize)
-    drawHexagon(hX * zoom + camera_x, hY * zoom + camera_y, (grid.piecesize - 5) * zoom, false, false, 0, 1, 0, 1)
+    hexagon.draw_hexagon(hX * zoom + camera_x, hY * zoom + camera_y, (grid.piecesize - 5) * zoom, false, false, 0, 1, 0, 1)
 end
 
 function drawPieceSelector(player, player_id, x, y, size)
@@ -158,7 +158,7 @@ function drawPieceSelector(player, player_id, x, y, size)
         if i == G.active_piece_id then
             -- Highlighted selection
             love.graphics.setColor(1, 1, 0, 0.5)
-            drawHexagon(px, py, size + 5, false, true, 1, 1, 0)
+            hexagon.draw_hexagon(px, py, size + 5, false, true, 1, 1, 0)
         end
         
         -- Draw piece button
@@ -169,7 +169,7 @@ function drawPieceSelector(player, player_id, x, y, size)
             else
                 love.graphics.setColor(0.9, 0.9, 0.9, 1)
             end
-            drawHexagon(px, py, size, false, true, player_id == 1 and 0.2 or 0.9, player_id == 1 and 0.2 or 0.9, player_id == 1 and 0.2 or 0.9)
+            hexagon.draw_hexagon(px, py, size, false, true, player_id == 1 and 0.2 or 0.9, player_id == 1 and 0.2 or 0.9, player_id == 1 and 0.2 or 0.9)
             
             -- Load template image if needed (template might not have loadImage method)
             local template = piece.template
@@ -198,7 +198,7 @@ function drawPieceSelector(player, player_id, x, y, size)
         else
             -- Out of stock - greyed out
             love.graphics.setColor(0.3, 0.3, 0.3, 0.5)
-            drawHexagon(px, py, size, false, true, 0.3, 0.3, 0.3)
+            hexagon.draw_hexagon(px, py, size, false, true, 0.3, 0.3, 0.3)
             love.graphics.setColor(0.5, 0.5, 0.5, 0.5)
             love.graphics.print(piece.template.initials, px - 8, py - 8)
         end

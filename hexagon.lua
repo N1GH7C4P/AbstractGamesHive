@@ -4,7 +4,7 @@ local function distanceBetween(x1, y1, x2, y2)
     return math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1))
 end
 
-function drawHexagon(x, y, piecesize, pointyTopped, fill, r, g ,b, a)
+function hexagon.draw_hexagon(x, y, piecesize, pointyTopped, fill, r, g ,b, a)
     r = r or 1
     g = g or 1
     b = b or 1
@@ -36,7 +36,7 @@ function drawHexagon(x, y, piecesize, pointyTopped, fill, r, g ,b, a)
 end
 
 -- Draw a hexagon split diagonally with two colors (for showing multiple options)
-function drawSplitHexagon(x, y, piecesize, pointyTopped, r1, g1, b1, a1, r2, g2, b2, a2)
+function hexagon.draw_split_hexagon(x, y, piecesize, pointyTopped, r1, g1, b1, a1, r2, g2, b2, a2)
     a1 = a1 or 1
     a2 = a2 or 1
     
@@ -54,12 +54,12 @@ function drawSplitHexagon(x, y, piecesize, pointyTopped, r1, g1, b1, a1, r2, g2,
         end
     end
     
-    -- Draw first half (top-left to bottom-right diagonal)
+    -- Draw first half (north-east: includes vertices 6, 1, 2, 3 for full coverage)
     love.graphics.setColor(r1, g1, b1, a1)
-    local half1 = {x, y, vertices[1][1], vertices[1][2], vertices[2][1], vertices[2][2], vertices[3][1], vertices[3][2], x, y}
+    local half1 = {x, y, vertices[6][1], vertices[6][2], vertices[1][1], vertices[1][2], vertices[2][1], vertices[2][2], vertices[3][1], vertices[3][2], x, y}
     love.graphics.polygon("fill", half1)
     
-    -- Draw second half
+    -- Draw second half (south-west: includes vertices 3, 4, 5, 6 for full coverage)
     love.graphics.setColor(r2, g2, b2, a2)
     local half2 = {x, y, vertices[3][1], vertices[3][2], vertices[4][1], vertices[4][2], vertices[5][1], vertices[5][2], vertices[6][1], vertices[6][2], x, y}
     love.graphics.polygon("fill", half2)

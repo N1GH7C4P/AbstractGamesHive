@@ -1,185 +1,188 @@
 {
-  "camera": {
-    "zoom": 1.6,
-    "x": 585,
-    "y": 441
-  },
-  "players": [
-    {
-      "id": 1,
-      "pieces": [
-        {
-          "id": 1,
-          "name": "Queen bee",
-          "inStock": 0
-        },
-        {
-          "id": 2,
-          "name": "Beetle",
-          "inStock": 1
-        },
-        {
-          "id": 3,
-          "name": "Grasshopper",
-          "inStock": 3
-        },
-        {
-          "id": 4,
-          "name": "Spider",
-          "inStock": 2
-        },
-        {
-          "id": 5,
-          "name": "Soldier ant",
-          "inStock": 2
-        },
-        {
-          "id": 6,
-          "name": "Ladybug",
-          "inStock": 1
-        },
-        {
-          "id": 7,
-          "name": "Mosquito",
-          "inStock": 0
-        },
-        {
-          "id": 8,
-          "name": "Pillbug",
-          "inStock": 1
-        }
-      ]
-    },
-    {
-      "id": 2,
-      "pieces": [
-        {
-          "id": 1,
-          "name": "Queen bee",
-          "inStock": 0
-        },
-        {
-          "id": 2,
-          "name": "Beetle",
-          "inStock": 0
-        },
-        {
-          "id": 3,
-          "name": "Grasshopper",
-          "inStock": 3
-        },
-        {
-          "id": 4,
-          "name": "Spider",
-          "inStock": 2
-        },
-        {
-          "id": 5,
-          "name": "Soldier ant",
-          "inStock": 3
-        },
-        {
-          "id": 6,
-          "name": "Ladybug",
-          "inStock": 1
-        },
-        {
-          "id": 7,
-          "name": "Mosquito",
-          "inStock": 0
-        },
-        {
-          "id": 8,
-          "name": "Pillbug",
-          "inStock": 1
-        }
-      ]
-    }
-  ],
-  "map": {
-    "current_radius": 10
-  },
   "board": [
     {
+      "has_under_piece": false,
       "cube": {
-        "z": 0,
         "x": 0,
-        "y": 0
+        "y": 1,
+        "z": -1
       },
+      "piece_id": 5,
+      "player_id": 1
+    },
+    {
+      "has_under_piece": false,
+      "cube": {
+        "x": 0,
+        "y": 2,
+        "z": -2
+      },
+      "piece_id": 7,
+      "player_id": 1
+    },
+    {
+      "has_under_piece": false,
+      "cube": {
+        "x": 2,
+        "y": -3,
+        "z": 1
+      },
+      "piece_id": 4,
+      "player_id": 2
+    },
+    {
+      "has_under_piece": false,
+      "cube": {
+        "x": 3,
+        "y": -3,
+        "z": 0
+      },
+      "piece_id": 6,
+      "player_id": 2
+    },
+    {
+      "has_under_piece": false,
+      "cube": {
+        "x": 3,
+        "y": -2,
+        "z": -1
+      },
+      "piece_id": 3,
+      "player_id": 2
+    },
+    {
+      "has_under_piece": false,
+      "cube": {
+        "x": 3,
+        "y": -1,
+        "z": -2
+      },
+      "piece_id": 8,
+      "player_id": 2
+    },
+    {
       "under_piece": {
-        "id": 5,
-        "player_id": 1
+        "player_id": 1,
+        "id": 8
       },
       "has_under_piece": true,
-      "piece_id": 2,
-      "player_id": 1
-    },
-    {
-      "piece_id": 1,
-      "has_under_piece": false,
       "cube": {
-        "z": 1,
-        "x": -1,
-        "y": 0
+        "x": -2,
+        "y": 3,
+        "z": -1
       },
+      "player_id": 1,
+      "piece_id": 2
+    },
+    {
+      "has_under_piece": false,
+      "cube": {
+        "x": 4,
+        "y": -2,
+        "z": -2
+      },
+      "piece_id": 2,
+      "player_id": 2
+    },
+    {
+      "has_under_piece": false,
+      "cube": {
+        "x": 4,
+        "y": -1,
+        "z": -3
+      },
+      "piece_id": 7,
+      "player_id": 2
+    },
+    {
+      "has_under_piece": false,
+      "cube": {
+        "x": -2,
+        "y": 2,
+        "z": 0
+      },
+      "piece_id": 6,
       "player_id": 1
     },
     {
-      "piece_id": 7,
       "has_under_piece": false,
       "cube": {
-        "z": 0,
+        "x": -1,
+        "y": 2,
+        "z": -1
+      },
+      "piece_id": 3,
+      "player_id": 1
+    },
+    {
+      "has_under_piece": false,
+      "cube": {
+        "x": 2,
+        "y": -1,
+        "z": -1
+      },
+      "piece_id": 1,
+      "player_id": 2
+    },
+    {
+      "has_under_piece": false,
+      "cube": {
+        "x": 2,
+        "y": -2,
+        "z": 0
+      },
+      "piece_id": 5,
+      "player_id": 2
+    },
+    {
+      "has_under_piece": false,
+      "cube": {
+        "x": -1,
+        "y": 1,
+        "z": 0
+      },
+      "piece_id": 1,
+      "player_id": 1
+    },
+    {
+      "has_under_piece": false,
+      "cube": {
         "x": 1,
-        "y": -1
+        "y": -1,
+        "z": 0
       },
+      "piece_id": 5,
+      "player_id": 2
+    },
+    {
+      "has_under_piece": false,
+      "cube": {
+        "x": -1,
+        "y": 0,
+        "z": 1
+      },
+      "piece_id": 4,
       "player_id": 1
     },
     {
-      "piece_id": 2,
       "has_under_piece": false,
       "cube": {
-        "z": 0,
-        "x": -1,
-        "y": 1
+        "x": 0,
+        "y": 0,
+        "z": 0
       },
-      "player_id": 2
-    },
-    {
-      "piece_id": 2,
-      "has_under_piece": false,
-      "cube": {
-        "z": 1,
-        "x": -2,
-        "y": 1
-      },
-      "player_id": 2
-    },
-    {
-      "piece_id": 1,
-      "has_under_piece": false,
-      "cube": {
-        "z": 0,
-        "x": -2,
-        "y": 2
-      },
-      "player_id": 2
-    },
-    {
-      "piece_id": 7,
-      "has_under_piece": false,
-      "cube": {
-        "z": -1,
-        "x": -1,
-        "y": 2
-      },
-      "player_id": 2
+      "piece_id": 5,
+      "player_id": 1
     }
   ],
   "game_state": {
+    "turn_number": [
+      12,
+      11
+    ],
     "highlight": 1,
     "move_mode": 1,
-    "active_piece_id": 2,
-    "selected_piece_x": -1,
+    "selected_piece_x": 4,
     "selected_piece_y": -1,
     "who_won": [
       0,
@@ -187,9 +190,106 @@
     ],
     "active_player_id": 2,
     "game_over": false,
-    "turn_number": [
-      8,
-      7
-    ]
+    "active_piece_id": 7
+  },
+  "camera": {
+    "x": 512,
+    "y": 384,
+    "zoom": 0.8
+  },
+  "players": [
+    {
+      "pieces": [
+        {
+          "id": 1,
+          "inStock": 0,
+          "name": "Queen bee"
+        },
+        {
+          "id": 2,
+          "inStock": 1,
+          "name": "Beetle"
+        },
+        {
+          "id": 3,
+          "inStock": 2,
+          "name": "Grasshopper"
+        },
+        {
+          "id": 4,
+          "inStock": 1,
+          "name": "Spider"
+        },
+        {
+          "id": 5,
+          "inStock": 1,
+          "name": "Soldier ant"
+        },
+        {
+          "id": 6,
+          "inStock": 0,
+          "name": "Ladybug"
+        },
+        {
+          "id": 7,
+          "inStock": 0,
+          "name": "Mosquito"
+        },
+        {
+          "id": 8,
+          "inStock": 0,
+          "name": "Pillbug"
+        }
+      ],
+      "id": 1
+    },
+    {
+      "pieces": [
+        {
+          "id": 1,
+          "inStock": 0,
+          "name": "Queen bee"
+        },
+        {
+          "id": 2,
+          "inStock": 1,
+          "name": "Beetle"
+        },
+        {
+          "id": 3,
+          "inStock": 2,
+          "name": "Grasshopper"
+        },
+        {
+          "id": 4,
+          "inStock": 1,
+          "name": "Spider"
+        },
+        {
+          "id": 5,
+          "inStock": 1,
+          "name": "Soldier ant"
+        },
+        {
+          "id": 6,
+          "inStock": 0,
+          "name": "Ladybug"
+        },
+        {
+          "id": 7,
+          "inStock": 0,
+          "name": "Mosquito"
+        },
+        {
+          "id": 8,
+          "inStock": 0,
+          "name": "Pillbug"
+        }
+      ],
+      "id": 2
+    }
+  ],
+  "map": {
+    "current_radius": 10
   }
 }
