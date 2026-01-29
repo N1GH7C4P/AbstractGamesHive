@@ -236,7 +236,9 @@ local function handle_multiple_option_click(mouseX, mouseY)
         -- Execute beetle move (climbing on top)
         print("Mosquito using Beetle power to climb")
         local selected_cube = cubecoords.from_offset(G.selected_piece_x, G.selected_piece_y)
-        local did_move = move_piece_on_map(G.map, selected_cube, G.mosquito_choice_dest)
+        local did_move = move_piece_on_map(G.map, selected_cube, G.mosquito_choice_dest, function()
+            game.checkIfWin(G.map, G.w, G.h)
+        end)
         clear_all_neighbours(G.map, G.w, G.h)
         G.move_mode = 0
         G.mosquito_choice_popup = false
@@ -335,7 +337,9 @@ local function handle_normal_movement_click(result_cube, result_hex)
     end
     
     local selected_cube = cubecoords.from_offset(G.selected_piece_x, G.selected_piece_y)
-    local did_move = move_piece_on_map(G.map, selected_cube, result_cube)
+    local did_move = move_piece_on_map(G.map, selected_cube, result_cube, function()
+        game.checkIfWin(G.map, G.w, G.h)
+    end)
     clear_all_neighbours(G.map, G.w, G.h)
     G.move_mode = 0
     if did_move == true then
@@ -385,6 +389,7 @@ local function handle_piece_placement_click(result_cube, result_hex, resultX, re
             if not tryAddPieceToMap(G.active_player_id, piece_info.template, G.map, result_cube) then
                 return true
             end
+            game.checkIfWin(G.map, G.w, G.h)
             game.pass_turn(G.active_player_id)
             return true
         end

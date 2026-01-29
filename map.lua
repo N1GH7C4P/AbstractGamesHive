@@ -1,4 +1,4 @@
-local player =require "player"
+local player = require "player"
 local PiecesEnum = require "pieces.pieces_enum"
 local animation = require("animation")
 local cubecoords = require "cubecoords"
@@ -394,17 +394,14 @@ function firstPieceCoords(map)
 end
 
 function pieceCanDetach(map, cube)
-    print("  pieceCanDetach checking [" .. cube.x .. "," .. cube.y .. "," .. cube.z .. "]")
     local hex = map_get_hex(map, cube)
     if not hex then 
-        print("    FAIL: hex doesn't exist")
         return false 
     end
     
     -- If this piece has something underneath it (beetle stacking),
     -- it can always detach because the under_piece maintains hive cohesion
     if hex.piece and hex.piece.under_piece then
-        print("    SUCCESS: has piece underneath (beetle stack)")
         return true
     end
     
@@ -415,7 +412,6 @@ function pieceCanDetach(map, cube)
     local first_cube = firstPieceCoords(map)
     if not first_cube then
         hex.piece = tmp
-        print("    SUCCESS: no pieces left")
         return true
     end
     
@@ -426,13 +422,11 @@ function pieceCanDetach(map, cube)
     for _, check_hex in pairs(map.hexes) do
         if check_hex.piece and not check_hex.neighbour then
             clear_all_neighbours(map, map.w, map.h)
-            print("    FAIL: hive would break apart")
             return false
         end
     end
     
     clear_all_neighbours(map, map.w, map.h)
-    print("    SUCCESS: can detach without breaking hive")
     return true
 end
 
@@ -487,7 +481,7 @@ function try_move_piece_on_map(map, src_cube, dest_cube)
     return false
 end
 
-function move_piece_on_map(map, src_cube, dest_cube)
+function move_piece_on_map(map, src_cube, dest_cube, on_complete_callback)
     if not try_move_piece_on_map(map, src_cube, dest_cube) then
         return false
     end
@@ -517,6 +511,11 @@ function move_piece_on_map(map, src_cube, dest_cube)
             -- Send network message if in multiplayer game
             if G.network and G.network.mode ~= "none" and G.network.connected then
                 G.network.send_move(G.active_player_id, src_cube, dest_cube)
+            end
+            
+            -- Call the completion callback if provided
+            if on_complete_callback then
+                on_complete_callback()
             end
         end
     end)

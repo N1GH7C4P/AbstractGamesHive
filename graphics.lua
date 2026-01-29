@@ -3,6 +3,101 @@ local map = require "map"
 local cubecoords = require "cubecoords"
 local animation = require "animation"
 
+-- Draw hex background based on player ID
+local function drawHexBackground(hx, hy, piecesize, pointyTopped, player_id)
+    if player_id == 1 then
+        hexagon.draw_hexagon(hx, hy, piecesize, pointyTopped, true, 0.1, 0.1, 0.1)
+    else
+        hexagon.draw_hexagon(hx, hy, piecesize, pointyTopped, true, 0.9, 0.9, 0.9)
+    end
+end
+
+-- Load piece image if needed
+local function loadPieceImage(piece)
+    if piece.loadImage then
+        piece:loadImage()
+    end
+end
+
+-- Draw piece image or initials as fallback
+local function drawPieceGraphic(piece, hx, hy, piecesize, zoom)
+    if piece.image then
+        local image = piece.image
+        local image_scale = (piecesize * 1.6 * zoom) / image:getWidth()
+        love.graphics.setColor(1, 1, 1, 1)
+        love.graphics.draw(image, hx, hy, 0, image_scale, image_scale, image:getWidth()/2, image:getHeight()/2)
+    else
+        love.graphics.setColor(piece.color)
+        love.graphics.print(piece.initials, hx-8*zoom, hy-8*zoom, 0, zoom, zoom)
+    end
+end
+
+-- Calculate stack height for stacked pieces
+local function calculateStackHeight(piece)
+    local height = 1
+    local current = piece.under_piece
+    while current do
+        height = height + 1
+        current = current.under_piece
+    end
+    return height
+end
+
+-- Draw stack height indicator
+local function drawStackHeightIndicator(piece, hx, hy, zoom)
+    if piece.under_piece then
+        local height = calculateStackHeight(piece)
+        love.graphics.setColor(1, 1, 0, 1)
+        love.graphics.print(tostring(height), hx-3*zoom, hy+5*zoom, 0, zoom, zoom)
+    end
+end
+
+-- Draw red border for pieces that moved last turn
+local function drawMovementBorder(piece, hx, hy, piecesize, pointyTopped, zoom)
+    if piece.has_moved_last_turn then
+        love.graphics.setColor(1, 0, 0, 0.8)
+        love.graphics.setLineWidth(3 * zoom)
+        hexagon.draw_hexagon(hx, hy, piecesize, pointyTopped, false)
+        love.graphics.setLineWidth(1)
+    end
+end
+
+-- Draw a single piece at the given pixel coordinates
+local function drawPieceAtPosition(piece, player_id, hx, hy, grid, zoom)
+    drawHexBackground(hx, hy, grid.piecesize * zoom, grid.pointyTopped, player_id)
+    loadPieceImage(piece)
+    drawPieceGraphic(piece, hx, hy, grid.piecesize, zoom)
+    drawStackHeightIndicator(piece, hx, hy, zoom)
+    drawMovementBorder(piece, hx, hy, grid.piecesize * zoom, grid.pointyTopped, zoom)
+    love.graphics.setColor(1, 1, 1, 1)
+end
+
+-- Draw all static pieces on the board
+local function drawStaticPieces(map, grid, camera_x, camera_y, zoom)
+    for cube_key, hex in pairs(map.hexes) do
+        if hex.piece and not animation.is_animating_from(cubecoords.from_key(cube_key)) then
+            local cube = cubecoords.from_key(cube_key)
+            local hx, hy = cubecoords.to_pixel(cube, grid.piecesize)
+            hx = hx * zoom + camera_x
+            hy = hy * zoom + camera_y
+            
+            drawPieceAtPosition(hex.piece, hex.player_id, hx, hy, grid, zoom)
+        end
+    end
+end
+
+-- Draw the currently animating piece if animation is active
+local function drawAnimatedPiece(grid, camera_x, camera_y, zoom)
+    local anim_x, anim_y, anim_piece = animation.get_animated_position(grid.piecesize)
+    
+    if anim_x and anim_y and anim_piece then
+        local hx = anim_x * zoom + camera_x
+        local hy = anim_y * zoom + camera_y
+        
+        drawPieceAtPosition(anim_piece, anim_piece.owner, hx, hy, grid, zoom)
+    end
+end
+
 function drawAddedPieces(map, canvas, grid, camera_x, camera_y, zoom)
     camera_x = camera_x or 0
     camera_y = camera_y or 0
@@ -10,105 +105,8 @@ function drawAddedPieces(map, canvas, grid, camera_x, camera_y, zoom)
     
     love.graphics.setCanvas(canvas)
     
-    -- Draw animated piece separately
-    local anim_x, anim_y, anim_piece = animation.get_animated_position(grid.piecesize)
-    
-    -- Iterate over all hexes using cube coordinates
-    for cube_key, hex in pairs(map.hexes) do
-        if hex.piece then
-            -- Skip drawing if this piece is being animated from this location
-            local cube = cubecoords.from_key(cube_key)
-            if animation.is_animating_from(cube) then
-                goto continue
-            end
-            
-            -- Convert cube coordinates directly to pixel coordinates
-            local hx, hy = cubecoords.to_pixel(cube, grid.piecesize)
-            hx = hx * zoom + camera_x
-            hy = hy * zoom + camera_y
-            
-            -- Draw hex background based on player
-            if hex.player_id == 1 then
-                hexagon.draw_hexagon(hx, hy, grid.piecesize * zoom, grid.pointyTopped, true, 0.1, 0.1, 0.1)
-            else
-                hexagon.draw_hexagon(hx, hy, grid.piecesize * zoom, grid.pointyTopped, true, 0.9, 0.9, 0.9)
-            end
-            
-            -- Load piece image if needed
-            if hex.piece.loadImage then
-                hex.piece:loadImage()
-            end
-            
-            -- Draw piece image if available, otherwise draw initials
-            if hex.piece.image then
-                local image = hex.piece.image
-                local image_scale = (grid.piecesize * 1.6 * zoom) / image:getWidth()
-                love.graphics.setColor(1, 1, 1, 1)
-                love.graphics.draw(image, hx, hy, 0, image_scale, image_scale, image:getWidth()/2, image:getHeight()/2)
-            else
-                -- Draw piece initials (fallback)
-                love.graphics.setColor(hex.piece.color)
-                love.graphics.print(hex.piece.initials, hx-8*zoom, hy-8*zoom, 0, zoom, zoom)
-            end
-            
-            -- Draw stack height indicator for beetles or stacked pieces
-            if hex.piece.under_piece then
-                -- Calculate stack height
-                local height = 1
-                local current = hex.piece.under_piece
-                while current do
-                    height = height + 1
-                    current = current.under_piece
-                end
-                
-                -- Draw height number below piece initials
-                love.graphics.setColor(1, 1, 0, 1)  -- Yellow color for visibility
-                love.graphics.print(tostring(height), hx-3*zoom, hy+5*zoom, 0, zoom, zoom)
-            end
-            
-            -- Draw border for pieces that moved last turn
-            if hex.piece.has_moved_last_turn then
-                love.graphics.setColor(1, 0, 0, 0.8)  -- Red border
-                love.graphics.setLineWidth(3 * zoom)
-                hexagon.draw_hexagon(hx, hy, grid.piecesize * zoom, grid.pointyTopped, false)
-                love.graphics.setLineWidth(1)
-            end
-            
-            love.graphics.setColor(1, 1, 1, 1)
-            
-            ::continue::
-        end
-    end
-    
-    -- Draw animated piece on top if animation is active
-    if anim_x and anim_y and anim_piece then
-        local hx = anim_x * zoom + camera_x
-        local hy = anim_y * zoom + camera_y
-        
-        -- Draw hex background
-        if anim_piece.owner == 1 then
-            hexagon.draw_hexagon(hx, hy, grid.piecesize * zoom, grid.pointyTopped, true, 0.1, 0.1, 0.1)
-        else
-            hexagon.draw_hexagon(hx, hy, grid.piecesize * zoom, grid.pointyTopped, true, 0.9, 0.9, 0.9)
-        end
-        
-        -- Load and draw piece image
-        if anim_piece.loadImage then
-            anim_piece:loadImage()
-        end
-        
-        if anim_piece.image then
-            local image = anim_piece.image
-            local image_scale = (grid.piecesize * 1.6 * zoom) / image:getWidth()
-            love.graphics.setColor(1, 1, 1, 1)
-            love.graphics.draw(image, hx, hy, 0, image_scale, image_scale, image:getWidth()/2, image:getHeight()/2)
-        else
-            love.graphics.setColor(anim_piece.color)
-            love.graphics.print(anim_piece.initials, hx-8*zoom, hy-8*zoom, 0, zoom, zoom)
-        end
-        
-        love.graphics.setColor(1, 1, 1, 1)
-    end
+    drawStaticPieces(map, grid, camera_x, camera_y, zoom)
+    drawAnimatedPiece(grid, camera_x, camera_y, zoom)
     
     love.graphics.setCanvas()
 end
@@ -192,6 +190,60 @@ function drawSelected(map, x, y, grid, camera_x, camera_y, zoom)
     hexagon.draw_hexagon(hX * zoom + camera_x, hY * zoom + camera_y, (grid.piecesize - 5) * zoom, false, false, 0, 1, 0, 1)
 end
 
+-- Draw selection highlight for active piece
+local function drawSelectionHighlight(px, py, size)
+    love.graphics.setColor(1, 1, 0, 0.5)
+    hexagon.draw_hexagon(px, py, size + 5, false, true, 1, 1, 0)
+end
+
+-- Load template image if not already loaded
+local function loadPieceTemplateImage(template)
+    if template.image_path and not template.image then
+        local success, image = pcall(love.graphics.newImage, template.image_path)
+        if success then
+            template.image = image
+        end
+    end
+end
+
+-- Draw piece image or initials as fallback
+local function drawPieceImageOrInitials(template, px, py, size)
+    if template.image then
+        local image = template.image
+        local image_scale = (size * 1.6) / image:getWidth()
+        love.graphics.setColor(1, 1, 1, 1)
+        love.graphics.draw(image, px, py, 0, image_scale, image_scale, image:getWidth()/2, image:getHeight()/2)
+    else
+        love.graphics.setColor(template.color)
+        love.graphics.print(template.initials, px - 8, py - 8)
+    end
+end
+
+-- Draw available piece button with image and stock count
+local function drawAvailablePieceButton(piece, player_id, px, py, size)
+    if player_id == 1 then
+        love.graphics.setColor(0.2, 0.2, 0.2, 1)
+    else
+        love.graphics.setColor(0.9, 0.9, 0.9, 1)
+    end
+    hexagon.draw_hexagon(px, py, size, false, true, player_id == 1 and 0.2 or 0.9, player_id == 1 and 0.2 or 0.9, player_id == 1 and 0.2 or 0.9)
+    
+    local template = piece.template
+    loadPieceTemplateImage(template)
+    drawPieceImageOrInitials(template, px, py, size)
+    
+    love.graphics.setColor(1, 1, 1, 1)
+    love.graphics.print("x" .. piece.inStock, px - 10, py + 10)
+end
+
+-- Draw unavailable (out of stock) piece button
+local function drawUnavailablePieceButton(piece, px, py, size)
+    love.graphics.setColor(0.3, 0.3, 0.3, 0.5)
+    hexagon.draw_hexagon(px, py, size, false, true, 0.3, 0.3, 0.3)
+    love.graphics.setColor(0.5, 0.5, 0.5, 0.5)
+    love.graphics.print(piece.template.initials, px - 8, py - 8)
+end
+
 function drawPieceSelector(player, player_id, x, y, size)
     size = size or 30
     local spacing = size * 2.5
@@ -202,53 +254,14 @@ function drawPieceSelector(player, player_id, x, y, size)
         local px = x + (i - 1) * spacing
         local py = y + 40
         
-        -- Draw button background
         if i == G.active_piece_id then
-            -- Highlighted selection
-            love.graphics.setColor(1, 1, 0, 0.5)
-            hexagon.draw_hexagon(px, py, size + 5, false, true, 1, 1, 0)
+            drawSelectionHighlight(px, py, size)
         end
         
-        -- Draw piece button
         if piece.inStock > 0 then
-            -- Available piece
-            if player_id == 1 then
-                love.graphics.setColor(0.2, 0.2, 0.2, 1)
-            else
-                love.graphics.setColor(0.9, 0.9, 0.9, 1)
-            end
-            hexagon.draw_hexagon(px, py, size, false, true, player_id == 1 and 0.2 or 0.9, player_id == 1 and 0.2 or 0.9, player_id == 1 and 0.2 or 0.9)
-            
-            -- Load template image if needed (template might not have loadImage method)
-            local template = piece.template
-            if template.image_path and not template.image then
-                local success, image = pcall(love.graphics.newImage, template.image_path)
-                if success then
-                    template.image = image
-                end
-            end
-            
-            -- Draw piece image or initials
-            if template.image then
-                local image = template.image
-                local image_scale = (size * 1.6) / image:getWidth()
-                love.graphics.setColor(1, 1, 1, 1)
-                love.graphics.draw(image, px, py, 0, image_scale, image_scale, image:getWidth()/2, image:getHeight()/2)
-            else
-                -- Draw piece initials (fallback)
-                love.graphics.setColor(template.color)
-                love.graphics.print(template.initials, px - 8, py - 8)
-            end
-            
-            -- Draw stock count
-            love.graphics.setColor(1, 1, 1, 1)
-            love.graphics.print("x" .. piece.inStock, px - 10, py + 10)
+            drawAvailablePieceButton(piece, player_id, px, py, size)
         else
-            -- Out of stock - greyed out
-            love.graphics.setColor(0.3, 0.3, 0.3, 0.5)
-            hexagon.draw_hexagon(px, py, size, false, true, 0.3, 0.3, 0.3)
-            love.graphics.setColor(0.5, 0.5, 0.5, 0.5)
-            love.graphics.print(piece.template.initials, px - 8, py - 8)
+            drawUnavailablePieceButton(piece, px, py, size)
         end
         
         love.graphics.setColor(1, 1, 1, 1)

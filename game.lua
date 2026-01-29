@@ -47,50 +47,64 @@ function Game.init_players()
     return G.player
 end
 
+-- Find queen bee owner in a piece stack (returns owner id or nil)
+local function findQueenInStack(piece)
+    local current_piece = piece
+    while current_piece do
+        if current_piece.id == PiecesEnum.QUEEN_BEE then
+            return current_piece.owner
+        end
+        current_piece = current_piece.under_piece
+    end
+    return nil
+end
+
+-- Count occupied neighbors around a hex
+local function countOccupiedNeighbors(map, cube)
+    local neighbors = cubecoords.all_neighbors(cube)
+    local occupied_count = 0
+    
+    for _, neighbor_cube in ipairs(neighbors) do
+        local neighbor_hex = map_get_hex(map, neighbor_cube)
+        if neighbor_hex and neighbor_hex.piece then
+            occupied_count = occupied_count + 1
+        end
+    end
+    
+    return occupied_count
+end
+
+-- Check if a queen at a given hex is surrounded
+local function isQueenSurrounded(map, hex)
+    local queen_owner = findQueenInStack(hex.piece)
+    if not queen_owner then
+        return false, nil
+    end
+    
+    local occupied_count = countOccupiedNeighbors(map, hex.cube)
+    
+    if occupied_count == 6 then
+        print("Player " .. queen_owner .. " Queen is surrounded!")
+        return true, queen_owner
+    end
+    
+    return false, queen_owner
+end
+
 function Game.checkIfWin(map, w, h)
     local surrounded_queens = {}
 
-    -- First pass: check all queens to see if any are surrounded
+    -- Check all queens to see if any are surrounded
     for _, hex in pairs(map.hexes) do
         if hex.piece then
-            -- Check the entire stack for Queen Bees (including under other pieces)
-            local current_piece = hex.piece
-            local queen_owner = nil
-            
-            -- Traverse the stack to find any Queen Bee
-            while current_piece do
-                if current_piece.id == PiecesEnum.QUEEN_BEE then
-                    -- Found a Queen Bee in the stack
-                    queen_owner = current_piece.owner
-                    break
-                end
-                current_piece = current_piece.under_piece
-            end
-            
-            -- If a Queen Bee was found, check if it's surrounded
-            if queen_owner then
-                -- Count occupied neighbors (regardless of player)
-                local neighbors = cubecoords.all_neighbors(hex.cube)
-                local occupied_count = 0
-                
-                for _, neighbor_cube in ipairs(neighbors) do
-                    local neighbor_hex = map_get_hex(map, neighbor_cube)
-                    if neighbor_hex and neighbor_hex.piece then
-                        occupied_count = occupied_count + 1
-                    end
-                end
-                
-                print("Queen at [" .. hex.cube.x .. "," .. hex.cube.y .. "," .. hex.cube.z .. "] has " .. occupied_count .. " neighbors")
-                
-                if occupied_count == 6 then
-                    print("Player " .. queen_owner .. " Queen is surrounded!")
-                    surrounded_queens[queen_owner] = true
-                end
+            local is_surrounded, queen_owner = isQueenSurrounded(map, hex)
+            if is_surrounded then
+                surrounded_queens[queen_owner] = true
             end
         end
     end
     
-    -- Second pass: set game_over and who_won based on surrounded queens
+    -- Set game_over and who_won based on surrounded queens
     -- This handles ties when both queens are surrounded in the same turn
     if surrounded_queens[1] or surrounded_queens[2] then
         G.game_over = true
@@ -148,7 +162,6 @@ function Game.pass_turn(active_piece_id)
             end
         end
     end
-    Game.checkIfWin(G.map, G.w, G.h)
 end
 
 return Game

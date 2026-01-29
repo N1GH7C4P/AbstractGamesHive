@@ -253,6 +253,7 @@ function Network.handle_message(msg)
         if piece_info and piece_info.template then
             -- Place the piece
             tryAddPieceToMap(msg.player_id, piece_info.template, G.map, cube)
+            game.checkIfWin(G.map, G.w, G.h)
             game.pass_turn(msg.player_id)
             Network.is_local_turn = true
         end
@@ -264,7 +265,9 @@ function Network.handle_message(msg)
         local to_cube = cubecoords.new(msg.to_x, msg.to_y, msg.to_z)
         
         -- Move the piece
-        move_piece_on_map(G.map, from_cube, to_cube)
+        move_piece_on_map(G.map, from_cube, to_cube, function()
+            game.checkIfWin(G.map, G.w, G.h)
+        end)
         game.pass_turn(msg.player_id)
         Network.is_local_turn = true
         

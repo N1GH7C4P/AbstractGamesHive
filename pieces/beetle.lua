@@ -134,7 +134,7 @@ function Beetle:move_piece(map, src_cube, dest_cube, active_player_id)
         dest_hex.piece = src_hex.piece
     end
     
-    dest_hex.player_id = active_player_id
+    dest_hex.player_id = src_hex.piece.owner
     
     -- If the source hex has an under_piece, restore it
     if src_hex.piece.under_piece then
