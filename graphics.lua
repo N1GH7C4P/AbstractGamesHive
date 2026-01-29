@@ -155,7 +155,7 @@ function drawPieceSelector(player, player_id, x, y, size)
         local py = y + 40
         
         -- Draw button background
-        if i == active_piece_id then
+        if i == G.active_piece_id then
             -- Highlighted selection
             love.graphics.setColor(1, 1, 0, 0.5)
             drawHexagon(px, py, size + 5, false, true, 1, 1, 0)
@@ -328,7 +328,7 @@ function printPlayerStock(player, player_id, x, y)
         local piece = pieces[i]
         local pieceName = piece.template and piece.template.name or piece.name
         love.graphics.print(pieceName..": "..tostring(piece.inStock), x, y + 10 + i*20)
-        if (i == active_piece_id) then
+        if (i == G.active_piece_id) then
             love.graphics.print("<==", x+100, y + 10 + i*20)
         end
     end

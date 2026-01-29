@@ -229,6 +229,7 @@ function Mosquito:mark_legal_moves(map, src_cube)
     
     local normal_move_hexes = {}
     local special_target_hexes = {}
+    local beetle_climb_hexes = {}  -- Track beetle climbs
     
     -- Check if piece can detach for normal movement (unless it's on top of the hive)
     local can_detach = src_hex.piece.under_piece or pieceCanDetach(map, src_cube)
@@ -242,17 +243,22 @@ function Mosquito:mark_legal_moves(map, src_cube)
             if try_self_detach(map, src_cube, dest_cube) then
                 local hex = map_get_hex(map, dest_cube)
                 if hex then
-                    -- Check if this destination is stacking (beetle power)
+                    table.insert(normal_move_hexes, hex)
+                    -- Track if this destination is stacking (beetle power)
                     local dest_hex = map_get_hex(map, dest_cube)
                     if dest_hex.piece and has_beetle then
-                        hex.is_beetle_move = true
+                        table.insert(beetle_climb_hexes, hex)
                     end
-                    table.insert(normal_move_hexes, hex)
                 end
             end
         end
     else
         print("Mosquito cannot detach - no normal moves available")
+    end
+    
+    -- Mark beetle climb moves AFTER validation loop
+    for _, hex in ipairs(beetle_climb_hexes) do
+        hex.is_beetle_move = true
     end
     
     -- If adjacent to Pillbug, also show special ability

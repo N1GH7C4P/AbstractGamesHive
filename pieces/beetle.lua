@@ -181,6 +181,7 @@ function Beetle:mark_legal_moves(map, src_cube)
     print("Testing Beetle adjacent moves")
     
     local legal_moves = {}
+    local beetle_climb_moves = {}  -- Track which moves are climbs
     
     -- Check if beetle can detach (or is on top of stack)
     local src_hex = map_get_hex(map, src_cube)
@@ -205,13 +206,18 @@ function Beetle:mark_legal_moves(map, src_cube)
         if can_move then
             local dest_hex = map_get_hex(map, neighbor_cube)
             if dest_hex then
-                -- Mark if this is a beetle-type move (climbing on top of stack)
-                if dest_hex.piece then
-                    dest_hex.is_beetle_move = true
-                end
                 table.insert(legal_moves, dest_hex)
+                -- Track if this is a beetle-type move (climbing on top of stack)
+                if dest_hex.piece then
+                    table.insert(beetle_climb_moves, dest_hex)
+                end
             end
         end
+    end
+    
+    -- Now mark the flags AFTER all validation (so clear_all_neighbours doesn't erase them)
+    for _, hex in ipairs(beetle_climb_moves) do
+        hex.is_beetle_move = true
     end
     
     print("Legal moves: " .. #legal_moves)

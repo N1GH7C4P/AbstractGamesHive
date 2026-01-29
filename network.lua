@@ -56,7 +56,7 @@ function Network.host(port)
     Network.mode = "server"
     Network.is_local_turn = true -- Server is player 1, goes first
     Network.local_player_id = 1  -- Host is player 1
-    active_player_id = 1
+    G.active_player_id = 1
     
     print("Server started on port " .. port)
     print("Waiting for client to connect...")
@@ -89,7 +89,7 @@ function Network.join(host, port)
     Network.connected = true
     Network.is_local_turn = false -- Client is player 2, waits for server
     Network.local_player_id = 2  -- Client is player 2
-    active_player_id = 1  -- Game starts with player 1's turn
+    G.active_player_id = 1  -- Game starts with player 1's turn
     
     -- Send connect message
     Network.send({type = MSG.CONNECT, player_id = 2})
@@ -248,10 +248,10 @@ function Network.handle_message(msg)
         local cube = cubecoords.new(msg.x, msg.y, msg.z)
         
         -- Get the piece template from player inventory
-        local piece_info = player[msg.player_id]:getPieceInfo(msg.piece_id)
+        local piece_info = G.player[msg.player_id]:getPieceInfo(msg.piece_id)
         if piece_info and piece_info.template then
             -- Place the piece
-            tryAddPieceToMap(msg.player_id, piece_info.template, map, cube)
+            tryAddPieceToMap(msg.player_id, piece_info.template, G.map, cube)
             pass_turn(msg.player_id)
             Network.is_local_turn = true
         end
@@ -263,7 +263,7 @@ function Network.handle_message(msg)
         local to_cube = cubecoords.new(msg.to_x, msg.to_y, msg.to_z)
         
         -- Move the piece
-        move_piece_on_map(map, from_cube, to_cube)
+        move_piece_on_map(G.map, from_cube, to_cube)
         pass_turn(msg.player_id)
         Network.is_local_turn = true
         
@@ -273,7 +273,7 @@ function Network.handle_message(msg)
         
     elseif msg.type == MSG.GAME_OVER then
         print("Game over!")
-        game_over = true
+        G.game_over = true
     end
 end
 
@@ -281,8 +281,8 @@ end
 function Network.send_game_state()
     local state = {
         type = MSG.GAME_STATE,
-        active_player = active_player_id,
-        turn_numbers = turn_number[1] .. "," .. turn_number[2]
+        active_player = G.active_player_id,
+        turn_numbers = G.turn_number[1] .. "," .. G.turn_number[2]
     }
     Network.send(state)
 end

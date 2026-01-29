@@ -55,14 +55,14 @@ end
 
 -- Legacy global functions for backward compatibility
 function removePieceFromStock(player_nb, id)
-    if player[player_nb] then
-        player[player_nb]:removePieceFromStock(id)
+    if G.player[player_nb] then
+        G.player[player_nb]:removePieceFromStock(id)
     end
 end
 
 function getPiecesInStock(player_nb, id)
-    if player[player_nb] then
-        return player[player_nb]:getPieceStock(id)
+    if G.player[player_nb] then
+        return G.player[player_nb]:getPieceStock(id)
     end
     return 0
 end

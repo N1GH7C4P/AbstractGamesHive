@@ -3,14 +3,14 @@ local Config = require("config")
 local PiecesEnum = require("pieces.pieces_enum")
 
 function init_players()
-    player = {}
+    G.player = {}
     
     -- Create two players with pieces from configuration
     for i = 1, 2 do
-        player[i] = PlayerClass:new(i, Config.pieceInventory)
+        G.player[i] = PlayerClass:new(i, Config.pieceInventory)
     end
     
-    return player
+    return G.player
 end
 
 function countNearbyPlayer(map, cube)
@@ -21,7 +21,7 @@ function countNearbyPlayer(map, cube)
     
     for _, hex in pairs(map.hexes) do
         if hex.neighbour then
-            if hex.player_id == active_player_id then
+            if hex.player_id == G.active_player_id then
                 friendly_count = friendly_count + 1
             elseif hex.player_id then
                 enemy_count = enemy_count + 1
@@ -29,14 +29,16 @@ function countNearbyPlayer(map, cube)
         end
     end
     
-    clear_all_neighbours(map, w, h)
+    clear_all_neighbours(map, G.w, G.h)
     return enemy_count, friendly_count
 end
 
 function checkIfWin(map, w, h)
     local enemy
     local friend
+    local surrounded_queens = {}
 
+    -- First pass: check all queens to see if any are surrounded
     for _, hex in pairs(map.hexes) do
         if hex.piece then
             -- Check the entire stack for Queen Bees (including under other pieces)
@@ -57,16 +59,26 @@ function checkIfWin(map, w, h)
             if queen_owner then
                 enemy, friend = countNearbyPlayer(map, hex.cube)
                 if enemy + friend == 6 then
-                    game_over = true
-                    who_won[queen_owner] = 1
+                    surrounded_queens[queen_owner] = true
                 end
             end
         end
     end
+    
+    -- Second pass: set game_over and who_won based on surrounded queens
+    -- This handles ties when both queens are surrounded in the same turn
+    if surrounded_queens[1] or surrounded_queens[2] then
+        G.game_over = true
+        if surrounded_queens[1] then
+            G.who_won[1] = 1
+        end
+        if surrounded_queens[2] then
+            G.who_won[2] = 1
+        end
+    end
 end
 
-function selectPieceOnMap(map, x, y, active_player_id)
-    local cube = cubecoords.from_offset(x, y)
+function selectPieceOnMap(map, cube, active_player_id)
     local hex = map_get_hex(map, cube)
     if hex and hex.player_id == active_player_id then
         return true
@@ -74,41 +86,42 @@ function selectPieceOnMap(map, x, y, active_player_id)
     return false
 end
 
-function printSelectedPieceInfo(map, selected_piece_x, selected_piece_y, move_mode, x, y)
-    if move_mode == 1 and selected_piece_x > 0 and selected_piece_y > 0 then
-        local cube = cubecoords.from_offset(selected_piece_x, selected_piece_y)
-        local hex = map_get_hex(map, cube)
-        if hex and hex.piece then
-            love.graphics.print("Selected piece: "..hex.piece.name.." ("..selected_piece_x..", "..selected_piece_y..")", x, y)
+function printSelectedPieceInfo(map, selected_piece_cube, move_mode, x, y, active_player_id)
+    if move_mode == 1 and selected_piece_cube then
+        if selectPieceOnMap(map, selected_piece_cube, active_player_id) then
+            local hex = map_get_hex(map, selected_piece_cube)
+            if hex and hex.piece then
+                love.graphics.print("Selected piece: "..hex.piece.name.." ("..selected_piece_cube.x..", "..selected_piece_cube.y..", "..selected_piece_cube.z..")", x, y)
+            end
         end
     end
 end
 
 function pass_turn(active_piece_id)
-    if (active_player_id == 1) then
-        move_mode = 0
-        active_player_id = 2
-        turn_number[1] = turn_number[1] + 1
+    if (G.active_player_id == 1) then
+        G.move_mode = 0
+        G.active_player_id = 2
+        G.turn_number[1] = G.turn_number[1] + 1
         
         -- Clear movement flags for player 2 pieces from their previous turn
         -- (Player 2's turn is starting, so clear their old flags)
-        for _, hex in pairs(map.hexes) do
+        for _, hex in pairs(G.map.hexes) do
             if hex.piece and hex.player_id == 2 then
                 hex.piece.has_moved_last_turn = false
             end
         end
-    elseif (active_player_id == 2) then
-        move_mode = 0
-        active_player_id = 1
-        turn_number[2] = turn_number[2] + 1
+    elseif (G.active_player_id == 2) then
+        G.move_mode = 0
+        G.active_player_id = 1
+        G.turn_number[2] = G.turn_number[2] + 1
         
         -- Clear movement flags for player 1 pieces from their previous turn
         -- (Player 1's turn is starting, so clear their old flags)
-        for _, hex in pairs(map.hexes) do
+        for _, hex in pairs(G.map.hexes) do
             if hex.piece and hex.player_id == 1 then
                 hex.piece.has_moved_last_turn = false
             end
         end
     end
-    checkIfWin(map, w, h)
+    checkIfWin(G.map, G.w, G.h)
 end

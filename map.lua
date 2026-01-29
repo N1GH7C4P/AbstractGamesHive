@@ -7,7 +7,7 @@ local PiecesEnum = require("pieces.pieces_enum")
 -- Maintains backward compatibility through wrapper functions
 
 local function addPieceToMap(player_nb, piece_template, map, cube)
-    highlight = 0
+    G.highlight = 0
     removePieceFromStock(player_nb, piece_template.id)
     local hex = map_get_hex(map, cube)
     if hex then
@@ -43,20 +43,20 @@ local function isNextToFriendly(map, col, row)
     
     local cube = cubecoords.from_offset(col, row)
     print("isNextToFriendly: checking cube [" .. cube.x .. "," .. cube.y .. "," .. cube.z .. "]")
-    print("  active_player_id=" .. active_player_id .. ", turn_number[" .. active_player_id .. "]=" .. turn_number[active_player_id])
+    print("  active_player_id=" .. G.active_player_id .. ", turn_number[" .. G.active_player_id .. "]=" .. G.turn_number[G.active_player_id])
 
     enemy_count, friendly_count = countNearbyPlayer(map, cube)
     print("  Neighbors: enemy=" .. enemy_count .. ", friendly=" .. friendly_count)
     
     -- Check for first and second piece
-    if (turn_number[active_player_id] == 1) then
-        print("  First turn for player " .. active_player_id)
+    if (G.turn_number[G.active_player_id] == 1) then
+        print("  First turn for player " .. G.active_player_id)
         local not_active = 1
-        if active_player_id == 1 then
+        if G.active_player_id == 1 then
             not_active = 2
         end
-        print("  Other player turn_number[" .. not_active .. "]=" .. turn_number[not_active])
-        if (turn_number[not_active] == 2) then
+        print("  Other player turn_number[" .. not_active .. "]=" .. G.turn_number[not_active])
+        if (G.turn_number[not_active] == 2) then
             print("  Second piece placement - must have exactly 1 enemy neighbor")
             if (enemy_count ~= 1) then
                 print("  REJECTED: enemy_count=" .. enemy_count .. " != 1")
@@ -99,14 +99,14 @@ function tryAddPieceToMap(player_nb, piece_template, map, cube)
         local center_cube = cubecoords.new(0, 0, 0)
         local center_hex = map_get_hex(map, center_cube)
         if center_hex then
-            highlight = 0
+            G.highlight = 0
             removePieceFromStock(player_nb, piece_template.id)
             center_hex.player_id = player_nb
             center_hex.piece = piece_template.class:new(player_nb)
             
             -- Send network message if in multiplayer game
-            if network and network.mode ~= "none" and network.connected then
-                network.send_place(player_nb, piece_template.id, center_cube)
+            if G.network and G.network.mode ~= "none" and G.network.connected then
+                G.network.send_place(player_nb, piece_template.id, center_cube)
             end
             
             -- No need to expand for first piece at center
@@ -115,7 +115,7 @@ function tryAddPieceToMap(player_nb, piece_template, map, cube)
         return false
     end
     
-    if (turn_number[player_nb] == Config.rules.queenMustBePlacedByTurn and player[player_nb].pieces[1].inStock == 1 and piece_template.id ~= 1) then
+    if (G.turn_number[player_nb] == Config.rules.queenMustBePlacedByTurn and G.player[player_nb].pieces[1].inStock == 1 and piece_template.id ~= 1) then
         print("Must place Queen bee")
         return false
     end
@@ -128,8 +128,8 @@ function tryAddPieceToMap(player_nb, piece_template, map, cube)
     addPieceToMap(player_nb, piece_template, map, cube)
     
     -- Send network message if in multiplayer game
-    if network and network.mode ~= "none" and network.connected then
-        network.send_place(player_nb, piece_template.id, cube)
+    if G.network and G.network.mode ~= "none" and G.network.connected then
+        G.network.send_place(player_nb, piece_template.id, cube)
     end
     
     return true
@@ -484,7 +484,7 @@ function move_piece_on_map(map, src_cube, dest_cube)
     
     -- Call the piece's move_piece method if available
     if src_hex.piece and src_hex.piece.move_piece then
-        local success = src_hex.piece:move_piece(map, src_cube, dest_cube, active_player_id)
+        local success = src_hex.piece:move_piece(map, src_cube, dest_cube, G.active_player_id)
         if success then
             -- Check if piece moved to outermost ring and expand if so
             local center = cubecoords.new(0, 0, 0)
@@ -494,8 +494,8 @@ function move_piece_on_map(map, src_cube, dest_cube)
             end
             
             -- Send network message if in multiplayer game
-            if network and network.mode ~= "none" and network.connected then
-                network.send_move(active_player_id, src_cube, dest_cube)
+            if G.network and G.network.mode ~= "none" and G.network.connected then
+                G.network.send_move(G.active_player_id, src_cube, dest_cube)
             end
         end
         return success

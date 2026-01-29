@@ -1,4 +1,6 @@
 -- Game state save/load functionality
+local Globals = require("globals")
+
 GameState = {}
 
 -- Simple JSON encoder with pretty-printing
@@ -145,32 +147,32 @@ function GameState.save(filename)
     
     -- Global game state
     save_data.game_state = {
-        active_player_id = active_player_id,
-        active_piece_id = active_piece_id,
-        turn_number = {turn_number[1], turn_number[2]},
-        move_mode = move_mode,
-        game_over = game_over,
-        who_won = {who_won[1], who_won[2]},
-        selected_piece_x = selected_piece_x,
-        selected_piece_y = selected_piece_y,
-        highlight = highlight
+        active_player_id = G.active_player_id,
+        active_piece_id = G.active_piece_id,
+        turn_number = {G.turn_number[1], G.turn_number[2]},
+        move_mode = G.move_mode,
+        game_over = G.game_over,
+        who_won = {G.who_won[1], G.who_won[2]},
+        selected_piece_x = G.selected_piece_x,
+        selected_piece_y = G.selected_piece_y,
+        highlight = G.highlight
     }
     
     -- Camera state
     save_data.camera = {
-        x = camera_x,
-        y = camera_y,
-        zoom = camera_zoom
+        x = G.camera_x,
+        y = G.camera_y,
+        zoom = G.camera_zoom
     }
     
     -- Player inventories
     save_data.players = {}
     for p = 1, 2 do
         save_data.players[p] = {
-            id = player[p].id,
+            id = G.player[p].id,
             pieces = {}
         }
-        for i, piece_info in ipairs(player[p].pieces) do
+        for i, piece_info in ipairs(G.player[p].pieces) do
             save_data.players[p].pieces[i] = {
                 id = piece_info.id,
                 name = piece_info.name,
@@ -181,7 +183,7 @@ function GameState.save(filename)
     
     -- Pieces on board
     save_data.board = {}
-    for cube_key, hex in pairs(map.hexes) do
+    for cube_key, hex in pairs(G.map.hexes) do
         if hex.piece then
             local piece_entry = {
                 cube = {x = hex.cube.x, y = hex.cube.y, z = hex.cube.z},
@@ -204,7 +206,7 @@ function GameState.save(filename)
     
     -- Map metadata
     save_data.map = {
-        current_radius = map.current_radius
+        current_radius = G.map.current_radius
     }
     
     -- Write to file
@@ -235,7 +237,7 @@ function GameState.load(filename)
     end
     
     -- Clear current game state
-    for cube_key, hex in pairs(map.hexes) do
+    for cube_key, hex in pairs(G.map.hexes) do
         hex.piece = nil
         hex.player_id = nil
         hex.neighbour = nil
@@ -245,28 +247,28 @@ function GameState.load(filename)
     
     -- Restore global game state
     if save_data.game_state then
-        active_player_id = save_data.game_state.active_player_id or 1
-        active_piece_id = save_data.game_state.active_piece_id or 1
-        turn_number = {
+        G.active_player_id = save_data.game_state.active_player_id or 1
+        G.active_piece_id = save_data.game_state.active_piece_id or 1
+        G.turn_number = {
             save_data.game_state.turn_number[1] or 1,
             save_data.game_state.turn_number[2] or 1
         }
-        move_mode = save_data.game_state.move_mode or 0
-        game_over = save_data.game_state.game_over or false
-        who_won = {
+        G.move_mode = save_data.game_state.move_mode or 0
+        G.game_over = save_data.game_state.game_over or false
+        G.who_won = {
             save_data.game_state.who_won[1] or 0,
             save_data.game_state.who_won[2] or 0
         }
-        selected_piece_x = save_data.game_state.selected_piece_x or 0
-        selected_piece_y = save_data.game_state.selected_piece_y or 0
-        highlight = save_data.game_state.highlight or 0
+        G.selected_piece_x = save_data.game_state.selected_piece_x or 0
+        G.selected_piece_y = save_data.game_state.selected_piece_y or 0
+        G.highlight = save_data.game_state.highlight or 0
     end
     
     -- Restore camera
     if save_data.camera then
-        camera_x = save_data.camera.x or 0
-        camera_y = save_data.camera.y or 0
-        camera_zoom = save_data.camera.zoom or 0.8
+        G.camera_x = save_data.camera.x or 0
+        G.camera_y = save_data.camera.y or 0
+        G.camera_zoom = save_data.camera.zoom or 0.8
     end
     
     -- Restore player inventories
@@ -274,8 +276,8 @@ function GameState.load(filename)
         for p = 1, 2 do
             if save_data.players[p] then
                 for i, piece_data in ipairs(save_data.players[p].pieces) do
-                    if player[p].pieces[i] then
-                        player[p].pieces[i].inStock = piece_data.inStock
+                    if G.player[p].pieces[i] then
+                        G.player[p].pieces[i].inStock = piece_data.inStock
                     end
                 end
             end
@@ -284,7 +286,7 @@ function GameState.load(filename)
     
     -- Restore map metadata
     if save_data.map then
-        map.current_radius = save_data.map.current_radius or 10
+        G.map.current_radius = save_data.map.current_radius or 10
     end
     
     -- Restore pieces on board
@@ -293,7 +295,7 @@ function GameState.load(filename)
         for _, piece_data in ipairs(save_data.board) do
             if not piece_data.has_under_piece then
                 local cube = cubecoords.new(piece_data.cube.x, piece_data.cube.y, piece_data.cube.z)
-                local hex = map_get_hex(map, cube)
+                local hex = map_get_hex(G.map, cube)
                 
                 if hex then
                     -- Get piece template and create instance
@@ -310,7 +312,7 @@ function GameState.load(filename)
         for _, piece_data in ipairs(save_data.board) do
             if piece_data.has_under_piece and piece_data.under_piece then
                 local cube = cubecoords.new(piece_data.cube.x, piece_data.cube.y, piece_data.cube.z)
-                local hex = map_get_hex(map, cube)
+                local hex = map_get_hex(G.map, cube)
                 
                 if hex then
                     -- First, create the piece that goes underneath
@@ -337,10 +339,8 @@ function GameState.load(filename)
         end
     end
     
-    -- Reset Pillbug special move state
-    pillbug_special_mode = false
-    pillbug_cube = nil
-    pillbug_target_cube = nil
+    -- Reset transient UI state (not part of saved game state)
+    Globals.reset_ui_state()
     
     print("Game loaded from: " .. filename)
     return true

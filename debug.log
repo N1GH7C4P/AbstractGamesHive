@@ -3,9 +3,167 @@ Lua socket loaded successfully
 Center hex (0,0,0) exists: true
 Center hex key: 0,0,0
 Game loaded from: savegame.json
-CLICK: mouse=(523,472), camera=(512,384), pixel=(13.75,110), cube=[0,-2,2], hex_exists=true
-isNextToFriendly: checking cube [0,-2,2]
-  active_player_id=1, turn_number[1]=8
-  Neighbors: enemy=0, friendly=1
-  Normal placement - must have friendly neighbors and no enemies
-  APPROVED
+CLICK: mouse=(484,302), camera=(585,441), pixel=(-63.125,-86.875), cube=[-1,2,-1], hex_exists=true
+=== mark_legal_moves_for_piece called ===
+Source cube: [-1,2,-1]
+Piece: Mosquito
+Testing Mosquito moves - mimics adjacent pieces
+Mosquito adjacent piece types: has Pillbug: false, has Beetle: true
+  pieceCanDetach checking [-1,2,-1]
+    SUCCESS: can detach without breaking hive
+Mosquito:get_legal_moves starting from [-1,2,-1]
+  Adjacent piece types: 
+    - Queen Bee (id: 1)
+    - Beetle (id: 2)
+  Checking moves as Queen bee
+  Checking moves as Beetle
+Total unique destinations found: 6
+Found 6 potential normal moves
+Marked 4 normal moves and 0 special targets
+Marked 4 normal moves and 0 special targets
+=== Complete ===
+CLICK: mouse=(485,302), camera=(585,441), pixel=(-62.5,-86.875), cube=[-1,2,-1], hex_exists=true
+CLICK: mouse=(419,448), camera=(585,441), pixel=(-103.75,4.375), cube=[-2,1,1], hex_exists=true
+=== mark_legal_moves_for_piece called ===
+Source cube: [-2,1,1]
+Piece: Beetle
+Testing Beetle adjacent moves
+  pieceCanDetach checking [-2,1,1]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-2,1,1]
+    SUCCESS: can detach without breaking hive
+  Neighbor 1: [-1,0,1] -> true
+  pieceCanDetach checking [-2,1,1]
+    SUCCESS: can detach without breaking hive
+  Neighbor 2: [-1,1,0] -> true
+  pieceCanDetach checking [-2,1,1]
+    SUCCESS: can detach without breaking hive
+  Neighbor 3: [-2,2,0] -> true
+  pieceCanDetach checking [-2,1,1]
+    SUCCESS: can detach without breaking hive
+  Neighbor 4: [-3,2,1] -> true
+  pieceCanDetach checking [-2,1,1]
+    SUCCESS: can detach without breaking hive
+  Neighbor 5: [-3,1,2] -> false
+  pieceCanDetach checking [-2,1,1]
+    SUCCESS: can detach without breaking hive
+  Neighbor 6: [-2,0,2] -> true
+Legal moves: 5
+Marked 5 normal moves and 0 special targets
+=== Complete ===
+CLICK: mouse=(419,448), camera=(585,441), pixel=(-103.75,4.375), cube=[-2,1,1], hex_exists=true
+CLICK: mouse=(492,316), camera=(585,441), pixel=(-58.125,-78.125), cube=[-1,2,-1], hex_exists=true
+=== mark_legal_moves_for_piece called ===
+Source cube: [-1,2,-1]
+Piece: Mosquito
+Testing Mosquito moves - mimics adjacent pieces
+Mosquito adjacent piece types: has Pillbug: false, has Beetle: true
+  pieceCanDetach checking [-1,2,-1]
+    SUCCESS: can detach without breaking hive
+Mosquito:get_legal_moves starting from [-1,2,-1]
+  Adjacent piece types: 
+    - Queen Bee (id: 1)
+    - Beetle (id: 2)
+  Checking moves as Queen bee
+  Checking moves as Beetle
+Total unique destinations found: 6
+Found 6 potential normal moves
+Marked 4 normal moves and 0 special targets
+Marked 4 normal moves and 0 special targets
+=== Complete ===
+CLICK: mouse=(492,316), camera=(585,441), pixel=(-58.125,-78.125), cube=[-1,2,-1], hex_exists=true
+CLICK: mouse=(492,316), camera=(585,441), pixel=(-58.125,-78.125), cube=[-1,2,-1], hex_exists=true
+=== mark_legal_moves_for_piece called ===
+Source cube: [-1,2,-1]
+Piece: Mosquito
+Testing Mosquito moves - mimics adjacent pieces
+Mosquito adjacent piece types: has Pillbug: false, has Beetle: true
+  pieceCanDetach checking [-1,2,-1]
+    SUCCESS: can detach without breaking hive
+Mosquito:get_legal_moves starting from [-1,2,-1]
+  Adjacent piece types: 
+    - Queen Bee (id: 1)
+    - Beetle (id: 2)
+  Checking moves as Queen bee
+  Checking moves as Beetle
+Total unique destinations found: 6
+Found 6 potential normal moves
+Marked 4 normal moves and 0 special targets
+Marked 4 normal moves and 0 special targets
+=== Complete ===
+CLICK: mouse=(441,352), camera=(585,441), pixel=(-90,-55.625), cube=[-2,2,0], hex_exists=true
+  pieceCanDetach checking [-1,2,-1]
+    SUCCESS: can detach without breaking hive
+CLICK: mouse=(495,397), camera=(585,441), pixel=(-56.25,-27.5), cube=[-1,1,0], hex_exists=true
+Spot not empty
+CLICK: mouse=(663,477), camera=(585,441), pixel=(48.75,22.5), cube=[1,-1,0], hex_exists=true
+=== mark_legal_moves_for_piece called ===
+Source cube: [1,-1,0]
+Piece: Mosquito
+Testing Mosquito moves - mimics adjacent pieces
+Mosquito adjacent piece types: has Pillbug: false, has Beetle: true
+  pieceCanDetach checking [1,-1,0]
+    SUCCESS: can detach without breaking hive
+Mosquito:get_legal_moves starting from [1,-1,0]
+  Adjacent piece types: 
+    - Beetle (id: 2)
+  Checking moves as Beetle
+Total unique destinations found: 6
+Found 6 potential normal moves
+Marked 3 normal moves and 0 special targets
+Marked 3 normal moves and 0 special targets
+=== Complete ===
+CLICKED CENTER (0,0,0): pixel=(8.125,10.625), hex_exists=true
+CLICK: mouse=(598,458), camera=(585,441), pixel=(8.125,10.625), cube=[0,-0,0], hex_exists=true
+  pieceCanDetach checking [1,-1,0]
+    SUCCESS: can detach without breaking hive
+CLICK: mouse=(521,416), camera=(585,441), pixel=(-40,-15.625), cube=[-1,1,0], hex_exists=true
+=== mark_legal_moves_for_piece called ===
+Source cube: [-1,1,0]
+Piece: Beetle
+Testing Beetle adjacent moves
+  pieceCanDetach checking [-1,1,0]
+    SUCCESS: can detach without breaking hive
+  pieceCanDetach checking [-1,1,0]
+    SUCCESS: can detach without breaking hive
+  Neighbor 1: [0,0,0] -> true
+  pieceCanDetach checking [-1,1,0]
+    SUCCESS: can detach without breaking hive
+  Neighbor 2: [0,1,-1] -> true
+  pieceCanDetach checking [-1,1,0]
+    SUCCESS: can detach without breaking hive
+  Neighbor 3: [-1,2,-1] -> true
+  pieceCanDetach checking [-1,1,0]
+    SUCCESS: can detach without breaking hive
+  Neighbor 4: [-2,2,0] -> true
+  pieceCanDetach checking [-1,1,0]
+    SUCCESS: can detach without breaking hive
+  Neighbor 5: [-2,1,1] -> true
+  pieceCanDetach checking [-1,1,0]
+    SUCCESS: can detach without breaking hive
+  Neighbor 6: [-1,0,1] -> true
+Legal moves: 6
+Marked 6 normal moves and 0 special targets
+=== Complete ===
+CLICK: mouse=(441,450), camera=(585,441), pixel=(-90,5.625), cube=[-2,1,1], hex_exists=true
+  pieceCanDetach checking [-1,1,0]
+    SUCCESS: can detach without breaking hive
+CLICK: mouse=(418,346), camera=(585,441), pixel=(-104.375,-59.375), cube=[-2,2,0], hex_exists=true
+Spot not empty
+CLICK: mouse=(494,484), camera=(585,441), pixel=(-56.875,26.875), cube=[-1,0,1], hex_exists=true
+=== mark_legal_moves_for_piece called ===
+Source cube: [-1,0,1]
+Piece: Queen bee
+Testing Queen moves - checking adjacent hexes only
+Found 6 adjacent hexes
+  pieceCanDetach checking [-1,0,1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [-1,0,1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [-1,0,1]
+    FAIL: hive would break apart
+  pieceCanDetach checking [-1,0,1]
+    FAIL: hive would break apart
+Total legal moves: 0
+Marked 0 normal moves and 0 special targets
+=== Complete ===

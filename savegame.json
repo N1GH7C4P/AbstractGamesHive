@@ -1,25 +1,8 @@
 {
-  "game_state": {
-    "active_player_id": 1,
-    "game_over": false,
-    "highlight": 0,
-    "move_mode": 0,
-    "active_piece_id": 3,
-    "selected_piece_x": 0,
-    "selected_piece_y": 0,
-    "turn_number": [
-      8,
-      8
-    ],
-    "who_won": [
-      0,
-      0
-    ]
-  },
   "camera": {
-    "zoom": 0.8,
-    "x": 512,
-    "y": 384
+    "zoom": 1.6,
+    "x": 585,
+    "y": 441
   },
   "players": [
     {
@@ -27,43 +10,43 @@
       "pieces": [
         {
           "id": 1,
-          "inStock": 0,
-          "name": "Queen bee"
+          "name": "Queen bee",
+          "inStock": 0
         },
         {
           "id": 2,
-          "inStock": 2,
-          "name": "Beetle"
+          "name": "Beetle",
+          "inStock": 1
         },
         {
           "id": 3,
-          "inStock": 1,
-          "name": "Grasshopper"
+          "name": "Grasshopper",
+          "inStock": 3
         },
         {
           "id": 4,
-          "inStock": 0,
-          "name": "Spider"
+          "name": "Spider",
+          "inStock": 2
         },
         {
           "id": 5,
-          "inStock": 1,
-          "name": "Soldier ant"
+          "name": "Soldier ant",
+          "inStock": 2
         },
         {
           "id": 6,
-          "inStock": 1,
-          "name": "Ladybug"
+          "name": "Ladybug",
+          "inStock": 1
         },
         {
           "id": 7,
-          "inStock": 1,
-          "name": "Mosquito"
+          "name": "Mosquito",
+          "inStock": 0
         },
         {
           "id": 8,
-          "inStock": 1,
-          "name": "Pillbug"
+          "name": "Pillbug",
+          "inStock": 1
         }
       ]
     },
@@ -72,150 +55,141 @@
       "pieces": [
         {
           "id": 1,
-          "inStock": 0,
-          "name": "Queen bee"
+          "name": "Queen bee",
+          "inStock": 0
         },
         {
           "id": 2,
-          "inStock": 2,
-          "name": "Beetle"
+          "name": "Beetle",
+          "inStock": 0
         },
         {
           "id": 3,
-          "inStock": 3,
-          "name": "Grasshopper"
+          "name": "Grasshopper",
+          "inStock": 3
         },
         {
           "id": 4,
-          "inStock": 2,
-          "name": "Spider"
+          "name": "Spider",
+          "inStock": 2
         },
         {
           "id": 5,
-          "inStock": 1,
-          "name": "Soldier ant"
+          "name": "Soldier ant",
+          "inStock": 3
         },
         {
           "id": 6,
-          "inStock": 1,
-          "name": "Ladybug"
+          "name": "Ladybug",
+          "inStock": 1
         },
         {
           "id": 7,
-          "inStock": 1,
-          "name": "Mosquito"
+          "name": "Mosquito",
+          "inStock": 0
         },
         {
           "id": 8,
-          "inStock": 1,
-          "name": "Pillbug"
+          "name": "Pillbug",
+          "inStock": 1
         }
       ]
     }
   ],
-  "board": [
-    {
-      "has_under_piece": false,
-      "player_id": 1,
-      "cube": {
-        "z": 0,
-        "x": 0,
-        "y": 0
-      },
-      "piece_id": 5
-    },
-    {
-      "has_under_piece": false,
-      "player_id": 1,
-      "cube": {
-        "z": 1,
-        "x": -1,
-        "y": 0
-      },
-      "piece_id": 5
-    },
-    {
-      "has_under_piece": false,
-      "player_id": 2,
-      "cube": {
-        "z": -1,
-        "x": 1,
-        "y": 0
-      },
-      "piece_id": 1
-    },
-    {
-      "has_under_piece": false,
-      "player_id": 1,
-      "cube": {
-        "z": -1,
-        "x": 0,
-        "y": 1
-      },
-      "piece_id": 4
-    },
-    {
-      "has_under_piece": false,
-      "player_id": 1,
-      "cube": {
-        "z": 0,
-        "x": -1,
-        "y": 1
-      },
-      "piece_id": 1
-    },
-    {
-      "has_under_piece": false,
-      "player_id": 1,
-      "cube": {
-        "z": 2,
-        "x": -2,
-        "y": 0
-      },
-      "piece_id": 3
-    },
-    {
-      "has_under_piece": false,
-      "player_id": 1,
-      "cube": {
-        "z": 2,
-        "x": -1,
-        "y": -1
-      },
-      "piece_id": 3
-    },
-    {
-      "has_under_piece": false,
-      "player_id": 2,
-      "cube": {
-        "z": -1,
-        "x": -1,
-        "y": 2
-      },
-      "piece_id": 5
-    },
-    {
-      "has_under_piece": false,
-      "player_id": 2,
-      "cube": {
-        "z": 0,
-        "x": -2,
-        "y": 2
-      },
-      "piece_id": 5
-    },
-    {
-      "has_under_piece": false,
-      "player_id": 1,
-      "cube": {
-        "z": 1,
-        "x": -2,
-        "y": 1
-      },
-      "piece_id": 4
-    }
-  ],
   "map": {
     "current_radius": 10
+  },
+  "board": [
+    {
+      "cube": {
+        "z": 0,
+        "x": 0,
+        "y": 0
+      },
+      "under_piece": {
+        "id": 5,
+        "player_id": 1
+      },
+      "has_under_piece": true,
+      "piece_id": 2,
+      "player_id": 1
+    },
+    {
+      "piece_id": 1,
+      "has_under_piece": false,
+      "cube": {
+        "z": 1,
+        "x": -1,
+        "y": 0
+      },
+      "player_id": 1
+    },
+    {
+      "piece_id": 7,
+      "has_under_piece": false,
+      "cube": {
+        "z": 0,
+        "x": 1,
+        "y": -1
+      },
+      "player_id": 1
+    },
+    {
+      "piece_id": 2,
+      "has_under_piece": false,
+      "cube": {
+        "z": 0,
+        "x": -1,
+        "y": 1
+      },
+      "player_id": 2
+    },
+    {
+      "piece_id": 2,
+      "has_under_piece": false,
+      "cube": {
+        "z": 1,
+        "x": -2,
+        "y": 1
+      },
+      "player_id": 2
+    },
+    {
+      "piece_id": 1,
+      "has_under_piece": false,
+      "cube": {
+        "z": 0,
+        "x": -2,
+        "y": 2
+      },
+      "player_id": 2
+    },
+    {
+      "piece_id": 7,
+      "has_under_piece": false,
+      "cube": {
+        "z": -1,
+        "x": -1,
+        "y": 2
+      },
+      "player_id": 2
+    }
+  ],
+  "game_state": {
+    "highlight": 1,
+    "move_mode": 1,
+    "active_piece_id": 2,
+    "selected_piece_x": -1,
+    "selected_piece_y": -1,
+    "who_won": [
+      0,
+      0
+    ],
+    "active_player_id": 2,
+    "game_over": false,
+    "turn_number": [
+      8,
+      7
+    ]
   }
 }
