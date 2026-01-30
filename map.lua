@@ -2,6 +2,7 @@ local player = require "player"
 local PiecesEnum = require "pieces.pieces_enum"
 local animation = require("animation")
 local cubecoords = require "cubecoords"
+local Config = require("config")
 
 -- Forward declarations
 local mark_neighbours_on_map_cube

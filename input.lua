@@ -40,12 +40,12 @@ local keyHandlers = {
     
     ["d"] = function()
         -- Save game
-        gamestate.save("output/savegame.json")
+        gamestate.save("savegame.json")
     end,
-    
+
     ["l"] = function()
         -- Load game
-        gamestate.load("output/savegame.json")
+        gamestate.load("savegame.json")
     end,
     
     ["h"] = function()

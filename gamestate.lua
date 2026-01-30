@@ -83,14 +83,8 @@ end
 
 -- Save complete game state to file
 function GameState.save(filename)
-    filename = filename or "output/savegame.json"
-    
-    local file = io.open(filename, "w")
-    if not file then
-        print("ERROR: Could not open file for writing: " .. filename)
-        return false
-    end
-    
+    filename = filename or "savegame.json"
+
     -- Build save data structure
     local save_data = {
         game_state = buildGameStateData(),
@@ -99,11 +93,15 @@ function GameState.save(filename)
         board = buildBoardData(),
         map = buildMapData()
     }
-    
-    -- Write to file
-    file:write(json.encode(save_data))
-    file:close()
-    print("Game saved to: " .. filename)
+
+    -- Write using LÖVE filesystem (writes to save directory)
+    local success, message = love.filesystem.write(filename, json.encode(save_data))
+    if not success then
+        print("ERROR: Could not save game: " .. (message or "unknown error"))
+        return false
+    end
+
+    print("Game saved to: " .. love.filesystem.getSaveDirectory() .. "/" .. filename)
     return true
 end
 
@@ -222,17 +220,15 @@ end
 
 -- Load game state from file
 function GameState.load(filename)
-    filename = filename or "output/savegame.json"
-    
-    local file = io.open(filename, "r")
-    if not file then
-        print("ERROR: Could not open file for reading: " .. filename)
+    filename = filename or "savegame.json"
+
+    -- Read using LÖVE filesystem (reads from save directory)
+    local content, error_msg = love.filesystem.read(filename)
+    if not content then
+        print("ERROR: Could not open file for reading: " .. (error_msg or filename))
         return false
     end
-    
-    local content = file:read("*all")
-    file:close()
-    
+
     -- Parse save data
     local save_data = json.decode(content)
     if not save_data then
