@@ -31,11 +31,6 @@ function QueenBee:try_to_move(map, src_cube, dest_cube)
     return true
 end
 
-function QueenBee:move_piece(map, src_cube, dest_cube, active_player_id)
-    -- Use standard movement from movement_utils
-    return movement_utils.simple_move_piece(map, src_cube, dest_cube)
-end
-
 function QueenBee:get_legal_moves(map, src_cube)
     -- Queen moves one space to adjacent empty hexes
     local moves = {}

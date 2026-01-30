@@ -144,11 +144,6 @@ function Ladybug:find_all_paths(map, current_cube, steps, visited, destinations,
     end
 end
 
-function Ladybug:move_piece(map, src_cube, dest_cube, active_player_id)
-    -- Use standard movement from movement_utils
-    return movement_utils.simple_move_piece(map, src_cube, dest_cube)
-end
-
 function Ladybug:mark_legal_moves(map, src_cube)
     print("Testing Ladybug moves - exactly 3 steps (2 on top, 1 down)")
     

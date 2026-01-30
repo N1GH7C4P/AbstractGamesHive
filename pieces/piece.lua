@@ -90,4 +90,11 @@ function Piece:execute_drop(map, src_cube, target_cube, drop_cube)
     return false
 end
 
+-- Default move piece implementation for standard pieces
+-- Pieces with special movement (Beetle, Mosquito, Pillbug) can override this
+function Piece:move_piece(map, src_cube, dest_cube, active_player_id)
+    local movement_utils = require("pieces.movement_utils")
+    return movement_utils.simple_move_piece(map, src_cube, dest_cube)
+end
+
 return Piece

@@ -102,13 +102,8 @@ function SoldierAnt:get_legal_moves(map, src_cube)
             end
         end
     end
-    
-    return legal_moves
-end
 
-function SoldierAnt:move_piece(map, src_cube, dest_cube, active_player_id)
-    -- Use standard movement from movement_utils
-    return movement_utils.simple_move_piece(map, src_cube, dest_cube)
+    return legal_moves
 end
 
 function SoldierAnt:mark_legal_moves(map, src_cube)

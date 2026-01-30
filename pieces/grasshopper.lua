@@ -113,11 +113,6 @@ function Grasshopper:get_legal_moves(map, src_cube)
     return legal_moves
 end
 
-function Grasshopper:move_piece(map, src_cube, dest_cube, active_player_id)
-    -- Use standard movement from movement_utils
-    return movement_utils.simple_move_piece(map, src_cube, dest_cube)
-end
-
 function Grasshopper:mark_legal_moves(map, src_cube)
     print("Testing Grasshopper moves - checking 6 directions")
     

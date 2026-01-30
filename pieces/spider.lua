@@ -154,11 +154,6 @@ function Spider:find_all_paths(map, current_cube, steps, visited, destinations, 
     end
 end
 
-function Spider:move_piece(map, src_cube, dest_cube, active_player_id)
-    -- Use standard movement from movement_utils
-    return movement_utils.simple_move_piece(map, src_cube, dest_cube)
-end
-
 function Spider:mark_legal_moves(map, src_cube)
     print("Testing Spider moves - finding paths of exactly 3 steps")
     
