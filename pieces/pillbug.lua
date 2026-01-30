@@ -82,9 +82,9 @@ function Pillbug:get_pickable_pieces(map, src_cube)
                 map_module.clear_all_neighbours(map, map.w, map.h)
                 local first_cube = map_module.firstPieceCoords(map)
                 local can_pick = true
-                
+
                 if first_cube then
-                    flood_neighbours(map, first_cube)
+                    map_module.flood_neighbours(map, first_cube)
                     
                     for _, check_hex in pairs(map.hexes) do
                         if check_hex.piece and not check_hex.neighbour then

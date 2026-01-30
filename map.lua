@@ -543,4 +543,5 @@ return {
     pieceCanDetach = pieceCanDetach,
     try_self_detach = try_self_detach,
     try_move_piece_on_map = try_move_piece_on_map,
+    firstPieceCoords = firstPieceCoords,
 }

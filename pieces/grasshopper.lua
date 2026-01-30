@@ -1,5 +1,6 @@
 local Piece = require("pieces.piece")
 local map_module = require("map")
+local movement_utils = require("pieces.movement_utils")
 
 -- Grasshopper class
 Grasshopper = setmetatable({}, {__index = Piece})
@@ -113,19 +114,8 @@ function Grasshopper:get_legal_moves(map, src_cube)
 end
 
 function Grasshopper:move_piece(map, src_cube, dest_cube, active_player_id)
-    local src_hex = map_module.get_hex(map, src_cube)
-    local dest_hex = map_module.get_hex(map, dest_cube)
-    
-    if not src_hex or not dest_hex then return false end
-    
-    -- Mark piece as moved this turn
-    src_hex.piece.has_moved_last_turn = true
-    
-    dest_hex.piece = src_hex.piece
-    dest_hex.player_id = src_hex.player_id
-    src_hex.piece = nil
-    src_hex.player_id = nil
-    return true
+    -- Use standard movement from movement_utils
+    return movement_utils.simple_move_piece(map, src_cube, dest_cube)
 end
 
 function Grasshopper:mark_legal_moves(map, src_cube)

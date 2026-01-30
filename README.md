@@ -2,6 +2,107 @@
 * https://love2d.org
 * a, s and click to select piece
 
+## Architecture
+
+This is a LÖVE2D-based implementation of the Hive board game. The codebase is organized into a modular structure with clear separation of concerns.
+
+### Module Hierarchy
+
+```
+main.lua (Entry Point)
+├── config.lua                    # Game configuration
+├── animation.lua                 # Animation system
+├── console.lua                   # Debug console
+│
+├── game.lua                      # Core game logic
+│   ├── player.lua                # Player management
+│   ├── globals.lua               # Global state
+│   ├── hexagon.lua               # Hexagon drawing/math
+│   ├── map.lua                   # Game board/map
+│   ├── pieces.lua                # Piece initialization
+│   │   ├── config.lua
+│   │   └── pieces/               # Individual piece types
+│   │       ├── pieces_enum.lua   # Piece type constants
+│   │       ├── piece.lua         # Base piece class
+│   │       ├── movement_utils.lua # ⭐ Shared movement logic
+│   │       ├── queenbee.lua
+│   │       ├── beetle.lua
+│   │       ├── grasshopper.lua
+│   │       ├── spider.lua
+│   │       ├── soldierant.lua
+│   │       ├── ladybug.lua
+│   │       ├── mosquito.lua
+│   │       └── pillbug.lua
+│   └── cubecoords.lua            # Cube coordinate system
+│
+├── graphics.lua                  # Rendering system
+│   ├── hexagon.lua
+│   ├── map.lua
+│   ├── cubecoords.lua
+│   └── animation.lua
+│
+├── ui.lua                        # User interface
+│   ├── cubecoords.lua
+│   ├── map.lua
+│   ├── network.lua               # (lazy loaded)
+│   └── pieces/pieces_enum.lua    # (lazy loaded)
+│
+├── input.lua                     # Input handling
+│   ├── pieces/pieces_enum.lua
+│   ├── cubecoords.lua
+│   ├── gamestate.lua             # Save/load system
+│   ├── console.lua
+│   ├── network.lua
+│   ├── globals.lua
+│   ├── game.lua
+│   └── map.lua
+│
+└── network.lua                   # Multiplayer networking
+    └── game.lua
+
+Utility Modules:
+├── cubecoords.lua               # Hexagonal coordinate math
+├── hexagon.lua                  # Hexagon geometry
+├── map.lua                      # Board state management
+├── gamestate.lua                # Serialization
+└── json.lua                     # JSON parser
+```
+
+### Core Systems
+
+1. **Game Loop** ([main.lua](main.lua))
+   - Entry point and LÖVE2D callbacks
+   - Coordinates update/draw cycles
+
+2. **Game Logic** ([game.lua](game.lua))
+   - Game initialization and state
+   - Win condition checking
+   - Turn management
+
+3. **Rendering** ([graphics.lua](graphics.lua))
+   - Board rendering
+   - Piece visualization
+   - Animation display
+
+4. **User Interface** ([ui.lua](ui.lua))
+   - Piece selector
+   - Tooltips and overlays
+   - Game over screen
+
+5. **Input System** ([input.lua](input.lua))
+   - Mouse and keyboard handling
+   - Camera controls (pan/zoom)
+   - Game state controls
+
+6. **Network** ([network.lua](network.lua))
+   - LAN multiplayer via LuaSocket
+   - Server/client architecture
+   - Move synchronization
+
+7. **Coordinate System** ([cubecoords.lua](cubecoords.lua))
+   - Hexagonal grid mathematics
+   - Pixel ↔ cube coordinate conversion
+
 ## Controls
 - **a/s**: Cycle through piece types to place
 - **Left click**: Place piece or select/move piece

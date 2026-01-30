@@ -1,5 +1,6 @@
 local Piece = require("pieces.piece")
 local map_module = require("map")
+local movement_utils = require("pieces.movement_utils")
 
 -- SoldierAnt class
 SoldierAnt = setmetatable({}, {__index = Piece})
@@ -50,7 +51,7 @@ function SoldierAnt:try_to_move(map, src_cube, dest_cube)
                     end
                 end
                 
-                if has_adjacent_piece and self:can_move_through_gap(map, current, next_cube) then
+                if has_adjacent_piece and movement_utils.can_move_through_gap(map, current, next_cube) then
                     visited[next_key] = true
                     table.insert(queue, next_cube)
                 end
@@ -61,41 +62,6 @@ function SoldierAnt:try_to_move(map, src_cube, dest_cube)
     return false
 end
 
--- Helper to check if a move through a gap is allowed (freedom to move)
-function SoldierAnt:can_move_through_gap(map, from_cube, to_cube)
-    -- Get the two hexes that are common neighbors of both from and to
-    local from_neighbors = cubecoords.all_neighbors(from_cube)
-    local to_neighbors = cubecoords.all_neighbors(to_cube)
-    
-    local common_neighbors = {}
-    for _, fn in ipairs(from_neighbors) do
-        for _, tn in ipairs(to_neighbors) do
-            if cubecoords.equals(fn, tn) then
-                table.insert(common_neighbors, fn)
-            end
-        end
-    end
-    
-    -- Need exactly 2 common neighbors (the ones on either side of the gap)
-    if #common_neighbors ~= 2 then
-        return false
-    end
-    
-    -- Check if both sides are blocked (if so, cannot move through)
-    local hex1 = map_module.get_hex(map, common_neighbors[1])
-    local hex2 = map_module.get_hex(map, common_neighbors[2])
-    
-    local blocked1 = hex1 and hex1.piece ~= nil
-    local blocked2 = hex2 and hex2.piece ~= nil
-    
-    -- If both sides are blocked, cannot move through
-    if blocked1 and blocked2 then
-        return false
-    end
-    
-    -- At least one side is open, can move through
-    return true
-end
 
 -- Helper function to get all legal moves for soldier ant
 function SoldierAnt:get_legal_moves(map, src_cube)
@@ -125,7 +91,7 @@ function SoldierAnt:get_legal_moves(map, src_cube)
                     end
                 end
                 
-                if has_adjacent_piece and self:can_move_through_gap(map, current, next_cube) then
+                if has_adjacent_piece and movement_utils.can_move_through_gap(map, current, next_cube) then
                     visited[next_key] = true
                     table.insert(queue, next_cube)
                     -- Add to legal moves (excluding starting position)
@@ -141,19 +107,8 @@ function SoldierAnt:get_legal_moves(map, src_cube)
 end
 
 function SoldierAnt:move_piece(map, src_cube, dest_cube, active_player_id)
-    local src_hex = map_module.get_hex(map, src_cube)
-    local dest_hex = map_module.get_hex(map, dest_cube)
-    
-    if not src_hex or not dest_hex then return false end
-    
-    -- Mark piece as moved this turn
-    src_hex.piece.has_moved_last_turn = true
-    
-    dest_hex.piece = src_hex.piece
-    dest_hex.player_id = src_hex.player_id
-    src_hex.piece = nil
-    src_hex.player_id = nil
-    return true
+    -- Use standard movement from movement_utils
+    return movement_utils.simple_move_piece(map, src_cube, dest_cube)
 end
 
 function SoldierAnt:mark_legal_moves(map, src_cube)

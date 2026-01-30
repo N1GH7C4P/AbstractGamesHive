@@ -1,6 +1,8 @@
 -- Network multiplayer module using lua socket
 local Network = {}
 local game = require("game")
+local cubecoords = require("cubecoords")
+local map_module = require("map")
 
 Network.socket = nil
 Network.server = nil

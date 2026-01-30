@@ -1,5 +1,6 @@
 local Piece = require("pieces.piece")
 local map_module = require("map")
+local movement_utils = require("pieces.movement_utils")
 
 -- Beetle class
 Beetle = setmetatable({}, {__index = Piece})
@@ -39,29 +40,20 @@ function Beetle:try_to_move(map, src_cube, dest_cube)
 end
 
 -- Helper to check if a move through a gap is allowed (freedom to move)
+-- Beetle version accounts for stack heights
 function Beetle:can_move_through_gap(map, from_cube, to_cube)
-    -- Get the two hexes that are common neighbors of both from and to
-    local from_neighbors = cubecoords.all_neighbors(from_cube)
-    local to_neighbors = cubecoords.all_neighbors(to_cube)
-    
-    local common_neighbors = {}
-    for _, fn in ipairs(from_neighbors) do
-        for _, tn in ipairs(to_neighbors) do
-            if cubecoords.equals(fn, tn) then
-                table.insert(common_neighbors, fn)
-            end
-        end
-    end
-    
+    -- Get the common neighbors
+    local common_neighbors = movement_utils.get_common_neighbors(from_cube, to_cube)
+
     -- Need exactly 2 common neighbors (the ones on either side of the gap)
     if #common_neighbors ~= 2 then
         return false
     end
-    
+
     -- Get stack heights for origin and destination
     local from_hex = map_module.get_hex(map, from_cube)
     local to_hex = map_module.get_hex(map, to_cube)
-    
+
     -- Calculate height of origin (without the beetle on it)
     local from_height = 0
     if from_hex and from_hex.piece then
@@ -72,48 +64,35 @@ function Beetle:can_move_through_gap(map, from_cube, to_cube)
             current = current.under_piece
         end
     end
-    
+
     -- Calculate height of destination
     local to_height = 0
     if to_hex and to_hex.piece then
-        to_height = self:get_stack_height(to_hex.piece)
+        to_height = movement_utils.get_stack_height(to_hex.piece)
     end
-    
+
     -- Check if both sides are blocked by stacks higher than origin and destination
     local hex1 = map_module.get_hex(map, common_neighbors[1])
     local hex2 = map_module.get_hex(map, common_neighbors[2])
-    
+
     local height1 = 0
     if hex1 and hex1.piece then
-        height1 = self:get_stack_height(hex1.piece)
+        height1 = movement_utils.get_stack_height(hex1.piece)
     end
-    
+
     local height2 = 0
     if hex2 and hex2.piece then
-        height2 = self:get_stack_height(hex2.piece)
+        height2 = movement_utils.get_stack_height(hex2.piece)
     end
-    
+
     -- Beetle cannot move through gap if both sides are higher than both origin and destination
-    if height1 > from_height and height1 > to_height and 
+    if height1 > from_height and height1 > to_height and
        height2 > from_height and height2 > to_height then
         return false
     end
-    
+
     -- At least one side is low enough, can move through
     return true
-end
-
--- Helper to calculate stack height
-function Beetle:get_stack_height(piece)
-    if not piece then return 0 end
-    
-    local height = 1
-    local current = piece.under_piece
-    while current do
-        height = height + 1
-        current = current.under_piece
-    end
-    return height
 end
 
 function Beetle:move_piece(map, src_cube, dest_cube, active_player_id)

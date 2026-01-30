@@ -206,7 +206,7 @@ end
 
 function Mosquito:use_special_ability_as_pillbug(map, src_cube, target_cube, dest_cube)
     -- Check if mosquito moved last turn (same restriction as pillbug)
-    local mosquito_hex = get_hex(map, src_cube)
+    local mosquito_hex = map_module.get_hex(map, src_cube)
     if mosquito_hex and mosquito_hex.piece and mosquito_hex.piece.has_moved_last_turn then
         return false
     end
