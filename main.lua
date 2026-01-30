@@ -71,5 +71,5 @@ function love.draw()
     console.draw(10, 400, 600, 350)
     
     -- Draw help overlay last (on top of everything)
-    input.draw_help_overlay()
+    ui.drawHelpOverlay()
 end

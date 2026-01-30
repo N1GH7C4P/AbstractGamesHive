@@ -3,6 +3,65 @@ local cubecoords = require("cubecoords")
 local map_module = require("map")
 
 local UI = {}
+local keyDescriptions = {
+    ["Left Click"] = "Select/move pieces, place pieces from inventory",
+    ["Right Click"] = "Deselect piece, cancel action",
+    ["Mouse Wheel"] = "Zoom in/out",
+    ["Drag"] = "Pan camera around the board",
+    ["Space"] = "Show this help screen",
+    ["r"] = "Restart game (local only)",
+    ["h"] = "Toggle cube coordinate display",
+    ["c"] = "Toggle debug console",
+    ["x"] = "Clear console output",
+    ["d"] = "Save game to file",
+    ["l"] = "Load game from file",
+    ["n"] = "Host network game (port 12345)",
+    ["m"] = "Join network game (localhost:12345)",
+    ["q"] = "Quit/disconnect network game",
+    ["+/="] = "Zoom in",
+    ["-/_"] = "Zoom out",
+    ["0"] = "Reset zoom to 1.0x",
+    ["Escape"] = "Quit game",
+}
+
+function UI.drawHelpOverlay()
+    if not G.show_help then return end
+    -- Semi-transparent dark background
+    love.graphics.setColor(0, 0, 0, 0.85)
+    love.graphics.rectangle("fill", 0, 0, G.window_w, G.window_h)
+    -- Title
+    love.graphics.setColor(1, 1, 0.5, 1)
+    local title = "KEYBOARD & MOUSE CONTROLS"
+    local font = love.graphics.getFont()
+    local title_width = font:getWidth(title)
+    love.graphics.print(title, (G.window_w - title_width) / 2, 50)
+    -- Controls list
+    love.graphics.setColor(1, 1, 1, 1)
+    local y = 100
+    local line_height = 25
+    local key_x = G.window_w / 2 - 250
+    local desc_x = G.window_w / 2 - 100
+    -- Sort keys for consistent display
+    local sorted_keys = {}
+    for key, _ in pairs(keyDescriptions) do
+        table.insert(sorted_keys, key)
+    end
+    table.sort(sorted_keys)
+    for _, key in ipairs(sorted_keys) do
+        local desc = keyDescriptions[key]
+        love.graphics.setColor(1, 1, 0.5, 1)
+        love.graphics.print(key, key_x, y)
+        love.graphics.setColor(1, 1, 1, 1)
+        love.graphics.print(desc, desc_x, y)
+        y = y + line_height
+    end
+    -- Footer
+    love.graphics.setColor(0.7, 0.7, 0.7, 1)
+    local footer = "Release SPACE to close"
+    local footer_width = font:getWidth(footer)
+    love.graphics.print(footer, (G.window_w - footer_width) / 2, G.window_h - 50)
+    love.graphics.setColor(1, 1, 1, 1)
+end
 
 function UI.drawPieceSelectorUI(graphics)
     local network = require("network")
@@ -253,4 +312,5 @@ return {
     drawGameOverScreen = UI.drawGameOverScreen,
     drawMosquitoPopup = UI.drawMosquitoPopup,
     drawHelpHint = UI.drawHelpHint,
+    drawHelpOverlay = UI.drawHelpOverlay,
 }

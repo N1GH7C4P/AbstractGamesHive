@@ -158,53 +158,7 @@ local keyDescriptions = {
     ["Escape"] = "Quit game",
 }
 
-function Input.draw_help_overlay()
-    if not G.show_help then return end
-    
-    -- Semi-transparent dark background
-    love.graphics.setColor(0, 0, 0, 0.85)
-    love.graphics.rectangle("fill", 0, 0, G.window_w, G.window_h)
-    
-    -- Title
-    love.graphics.setColor(1, 1, 0.5, 1)
-    local title = "KEYBOARD & MOUSE CONTROLS"
-    local font = love.graphics.getFont()
-    local title_width = font:getWidth(title)
-    love.graphics.print(title, (G.window_w - title_width) / 2, 50)
-    
-    -- Controls list
-    love.graphics.setColor(1, 1, 1, 1)
-    local y = 100
-    local line_height = 25
-    local key_x = G.window_w / 2 - 250
-    local desc_x = G.window_w / 2 - 100
-    
-    -- Sort keys for consistent display
-    local sorted_keys = {}
-    for key, _ in pairs(keyDescriptions) do
-        table.insert(sorted_keys, key)
-    end
-    table.sort(sorted_keys)
-    
-    for _, key in ipairs(sorted_keys) do
-        local desc = keyDescriptions[key]
-        -- Draw key in yellow
-        love.graphics.setColor(1, 1, 0.5, 1)
-        love.graphics.print(key, key_x, y)
-        -- Draw description in white
-        love.graphics.setColor(1, 1, 1, 1)
-        love.graphics.print(desc, desc_x, y)
-        y = y + line_height
-    end
-    
-    -- Footer
-    love.graphics.setColor(0.7, 0.7, 0.7, 1)
-    local footer = "Release SPACE to close"
-    local footer_width = font:getWidth(footer)
-    love.graphics.print(footer, (G.window_w - footer_width) / 2, G.window_h - 50)
-    
-    love.graphics.setColor(1, 1, 1, 1)
-end
+-- (draw_help_overlay moved to ui.lua)
 
 function Input.keypressed(key)
     -- Handle spacebar separately to show help
@@ -537,5 +491,4 @@ return {
     update_mouse = Input.update_mouse,
     keypressed = Input.keypressed,
     keyreleased = Input.keyreleased,
-    draw_help_overlay = Input.draw_help_overlay,
 }
