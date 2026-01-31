@@ -1,2 +1,29 @@
 output/debug.log
 output/savegame.json
+
+# Lua/Luarocks
+lua_modules/
+.luarocks/
+*.rock
+
+# Busted test framework
+.busted_*
+luacov.*.out
+luacov.stats.out
+
+# LÖVE2D
+*.love
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Documentation
+REFACTORING_SUMMARY.md

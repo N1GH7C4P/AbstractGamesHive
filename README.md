@@ -55,7 +55,10 @@ main.lua (Entry Point)
 │   ├── network.lua
 │   ├── globals.lua
 │   ├── game.lua
-│   └── map.lua
+│   ├── map.lua
+│   └── camera.lua                # ⭐ Camera controls
+│
+├── camera.lua                    # ⭐ Camera zoom & pan
 │
 └── network.lua                   # Multiplayer networking
     └── game.lua
@@ -65,6 +68,7 @@ Utility Modules:
 ├── hexagon.lua                  # Hexagon geometry
 ├── map.lua                      # Board state management
 ├── gamestate.lua                # Serialization
+├── camera.lua                   # ⭐ Camera controls (zoom & pan)
 └── json.lua                     # JSON parser
 ```
 
@@ -91,15 +95,20 @@ Utility Modules:
 
 5. **Input System** ([input.lua](input.lua))
    - Mouse and keyboard handling
-   - Camera controls (pan/zoom)
+   - Delegates camera controls to [camera.lua](camera.lua)
    - Game state controls
 
-6. **Network** ([network.lua](network.lua))
+6. **Camera** ([camera.lua](camera.lua))
+   - Zoom in/out (mouse wheel, +/- keys)
+   - Pan (drag with right/middle click)
+   - Screen ↔ world coordinate conversion
+
+7. **Network** ([network.lua](network.lua))
    - LAN multiplayer via LuaSocket
    - Server/client architecture
    - Move synchronization
 
-7. **Coordinate System** ([cubecoords.lua](cubecoords.lua))
+8. **Coordinate System** ([cubecoords.lua](cubecoords.lua))
    - Hexagonal grid mathematics
    - Pixel ↔ cube coordinate conversion
 
@@ -127,6 +136,42 @@ Utility Modules:
 4. Moves are automatically synchronized over the network
 
 **Note:** Requires LuaSocket. Install with: `luarocks install luasocket`
+
+## Testing
+
+The project includes automated tests using the [Busted](https://lunarmodules.github.io/busted/) testing framework.
+
+### Setup
+
+```bash
+# Install Lua and luarocks (if not already installed)
+brew install lua luarocks
+
+# Install Busted test framework
+luarocks install --local busted
+```
+
+### Running Tests
+
+```bash
+# Run all tests
+eval $(luarocks path --bin) && busted
+
+# Run tests with verbose output
+eval $(luarocks path --bin) && busted --verbose
+
+# Run specific test file
+eval $(luarocks path --bin) && busted tests/camera_spec.lua
+```
+
+### Test Coverage
+
+**81 tests** covering core modules:
+- **camera.lua** (23 tests) - Zoom, pan, coordinate conversion
+- **cubecoords.lua** (44 tests) - Hexagonal coordinate math
+- **movement_utils.lua** (14 tests) - Common movement logic
+
+All tests pass with 0 failures.
 
 <img src="hive.png" width="500" height="auto"/>
 

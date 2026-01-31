@@ -10,6 +10,7 @@ local network = require("network")
 local globals = require("globals")
 local game = require("game")
 local map_module = require("map")
+local camera = require("camera")
 
 -- Key handler functions (Lua doesn't have switch-case, so we use a table-based dispatch)
 local keyHandlers = {
@@ -81,41 +82,21 @@ local keyHandlers = {
     
     ["="] = function()
         -- Zoom in
-        local zoom_speed = 0.2
-        local max_zoom = 3.0
         local mouseX, mouseY = love.mouse.getPosition()
-        local world_x_before = (mouseX - G.camera_x) / G.camera_zoom
-        local world_y_before = (mouseY - G.camera_y) / G.camera_zoom
-        
-        G.camera_zoom = math.min(G.camera_zoom + zoom_speed, max_zoom)
-        print("Zoom in (keyboard): " .. string.format("%.1f", G.camera_zoom))
-        
-        local world_x_after = (mouseX - G.camera_x) / G.camera_zoom
-        local world_y_after = (mouseY - G.camera_y) / G.camera_zoom
-        G.camera_x = G.camera_x + (world_x_after - world_x_before) * G.camera_zoom
-        G.camera_y = G.camera_y + (world_y_after - world_y_before) * G.camera_zoom
+        local new_zoom = camera.zoom_in(G, mouseX, mouseY, true)
+        print("Zoom in (keyboard): " .. string.format("%.1f", new_zoom))
     end,
     
     ["-"] = function()
         -- Zoom out
-        local zoom_speed = 0.2
-        local min_zoom = 0.3
         local mouseX, mouseY = love.mouse.getPosition()
-        local world_x_before = (mouseX - G.camera_x) / G.camera_zoom
-        local world_y_before = (mouseY - G.camera_y) / G.camera_zoom
-        
-        G.camera_zoom = math.max(G.camera_zoom - zoom_speed, min_zoom)
-        print("Zoom out (keyboard): " .. string.format("%.1f", G.camera_zoom))
-        
-        local world_x_after = (mouseX - G.camera_x) / G.camera_zoom
-        local world_y_after = (mouseY - G.camera_y) / G.camera_zoom
-        G.camera_x = G.camera_x + (world_x_after - world_x_before) * G.camera_zoom
-        G.camera_y = G.camera_y + (world_y_after - world_y_before) * G.camera_zoom
+        local new_zoom = camera.zoom_out(G, mouseX, mouseY, true)
+        print("Zoom out (keyboard): " .. string.format("%.1f", new_zoom))
     end,
     
     ["0"] = function()
         -- Reset zoom
-        G.camera_zoom = 1.0
+        camera.reset_zoom(G)
         print("Zoom reset to 1.0")
     end,
     
@@ -371,11 +352,7 @@ function Input.mousepressed(x, y, button, istouch)
     
     -- Right-click or middle-click to start dragging
     if button == 2 or button == 3 then
-        G.is_dragging = true
-        G.drag_start_x = x
-        G.drag_start_y = y
-        G.drag_start_camera_x = G.camera_x
-        G.drag_start_camera_y = G.camera_y
+        camera.start_drag(G, x, y)
         return
     end
     
@@ -391,10 +368,9 @@ function Input.mousepressed(x, y, button, istouch)
         if handle_piece_selector_click(mouseX, mouseY) then
             return
         end
-        
+
         -- Convert mouse position to cube coordinates
-        local pixel_x = (mouseX - G.camera_x) / G.camera_zoom
-        local pixel_y = (mouseY - G.camera_y) / G.camera_zoom
+        local pixel_x, pixel_y = camera.screen_to_world(G, mouseX, mouseY)
         local result_cube = cubecoords.from_pixel(pixel_x, pixel_y, G.size)
         local result_hex = map_module.get_hex(G.map, result_cube)
          
@@ -434,53 +410,34 @@ end
 function Input.mousereleased(x, y, button, istouch)
     -- Stop dragging on right-click or middle-click release
     if button == 2 or button == 3 then
-        is_dragging = false
+        camera.stop_drag(G)
     end
 end
 
 function Input.wheelmoved(x, y)
     print("Wheelmoved: x=" .. x .. ", y=" .. y)  -- Debug logging
-    
+
     -- Zoom in/out with mousewheel
-    local zoom_speed = 0.1
-    local min_zoom = 0.3
-    local max_zoom = 3.0
-    
-    -- Get mouse position before zoom
     local mouseX, mouseY = love.mouse.getPosition()
-    local world_x_before = (mouseX - G.camera_x) / G.camera_zoom
-    local world_y_before = (mouseY - G.camera_y) / G.camera_zoom
-    
-    -- Adjust zoom
+
     if y > 0 then
-        G.camera_zoom = math.min(G.camera_zoom + zoom_speed, max_zoom)
-        print("Zooming in: " .. G.camera_zoom)
+        local new_zoom = camera.zoom_in(G, mouseX, mouseY, false)
+        print("Zooming in: " .. new_zoom)
     elseif y < 0 then
-        G.camera_zoom = math.max(G.camera_zoom - zoom_speed, min_zoom)
-        print("Zooming out: " .. G.camera_zoom)
+        local new_zoom = camera.zoom_out(G, mouseX, mouseY, false)
+        print("Zooming out: " .. new_zoom)
     end
-    
-    -- Adjust camera position to zoom towards mouse cursor
-    local world_x_after = (mouseX - G.camera_x) / G.camera_zoom
-    local world_y_after = (mouseY - G.camera_y) / G.camera_zoom
-    
-    G.camera_x = G.camera_x + (world_x_after - world_x_before) * G.camera_zoom
-    G.camera_y = G.camera_y + (world_y_after - world_y_before) * G.camera_zoom
 end
 
 function Input.update_mouse(dt)
     G.mouseX, G.mouseY = love.mouse.getPosition()
     -- Convert mouse to cube coordinates for display (accounting for zoom)
-    local pixel_x = (G.mouseX - G.camera_x) / G.camera_zoom
-    local pixel_y = (G.mouseY - G.camera_y) / G.camera_zoom
+    local pixel_x, pixel_y = camera.screen_to_world(G, G.mouseX, G.mouseY)
     local hover_cube = cubecoords.from_pixel(pixel_x, pixel_y, G.size)
     G.resultX, G.resultY = cubecoords.to_offset(hover_cube)
-    
+
     -- Handle camera dragging
-    if G.is_dragging then
-        G.camera_x = G.drag_start_camera_x + (G.mouseX - G.drag_start_x)
-        G.camera_y = G.drag_start_camera_y + (G.mouseY - G.drag_start_y)
-    end
+    camera.update_drag(G, G.mouseX, G.mouseY)
 end
 
 -- Export module
