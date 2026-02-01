@@ -1,5 +1,4 @@
 local hexagon = require "hexagon"
-local map = require "map"
 local cubecoords = require "cubecoords"
 local animation = require "animation"
 

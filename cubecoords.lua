@@ -91,9 +91,8 @@ function CubeCoords.ring(center, radius)
     local cube = CubeCoords.add(center, CubeCoords.scale(CubeCoords.directions()[5], radius))
     
     -- Walk around the ring
-    local dirs = CubeCoords.directions()
     for i = 0, 5 do
-        for j = 0, radius - 1 do
+        for _ = 0, radius - 1 do
             table.insert(results, cube)
             cube = CubeCoords.neighbor(cube, i)
         end

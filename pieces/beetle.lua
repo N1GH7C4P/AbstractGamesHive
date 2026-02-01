@@ -122,17 +122,15 @@ function Beetle:move_piece(map, src_cube, dest_cube, active_player_id)
         src_hex.piece.under_piece = nil
         src_hex.player_id = underpiece.player_id
         src_hex.piece = underpiece
-        underpiece = nil
     else
         src_hex.piece = nil
         src_hex.player_id = nil
     end
-    
+
     -- Temp piece becomes the new under_piece
     if tempPiece then
         dest_hex.piece.under_piece = tempPiece
         dest_hex.piece.under_piece.player_id = tempPiece.player_id
-        tempPiece = nil
     end
     
     return true

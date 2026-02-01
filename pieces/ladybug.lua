@@ -1,6 +1,5 @@
 local Piece = require("pieces.piece")
 local map_module = require("map")
-local movement_utils = require("pieces.movement_utils")
 
 -- Ladybug class
 Ladybug = setmetatable({}, {__index = Piece})

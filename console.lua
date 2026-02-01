@@ -72,8 +72,6 @@ function Console.draw(x, y, width, height)
         local message = Console.messages[i]
         local draw_y = start_y + (i - start_index) * line_height
         
-        -- Truncate long messages
-        local max_width = width - 10
         love.graphics.print(message, x + 5, draw_y)
     end
 end

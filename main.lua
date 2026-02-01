@@ -1,7 +1,7 @@
 -- Load modules
 local Config = require("config")
-local PiecesEnum = require("pieces/pieces_enum")
-local pieces = require("pieces")
+require("pieces/pieces_enum")  -- Loads piece ID constants
+require("pieces")  -- Loads piece classes
 local game = require("game")
 local graphics = require("graphics")
 local ui = require("ui")

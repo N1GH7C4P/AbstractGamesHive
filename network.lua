@@ -147,7 +147,7 @@ function Network.receive()
         return nil
     end
     
-    local data, err, partial = connection:receive("*l")
+    local data, _err, _partial = connection:receive("*l")
     if data then
         return Network.deserialize(data)
     end

@@ -1,6 +1,5 @@
 local Piece = require("pieces.piece")
 local map_module = require("map")
-local movement_utils = require("pieces.movement_utils")
 
 -- Grasshopper class
 Grasshopper = setmetatable({}, {__index = Piece})
@@ -60,8 +59,6 @@ function Grasshopper:try_to_move(map, src_cube, dest_cube)
             return false
         end
     end
-    
-    return false
 end
 
 -- Helper function to get all legal moves for grasshopper

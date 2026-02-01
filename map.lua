@@ -1,4 +1,4 @@
-local player = require "player"
+require "player"  -- Loads Player class and helper functions
 local PiecesEnum = require "pieces.pieces_enum"
 local animation = require("animation")
 local cubecoords = require "cubecoords"
@@ -68,11 +68,8 @@ local function isMapEmpty(map)
 end
 
 local function isNextToFriendly(map, col, row)
-    local enemy_count = 0
-    local friendly_count = 0
-    
     local cube = cubecoords.from_offset(col, row)
-    enemy_count, friendly_count = countNearbyPlayer(map, cube)
+    local enemy_count, friendly_count = countNearbyPlayer(map, cube)
     
     -- Check for first and second piece
     if (G.turn_number[G.active_player_id] == 1) then
@@ -200,36 +197,9 @@ function expand_map(map)
     print("Map expanded to radius " .. map.current_radius)
 end
 
--- Check if any neighbors of a cube are outside the map, and expand if needed
-local function ensure_map_coverage(map, cube)
-    local neighbors = cubecoords.all_neighbors(cube)
-    local needs_expansion = false
-    
-    for _, neighbor in ipairs(neighbors) do
-        local hex = get_hex(map, neighbor)
-            if not get_hex(map, neighbor) then
-            needs_expansion = true
-            break
-        end
-    end
-    
-    if needs_expansion then
-        expand_map(map)
-    end
-end
-
 -- Helper to get hex by cube coordinates
 function get_hex(map, cube)
     local key = cubecoords.to_key(cube)
-    return map.hexes[key]
-end
-
--- Helper to get hex by offset coordinates (backward compat)
-local function get_hex_offset(map, col, row)
-    if not map.offset_to_key[row] or not map.offset_to_key[row][col] then
-        return nil
-    end
-    local key = map.offset_to_key[row][col]
     return map.hexes[key]
 end
 
@@ -241,12 +211,6 @@ function mark_neighbours_on_map_cube(map, cube)
             hex.neighbour = true
         end
     end
-end
-
--- Backward compat wrapper
-local function mark_neighbours_on_map(map, col, row, w, h)
-    local cube = cubecoords.from_offset(col, row)
-    mark_neighbours_on_map_cube(map, cube)
 end
 
 local function mark_tmp_on_map(map, col, row, w, h)
@@ -309,37 +273,12 @@ local function mark_legal_moves_for_piece(map, src_cube, w, h)
     print("=== Complete ===")
 end
 
-local function remove_piece_from_map(map, col, row)
-    local cube = cubecoords.from_offset(col, row)
-    local hex = get_hex(map, cube)
-    if hex and hex.piece then
-        print("Removed piece from: "..tostring(col)..", "..tostring(row))
-        hex.piece = nil
-        return true
-    end
-    print("Failed to remove piece from: "..tostring(col)..", "..tostring(row))
-    return false
-end
-
 local function tmp_to_neighbor(map)
     for _, hex in pairs(map.hexes) do
         if hex.tmp then
             hex.neighbour = true
         end
     end
-end
-
-local function flood_neighbours_neighbours_jump(map, col, row, w, h)
-    clear_all_tmp(map, w, h)
-    for _, hex in pairs(map.hexes) do
-        if hex.neighbour then
-            local hcol, hrow = cubecoords.to_offset(hex.cube)
-            mark_tmp_on_map(map, hcol, hrow, w, h)
-        end
-    end
-    clear_all_neighbours(map, w, h)
-    tmp_to_neighbor(map)
-    clear_all_tmp(map, w, h)
 end
 
 local function flood_neighbours_neighbours(map, col, row, w, h)
@@ -505,19 +444,17 @@ local function move_piece_on_map(map, src_cube, dest_cube, on_complete_callback)
     end
     
     local src_hex = get_hex(map, src_cube)
-    local dest_hex = get_hex(map, dest_cube)
-    
+
     -- Store piece reference for animation
     local moving_piece = src_hex.piece
-    
+
     -- Start animation, then actually move the piece when animation completes
     animation.start_move(moving_piece, src_cube, dest_cube, function()
         -- This callback executes when animation completes
-        local src_hex = get_hex(map, src_cube)
-        local dest_hex = get_hex(map, dest_cube)
-        
-        if src_hex.piece and src_hex.piece.move_piece then
-            src_hex.piece:move_piece(map, src_cube, dest_cube, G.active_player_id)
+        local current_src_hex = get_hex(map, src_cube)
+
+        if current_src_hex.piece and current_src_hex.piece.move_piece then
+            current_src_hex.piece:move_piece(map, src_cube, dest_cube, G.active_player_id)
             
             -- Check if piece moved to outermost ring and expand if so
             local center = cubecoords.new(0, 0, 0)

@@ -71,8 +71,8 @@ local function toHexagonCoordinatesHorizontal(x, y, grid)
     local piecesize = grid.piecesize
     local shifted = grid.shifted
 
-    local tileX = 0
-    local tileY = 0
+    local tileX
+    local tileY
     local tileThirdWidth = piecesize * math.cos(math.pi / 3)
     local tileWidth = 3 * tileThirdWidth
     local tileHalfHeight = piecesize * math.cos(math.pi / 6)
@@ -147,8 +147,8 @@ local function toHexagonCoordinatesVertical(x, y, grid)
     local piecesize = grid.piecesize
     local shifted = grid.shifted
 
-    local tileX = 0
-    local tileY = 0
+    local tileX
+    local tileY
     local tileThirdHeight = piecesize * math.cos(math.pi / 3)
     local tileHeight = 3 * tileThirdHeight
     local tileHalfWidth = piecesize * math.cos(math.pi / 6)
@@ -235,15 +235,10 @@ function hexagon.grid(width, height, piecesize, pointyTopped, shifted)
         return grid
 end
 
-function hexagon.drawGrid(grid, canvas, camera_x, camera_y)
-    camera_x = camera_x or 0
-    camera_y = camera_y or 0
-    
-    love.graphics.setCanvas(canvas)
-    -- Note: This function now expects the map to be passed via a global or param
-    -- For now, we'll draw based on grid dimensions, but the actual rendering
-    -- should be done by iterating through map.hexes
+function hexagon.drawGrid(_grid, canvas, _camera_x, _camera_y)
+    -- Note: Parameters prefixed with _ are intentionally unused
     -- This is a compatibility stub - actual grid drawing happens in graphics.lua
+    love.graphics.setCanvas(canvas)
     love.graphics.setCanvas()
 end
 
@@ -276,8 +271,7 @@ end
 
 -- Given the coordinates of a point in the plan, return the coordinates of the hexagon under that point in the grid
 function hexagon.toHexagonCoordinates(x, y, grid)
-    local resultX = 0
-    local resultY = 0
+    local resultX, resultY
 
     if grid.pointyTopped then
         resultX, resultY = toHexagonCoordinatesVertical(x, y, grid)
