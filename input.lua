@@ -177,8 +177,7 @@ local function handle_multiple_option_click(mouseX, mouseY)
         end)
         map_module.clear_all_neighbours(G.map, G.w, G.h)
         G.move_mode = 0
-        G.mosquito_choice_popup = false
-        G.mosquito_choice_dest = nil
+        globals.clear_mosquito_popup()
         if did_move == true then
             game.pass_turn(G.active_player_id)
         end
@@ -189,11 +188,8 @@ local function handle_multiple_option_click(mouseX, mouseY)
         local selected_cube = cubecoords.from_offset(G.selected_piece_x, G.selected_piece_y)
         local selected_hex = map_module.get_hex(G.map, selected_cube)
         
-        G.pillbug_special_mode = true
-        G.pillbug_cube = selected_cube
-        G.pillbug_target_cube = G.mosquito_choice_dest
-        G.mosquito_choice_popup = false
-        G.mosquito_choice_dest = nil
+        globals.enter_pillbug_mode(selected_cube, G.mosquito_choice_dest)
+        globals.clear_mosquito_popup()
         
         -- Clear current highlights and show drop locations
         map_module.clear_all_neighbours(G.map, G.w, G.h)
@@ -211,10 +207,8 @@ local function handle_multiple_option_click(mouseX, mouseY)
         return true
     else
         -- Click outside popup cancels
-        G.mosquito_choice_popup = false
-        G.mosquito_choice_dest = nil
-        G.move_mode = 0
-        G.highlight = 0
+        globals.clear_mosquito_popup()
+        globals.deselect_piece()
         map_module.clear_all_neighbours(G.map, G.w, G.h)
         return true
     end
@@ -257,11 +251,8 @@ local function handle_drop_click(result_cube, result_hex)
     end
     
     -- Reset state (whether successful or cancelled)
-    G.pillbug_special_mode = false
-    G.pillbug_cube = nil
-    G.pillbug_target_cube = nil
-    G.move_mode = 0
-    G.highlight = 0
+    globals.clear_pillbug_mode()
+    globals.deselect_piece()
     map_module.clear_all_neighbours(G.map, G.w, G.h)
     return true
 end
@@ -396,8 +387,7 @@ function Input.mousepressed(x, y, button, istouch)
             end
             
             -- Clicking elsewhere cancels the selection
-            G.move_mode = 0
-            G.highlight = 0
+            globals.deselect_piece()
             map_module.clear_all_neighbours(G.map, G.w, G.h)
             return
         else

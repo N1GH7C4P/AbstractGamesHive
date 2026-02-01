@@ -290,4 +290,12 @@ function hexagon.toHexagonCoordinates(x, y, grid)
     return resultX, resultY
 end
 
-return hexagon
+-- Export module
+return {
+    draw_hexagon = hexagon.draw_hexagon,
+    draw_split_hexagon = hexagon.draw_split_hexagon,
+    grid = hexagon.grid,
+    drawGrid = hexagon.drawGrid,
+    toPlanCoordinates = hexagon.toPlanCoordinates,
+    toHexagonCoordinates = hexagon.toHexagonCoordinates,
+}

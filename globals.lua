@@ -77,18 +77,64 @@ end
 
 -- Reset transient UI state (used when loading games or resetting interaction)
 function Globals.reset_ui_state()
-    G.pillbug_special_mode = false
-    G.pillbug_cube = nil
-    G.pillbug_target_cube = nil
+    Globals.clear_pillbug_mode()
+    Globals.clear_mosquito_popup()
+    Globals.clear_selection()
+end
+
+-- Clear piece selection state (full reset including selected coordinates)
+function Globals.clear_selection()
+    G.move_mode = 0
+    G.highlight = 0
+    G.selected_piece_x = 0
+    G.selected_piece_y = 0
+end
+
+-- Deselect piece (clear move mode and highlight, keep selected coords for reference)
+function Globals.deselect_piece()
+    G.move_mode = 0
+    G.highlight = 0
+end
+
+-- Select a piece on the map at given offset coordinates
+function Globals.select_piece(offset_x, offset_y)
+    G.highlight = 1
+    G.selected_piece_x = offset_x
+    G.selected_piece_y = offset_y
+    G.move_mode = 1
+end
+
+-- Clear mosquito choice popup state
+function Globals.clear_mosquito_popup()
     G.mosquito_choice_popup = false
     G.mosquito_choice_options = {}
     G.mosquito_choice_dest = nil
     G.mosquito_popup_x = 0
     G.mosquito_popup_y = 0
-    G.selected_piece_x = 0
-    G.selected_piece_y = 0
-    G.move_mode = 0
-    G.highlight = 0
 end
 
-return Globals
+-- Clear pillbug special move state
+function Globals.clear_pillbug_mode()
+    G.pillbug_special_mode = false
+    G.pillbug_cube = nil
+    G.pillbug_target_cube = nil
+end
+
+-- Enter pillbug special move mode (for picking up and dropping adjacent pieces)
+function Globals.enter_pillbug_mode(pillbug_cube, target_cube)
+    G.pillbug_special_mode = true
+    G.pillbug_cube = pillbug_cube
+    G.pillbug_target_cube = target_cube
+end
+
+-- Export module
+return {
+    init = Globals.init,
+    reset_ui_state = Globals.reset_ui_state,
+    clear_selection = Globals.clear_selection,
+    deselect_piece = Globals.deselect_piece,
+    select_piece = Globals.select_piece,
+    clear_mosquito_popup = Globals.clear_mosquito_popup,
+    clear_pillbug_mode = Globals.clear_pillbug_mode,
+    enter_pillbug_mode = Globals.enter_pillbug_mode,
+}
