@@ -1,3 +1,5 @@
+-- Rendering functions for pieces, grid, and UI elements
+
 local hexagon = require "hexagon"
 local cubecoords = require "cubecoords"
 local animation = require "animation"
@@ -427,7 +429,6 @@ function drawGameBoard()
     end
 end
 
--- Export module
 return {
     drawAddedPieces = drawAddedPieces,
     drawGridHexes = drawGridHexes,

@@ -1,10 +1,7 @@
--- Game action execution module
--- Handles all user-initiated game actions (movement, placement, special abilities)
--- This module separates game logic from input handling
+-- Game action execution (movement, placement, special abilities)
 
 local Actions = {}
 
--- Dependencies
 local cubecoords = require("cubecoords")
 local globals = require("globals")
 local game = require("game")
@@ -201,7 +198,6 @@ function Actions.execute_mosquito_pillbug_choice(src_cube, target_cube)
     return drop_locations
 end
 
--- Export module
 return {
     place_piece = Actions.place_piece,
     select_piece_on_map = Actions.select_piece_on_map,

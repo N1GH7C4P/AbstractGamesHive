@@ -1,14 +1,10 @@
--- Global game state and configuration
--- This file contains all global variables used across the codebase
--- All globals are namespaced under 'G' to distinguish them from local variables
+-- Global game state (all globals namespaced under 'G')
 
 local Globals = {}
 
 function Globals.init()
-    -- Initialize global state table
     G = {}
-    
-    -- Configuration
+
     G.menu_offset_x = 0
     G.window_w = 0
     G.window_h = 0
@@ -127,7 +123,6 @@ function Globals.enter_pillbug_mode(pillbug_cube, target_cube)
     G.pillbug_target_cube = target_cube
 end
 
--- Export module
 return {
     init = Globals.init,
     reset_ui_state = Globals.reset_ui_state,

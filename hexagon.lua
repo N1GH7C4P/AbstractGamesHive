@@ -1,3 +1,5 @@
+-- Hexagon grid utilities and rendering
+
 local hexagon = {}
 
 local function distanceBetween(x1, y1, x2, y2)
@@ -284,7 +286,6 @@ function hexagon.toHexagonCoordinates(x, y, grid)
     return resultX, resultY
 end
 
--- Export module
 return {
     draw_hexagon = hexagon.draw_hexagon,
     draw_split_hexagon = hexagon.draw_split_hexagon,

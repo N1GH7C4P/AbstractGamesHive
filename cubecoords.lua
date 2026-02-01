@@ -243,7 +243,6 @@ function CubeCoords.from_key(key)
     return CubeCoords.new(tonumber(x), tonumber(y), tonumber(z))
 end
 
--- Export module
 return {
     new = CubeCoords.new,
     to_offset = CubeCoords.to_offset,

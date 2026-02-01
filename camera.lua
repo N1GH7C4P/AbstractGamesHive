@@ -1,9 +1,7 @@
 -- Camera module for zoom and pan controls
--- Works with the global G object to manage camera state
 
 local Camera = {}
 
--- Camera constants
 local ZOOM_SPEED_WHEEL = 0.1
 local ZOOM_SPEED_KEYBOARD = 0.2
 local MIN_ZOOM = 0.3

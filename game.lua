@@ -1,3 +1,5 @@
+-- Game initialization and win condition checking
+
 local PlayerClass = require("player")
 local Config = require("config")
 local PiecesEnum = require("pieces.pieces_enum")
@@ -164,7 +166,6 @@ function Game.pass_turn(active_piece_id)
     end
 end
 
--- Export module
 return {
     init = Game.init,
     init_players = Game.init_players,

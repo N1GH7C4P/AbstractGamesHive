@@ -22,17 +22,14 @@ function Animation.update(dt)
     G.animation_progress = G.animation_progress + (dt / G.animation_duration)
     
     if G.animation_progress >= 1.0 then
-        -- Animation complete
         G.animation_progress = 1.0
         G.animating = false
-        
-        -- Call completion callback
+
         if G.animation_callback then
             G.animation_callback()
             G.animation_callback = nil
         end
-        
-        -- Clear animation state
+
         G.animation_piece = nil
         G.animation_from_cube = nil
         G.animation_to_cube = nil
@@ -71,7 +68,6 @@ function Animation.is_animating_from(cube)
     return cubecoords.equals(G.animation_from_cube, cube)
 end
 
--- Export module
 return {
     start_move = Animation.start_move,
     update = Animation.update,

@@ -1,4 +1,5 @@
--- Load modules
+-- Main LÖVE entry point
+
 local Config = require("config")
 require("pieces/pieces_enum")  -- Loads piece ID constants
 require("pieces")  -- Loads piece classes

@@ -256,7 +256,6 @@ function GameState.load(filename)
     return true
 end
 
--- Export module
 return {
     save = GameState.save,
     load = GameState.load,

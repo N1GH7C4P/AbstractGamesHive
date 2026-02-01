@@ -360,7 +360,6 @@ function Input.update_mouse(dt)
     camera.update_drag(G, G.mouseX, G.mouseY)
 end
 
--- Export module
 return {
     mousepressed = Input.mousepressed,
     mousereleased = Input.mousereleased,

@@ -301,7 +301,6 @@ function UI.drawHelpHint()
     love.graphics.setColor(1, 1, 1, 1)
 end
 
--- Export module
 return {
     drawPieceSelectorUI = UI.drawPieceSelectorUI,
     drawPieceSelectorTooltip = UI.drawPieceSelectorTooltip,

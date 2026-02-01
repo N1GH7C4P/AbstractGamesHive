@@ -1,4 +1,6 @@
-require "player"  -- Loads Player class and helper functions
+-- Map and piece placement/movement logic
+
+require "player"
 local PiecesEnum = require "pieces.pieces_enum"
 local animation = require("animation")
 local cubecoords = require "cubecoords"
@@ -478,7 +480,6 @@ local function move_piece_on_map(map, src_cube, dest_cube, on_complete_callback)
     return true
 end
 
--- Export module
 return {
     init_map = init_map,
     tryAddPieceToMap = tryAddPieceToMap,
