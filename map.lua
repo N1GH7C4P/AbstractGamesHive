@@ -421,9 +421,16 @@ local function pieceCanDetach(map, cube)
     end
     
     flood_neighbours(map, first_cube)
+
+    -- Mark the starting piece as visited (flood_neighbours only marks neighbors)
+    local first_hex = get_hex(map, first_cube)
+    if first_hex then
+        first_hex.neighbour = true
+    end
+
     hex.piece = tmp
     hex.neighbour = true
-    
+
     for _, check_hex in pairs(map.hexes) do
         if check_hex.piece and not check_hex.neighbour then
             clear_all_neighbours(map, map.w, map.h)
@@ -440,20 +447,26 @@ local function try_self_detach(map, src_cube, dest_cube)
     for _, hex in pairs(map.hexes) do
         hex.neighbour = nil
     end
-    
+
     local src_hex = get_hex(map, src_cube)
     if not src_hex then return false end
-    
+
     local tmp = src_hex.player_id
-    src_hex.player_id = nil
-    
+
+    -- If piece has under_piece, source location still has a piece after moving
+    if src_hex.piece and src_hex.piece.under_piece then
+        src_hex.player_id = src_hex.piece.under_piece.player_id
+    else
+        src_hex.player_id = nil
+    end
+
     -- Check if destination would be connected to the hive
     local enemy, friend = countNearbyPlayer(map, dest_cube)
     if (enemy + friend == 0) then
         src_hex.player_id = tmp
         return false
     end
-    
+
     src_hex.player_id = tmp
     return true
 end
