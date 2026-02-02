@@ -1,6 +1,8 @@
 # AbstractGameHive (Hive Helsinki Rush project)
 * https://love2d.org
 
+https://en.wikipedia.org/wiki/Hive_(game)#Movement_and_pieces
+
 ## Architecture
 
 The codebase is organized into a modular structure with clear separation of concerns.
