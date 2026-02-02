@@ -15,7 +15,7 @@ main.lua (Entry Point)
 │
 ├── game.lua                      # Core game logic
 │   ├── player.lua                # Player management
-│   ├── globals.lua               # Global state
+│   ├── globals.lua               # Global state management
 │   ├── hexagon.lua               # Hexagon drawing/math
 │   ├── map.lua                   # Game board/map
 │   ├── pieces.lua                # Piece initialization
@@ -23,7 +23,7 @@ main.lua (Entry Point)
 │   │   └── pieces/               # Individual piece types
 │   │       ├── pieces_enum.lua   # Piece type constants
 │   │       ├── piece.lua         # Base piece class
-│   │       ├── movement_utils.lua # ⭐ Shared movement logic
+│   │       ├── movement_utils.lua # Shared movement logic
 │   │       ├── queenbee.lua
 │   │       ├── beetle.lua
 │   │       ├── grasshopper.lua
@@ -47,6 +47,7 @@ main.lua (Entry Point)
 │   └── pieces/pieces_enum.lua    # (lazy loaded)
 │
 ├── input.lua                     # Input handling
+│   ├── actions.lua               # Game action execution
 │   ├── pieces/pieces_enum.lua
 │   ├── cubecoords.lua
 │   ├── gamestate.lua             # Save/load system
@@ -55,9 +56,11 @@ main.lua (Entry Point)
 │   ├── globals.lua
 │   ├── game.lua
 │   ├── map.lua
-│   └── camera.lua                # ⭐ Camera controls
+│   └── camera.lua                # Camera controls
 │
-├── camera.lua                    # ⭐ Camera zoom & pan
+├── actions.lua                   # Game actions (placement, movement, special abilities)
+│
+├── camera.lua                    # Camera zoom & pan
 │
 └── network.lua                   # Multiplayer networking
     └── game.lua
@@ -66,8 +69,9 @@ Utility Modules:
 ├── cubecoords.lua               # Hexagonal coordinate math
 ├── hexagon.lua                  # Hexagon geometry
 ├── map.lua                      # Board state management
+├── globals.lua                  # Global state helpers
 ├── gamestate.lua                # Serialization
-├── camera.lua                   # ⭐ Camera controls (zoom & pan)
+├── camera.lua                   # Camera controls (zoom & pan)
 └── json.lua                     # JSON parser
 ```
 
@@ -95,19 +99,24 @@ Utility Modules:
 5. **Input System** ([input.lua](input.lua))
    - Mouse and keyboard handling
    - Delegates camera controls to [camera.lua](camera.lua)
-   - Game state controls
+   - Delegates game actions to [actions.lua](actions.lua)
 
-6. **Camera** ([camera.lua](camera.lua))
+6. **Actions** ([actions.lua](actions.lua))
+   - Piece placement and movement execution
+   - Inventory navigation
+   - Special abilities (pillbug, mosquito)
+
+7. **Camera** ([camera.lua](camera.lua))
    - Zoom in/out (mouse wheel, +/- keys)
    - Pan (drag with right/middle click)
    - Screen ↔ world coordinate conversion
 
-7. **Network** ([network.lua](network.lua))
+8. **Network** ([network.lua](network.lua))
    - LAN multiplayer via LuaSocket
    - Server/client architecture
    - Move synchronization
 
-8. **Coordinate System** ([cubecoords.lua](cubecoords.lua))
+9. **Coordinate System** ([cubecoords.lua](cubecoords.lua))
    - Hexagonal grid mathematics
    - Pixel ↔ cube coordinate conversion
 
