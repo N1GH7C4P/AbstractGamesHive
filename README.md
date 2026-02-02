@@ -1,7 +1,7 @@
 # AbstractGameHive (Hive Helsinki Rush project)
 * https://love2d.org
 
-https://en.wikipedia.org/wiki/Hive_(game)#Movement_and_pieces
+* https://en.wikipedia.org/wiki/Hive_(game)#Movement_and_pieces
 
 ## Architecture
 
@@ -11,21 +11,21 @@ The codebase is organized into a modular structure with clear separation of conc
 
 ```
 main.lua (Entry Point)
-├── config.lua                    # Game configuration
-├── animation.lua                 # Animation system
-├── console.lua                   # Debug console
+├── config.lua                      # Game configuration
+├── animation.lua                   # Animation system
+├── console.lua                     # Debug console
 │
-├── game.lua                      # Core game logic
-│   ├── player.lua                # Player management
-│   ├── globals.lua               # Global state management
-│   ├── hexagon.lua               # Hexagon drawing/math
-│   ├── map.lua                   # Game board/map
-│   ├── pieces.lua                # Piece initialization
+├── game.lua                        # Core game logic
+│   ├── player.lua                  # Player management
+│   ├── globals.lua                 # Global state management
+│   ├── hexagon.lua                 # Hexagon drawing/math
+│   ├── map.lua                     # Game board/map
+│   ├── pieces.lua                  # Piece initialization
 │   │   ├── config.lua
-│   │   └── pieces/               # Individual piece types
-│   │       ├── pieces_enum.lua   # Piece type constants
-│   │       ├── piece.lua         # Base piece class
-│   │       ├── movement_utils.lua # Shared movement logic
+│   │   └── pieces/                 # Individual piece types
+│   │       ├── pieces_enum.lua     # Piece type constants
+│   │       ├── piece.lua           # Base piece class
+│   │       ├── movement_utils.lua  # Shared movement logic
 │   │       ├── queenbee.lua
 │   │       ├── beetle.lua
 │   │       ├── grasshopper.lua
@@ -34,47 +34,47 @@ main.lua (Entry Point)
 │   │       ├── ladybug.lua
 │   │       ├── mosquito.lua
 │   │       └── pillbug.lua
-│   └── cubecoords.lua            # Cube coordinate system
+│   └── cubecoords.lua              # Cube coordinate system
 │
-├── graphics.lua                  # Rendering system
+├── graphics.lua                    # Rendering system
 │   ├── hexagon.lua
 │   ├── map.lua
 │   ├── cubecoords.lua
 │   └── animation.lua
 │
-├── ui.lua                        # User interface
+├── ui.lua                          # User interface
 │   ├── cubecoords.lua
 │   ├── map.lua
-│   ├── network.lua               # (lazy loaded)
-│   └── pieces/pieces_enum.lua    # (lazy loaded)
+│   ├── network.lua                 # (lazy loaded)
+│   └── pieces/pieces_enum.lua      # (lazy loaded)
 │
-├── input.lua                     # Input handling
-│   ├── actions.lua               # Game action execution
+├── input.lua                       # Input handling
+│   ├── actions.lua                 # Game action execution
 │   ├── pieces/pieces_enum.lua
 │   ├── cubecoords.lua
-│   ├── gamestate.lua             # Save/load system
+│   ├── gamestate.lua               # Save/load system
 │   ├── console.lua
 │   ├── network.lua
 │   ├── globals.lua
 │   ├── game.lua
 │   ├── map.lua
-│   └── camera.lua                # Camera controls
+│   └── camera.lua                  # Camera controls
 │
-├── actions.lua                   # Game actions (placement, movement, special abilities)
+├── actions.lua                     # Game actions (placement, movement, special abilities)
 │
-├── camera.lua                    # Camera zoom & pan
+├── camera.lua                      # Camera zoom & pan
 │
-└── network.lua                   # Multiplayer networking
+└── network.lua                     # Multiplayer networking
     └── game.lua
 
 Utility Modules:
-├── cubecoords.lua               # Hexagonal coordinate math
-├── hexagon.lua                  # Hexagon geometry
-├── map.lua                      # Board state management
-├── globals.lua                  # Global state helpers
-├── gamestate.lua                # Serialization
-├── camera.lua                   # Camera controls (zoom & pan)
-└── json.lua                     # JSON parser
+├── cubecoords.lua                  # Hexagonal coordinate math
+├── hexagon.lua                     # Hexagon geometry
+├── map.lua                         # Board state management
+├── globals.lua                     # Global state helpers
+├── gamestate.lua                   # Serialization
+├── camera.lua                      # Camera controls (zoom & pan)
+└── json.lua                        # JSON parser
 ```
 
 ### Core Systems
@@ -146,6 +146,29 @@ Utility Modules:
 4. Moves are automatically synchronized over the network
 
 **Note:** Requires LuaSocket. Install with: `luarocks install luasocket`
+
+## Running the Game
+
+### Install LÖVE2D
+
+**macOS:**
+```bash
+brew install love
+```
+
+**Linux (Ubuntu/Debian):**
+```bash
+sudo apt install love
+```
+
+**Windows:**
+Download from https://love2d.org
+
+### Run
+
+```bash
+love .
+```
 
 ## Development
 
