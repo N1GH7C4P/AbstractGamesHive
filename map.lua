@@ -72,7 +72,7 @@ end
 local function isNextToFriendly(map, col, row)
     local cube = cubecoords.from_offset(col, row)
     local enemy_count, friendly_count = countNearbyPlayer(map, cube)
-    
+
     -- Check for first and second piece
     if (G.turn_number[G.active_player_id] == 1) then
         local not_active = 1
@@ -86,82 +86,103 @@ local function isNextToFriendly(map, col, row)
         end
         return true
     end
-    
+
     if (friendly_count > 0 and enemy_count == 0) then
         return true
     end
     return false
 end
 
-local function tryAddPieceToMap(player_nb, piece_template, map, cube)
+-- Send network message for piece placement if in multiplayer game
+local function send_network_placement(player_nb, piece_id, cube)
+    if G.network and G.network.mode ~= "none" and G.network.connected then
+        G.network.send_place(player_nb, piece_id, cube)
+    end
+end
+
+-- Validate basic placement requirements (stock, hex exists, spot empty)
+local function validate_basic_placement(player_nb, piece_template, map, cube)
     if getPiecesInStock(player_nb, piece_template.id) == 0 then
         print("Player ", player_nb, " has no piece ", piece_template.name, " in stock.")
-        return false
+        return false, nil
     end
-    
-        local hex = get_hex(map, cube)
-    
+
+    local hex = get_hex(map, cube)
     if not hex then
         print("Hex out of bounds")
-        return false
+        return false, nil
     end
-    
+
     if hex.piece then
         print("Spot not empty")
+        return false, nil
+    end
+
+    return true, hex
+end
+
+-- Handle placement of the first piece (must be at center)
+local function place_first_piece(player_nb, piece_template, map)
+    local center_cube = cubecoords.new(0, 0, 0)
+    local center_hex = get_hex(map, center_cube)
+    if not center_hex then
         return false
     end
-    
-    if isMapEmpty(map) then
-        -- Force first piece at center (0,0,0)
-        local center_cube = cubecoords.new(0, 0, 0)
-        local center_hex = get_hex(map, center_cube)
-        if center_hex then
-            G.highlight = 0
-            removePieceFromStock(player_nb, piece_template.id)
-            center_hex.player_id = player_nb
-            center_hex.piece = piece_template.class:new(player_nb)
-            
-            -- Send network message if in multiplayer game
-            if G.network and G.network.mode ~= "none" and G.network.connected then
-                G.network.send_place(player_nb, piece_template.id, center_cube)
-            end
-            
-            -- No need to expand for first piece at center
-            return true
-        end
-        return false
-    end
-    
-    if (G.turn_number[player_nb] == Config.rules.queenMustBePlacedByTurn and G.player[player_nb].pieces[1].inStock == 1 and piece_template.id ~= 1) then
+
+    G.highlight = 0
+    removePieceFromStock(player_nb, piece_template.id)
+    center_hex.player_id = player_nb
+    center_hex.piece = piece_template.class:new(player_nb)
+    send_network_placement(player_nb, piece_template.id, center_cube)
+    return true
+end
+
+-- Check if player must place their queen this turn
+local function must_place_queen(player_nb, piece_template)
+    local turn = G.turn_number[player_nb]
+    local queen_in_stock = G.player[player_nb].pieces[1].inStock == 1
+    local not_placing_queen = piece_template.id ~= 1
+
+    if turn == Config.rules.queenMustBePlacedByTurn and queen_in_stock and not_placing_queen then
         print("Must place Queen bee")
+        return true
+    end
+    return false
+end
+
+local function tryAddPieceToMap(player_nb, piece_template, map, cube)
+    local valid, _ = validate_basic_placement(player_nb, piece_template, map, cube)
+    if not valid then
         return false
     end
-    
+
+    if isMapEmpty(map) then
+        return place_first_piece(player_nb, piece_template, map)
+    end
+
+    if must_place_queen(player_nb, piece_template) then
+        return false
+    end
+
     local col, row = cubecoords.to_offset(cube)
     if not isNextToFriendly(map, col, row) then
         return false
     end
-    
+
     addPieceToMap(player_nb, piece_template, map, cube)
-    
-    -- Send network message if in multiplayer game
-    if G.network and G.network.mode ~= "none" and G.network.connected then
-        G.network.send_place(player_nb, piece_template.id, cube)
-    end
-    
+    send_network_placement(player_nb, piece_template.id, cube)
     return true
 end
 
 local function init_map()
     local map = {}
     map.hexes = {}
-    map.current_radius = 10  -- Track current grid radius
-    
+    local initial_radius = Config.game.mapRadius
+    map.current_radius = initial_radius
+
     -- Build hexes in rings radiating from center (0,0,0)
-    -- Start with 10 rings around the center
     local center = cubecoords.new(0, 0, 0)
-    local rings = 10
-    local all_hexes = cubecoords.spiral(center, rings)
+    local all_hexes = cubecoords.spiral(center, initial_radius)
     
     for _, cube in ipairs(all_hexes) do
         local key = cubecoords.to_key(cube)
@@ -244,9 +265,7 @@ function clear_all_neighbours(map, w, h)
 end
 
 local function mark_legal_moves_for_piece(map, src_cube, w, h)
-    print("=== mark_legal_moves_for_piece called ===")
-    print("Source cube: [" .. src_cube.x .. "," .. src_cube.y .. "," .. src_cube.z .. "]")
-    
+
     clear_all_neighbours(map, w, h)
     
     local src_hex = get_hex(map, src_cube)
@@ -255,8 +274,6 @@ local function mark_legal_moves_for_piece(map, src_cube, w, h)
         print("ERROR: No piece at source!")
         return
     end
-    
-    print("Piece: " .. src_hex.piece.name)
     
     -- Delegate to the piece's mark_legal_moves method
     local result = src_hex.piece:mark_legal_moves(map, src_cube)
@@ -270,9 +287,6 @@ local function mark_legal_moves_for_piece(map, src_cube, w, h)
     for _, hex in ipairs(result.special_targets) do
         hex.can_special = true
     end
-    
-    print("Marked " .. #result.normal_moves .. " normal moves and " .. #result.special_targets .. " special targets")
-    print("=== Complete ===")
 end
 
 local function tmp_to_neighbor(map)

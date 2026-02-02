@@ -51,8 +51,6 @@ local function init_test_globals()
 
     -- Minimal required globals for piece movement tests
     G.active_player_id = 1
-    G.w = 50  -- Legacy map dimensions
-    G.h = 50
     G.turn_number = {2, 2}  -- Both players past turn 1 (so queen placement not required)
     G.animating = false
     G.network = {mode = "none", connected = false}

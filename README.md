@@ -1,10 +1,9 @@
-# HIVE Abstract game
+# AbstractGameHive (Hive Helsinki Rush project)
 * https://love2d.org
-* a, s and click to select piece
 
 ## Architecture
 
-This is a LÖVE2D-based implementation of the Hive board game. The codebase is organized into a modular structure with clear separation of concerns.
+The codebase is organized into a modular structure with clear separation of concerns.
 
 ### Module Hierarchy
 
@@ -137,9 +136,7 @@ Utility Modules:
 
 **Note:** Requires LuaSocket. Install with: `luarocks install luasocket`
 
-## Testing
-
-The project includes automated tests using the [Busted](https://lunarmodules.github.io/busted/) testing framework.
+## Development
 
 ### Setup
 
@@ -147,31 +144,42 @@ The project includes automated tests using the [Busted](https://lunarmodules.git
 # Install Lua and luarocks (if not already installed)
 brew install lua luarocks
 
-# Install Busted test framework
-luarocks install --local busted
+# Install development tools
+luarocks install --local busted      # Test framework
+luarocks install --local luacheck    # Static analyzer
 ```
 
 ### Running Tests
 
 ```bash
 # Run all tests
-eval $(luarocks path --bin) && busted
+busted tests/
 
 # Run tests with verbose output
-eval $(luarocks path --bin) && busted --verbose
+busted tests/ --verbose
 
 # Run specific test file
-eval $(luarocks path --bin) && busted tests/camera_spec.lua
+busted tests/camera_spec.lua
 ```
+
+### Static Analysis
+
+```bash
+# Run luacheck on all files
+luacheck .
+```
+
+A pre-commit hook runs both luacheck and tests automatically before each commit.
 
 ### Test Coverage
 
-**81 tests** covering core modules:
-- **camera.lua** (23 tests) - Zoom, pan, coordinate conversion
-- **cubecoords.lua** (44 tests) - Hexagonal coordinate math
-- **movement_utils.lua** (14 tests) - Common movement logic
+**238 tests** covering core modules including:
+- Piece movement logic (all 8 piece types)
+- Game state management
+- Coordinate systems
+- Camera controls
 
 All tests pass with 0 failures.
 
-<img src="hive.png" width="500" height="auto"/>
+<img src="/img/screenshot.png" width="500" height="auto"/>
 

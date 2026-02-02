@@ -4,7 +4,6 @@ local PlayerClass = require("player")
 local Config = require("config")
 local PiecesEnum = require("pieces.pieces_enum")
 local globals = require("globals")
-local hexagon = require("hexagon")
 local pieces = require("pieces")
 local map_module = require("map")
 
@@ -12,19 +11,17 @@ local Game = {}
 
 function Game.init()
     -- Initialize game state (called on startup and restart)
-    
+
     globals.init()
-    
+
     -- Load configuration into globals
     G.menu_offset_x = Config.game.menuOffsetX
     G.window_w = Config.game.windowWidth
     G.window_h = Config.game.windowHeight
-    G.w = Config.game.mapWidth
-    G.h = Config.game.mapHeight
     G.size = Config.game.hexSize
-    
+
     -- Initialize game components
-    G.grid = hexagon.grid(G.w, G.h, G.size, false, false)
+    G.grid = {piecesize = G.size, pointyTopped = false}
     G.piecesInvetory = pieces.init_pieces()
     G.player = Game.init_players()
     G.map = map_module.init_map()

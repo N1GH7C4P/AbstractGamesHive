@@ -8,8 +8,6 @@ function Globals.init()
     G.menu_offset_x = 0
     G.window_w = 0
     G.window_h = 0
-    G.w = 0  -- Legacy map width (for backward compatibility)
-    G.h = 0  -- Legacy map height (for backward compatibility)
     G.size = 0  -- Hex size
     
     -- Camera/viewport state for panning
