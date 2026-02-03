@@ -1,0 +1,46 @@
+-- LuaCov configuration file
+-- Run tests with coverage: busted --coverage
+-- Generate report: luacov
+
+return {
+  -- Patterns for files to include in coverage (use simple patterns)
+  include = {
+    "^actions$",
+    "^animation$",
+    "^camera$",
+    "^config$",
+    "^cubecoords$",
+    "^game$",
+    "^gamestate$",
+    "^globals$",
+    "^hexagon$",
+    "^input$",
+    "^main$",
+    "^map$",
+    "^movement_utils$",
+    "^network$",
+    "^player$",
+    "^render$",
+    "^pieces%.",
+  },
+
+  -- Patterns for files to exclude from coverage
+  exclude = {
+    "tests",
+    "luacov",
+    "busted",
+    "_spec$",
+  },
+
+  -- Stats file location
+  statsfile = "luacov.stats.out",
+
+  -- Report file location
+  reportfile = "luacov.report.out",
+
+  -- Run reporter automatically after tests
+  runreport = true,
+
+  -- Delete stats file after generating report
+  deletestats = false,
+}

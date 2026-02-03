@@ -9,5 +9,11 @@ return {
     verbose = true,
     output = "utfTerminal",
     coverage = false
+  },
+  -- Run with: busted --run=coverage
+  coverage = {
+    verbose = true,
+    output = "utfTerminal",
+    coverage = true
   }
 }

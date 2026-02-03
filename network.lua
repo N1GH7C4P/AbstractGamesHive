@@ -3,6 +3,7 @@ local Network = {}
 local game = require("game")
 local cubecoords = require("cubecoords")
 local map_module = require("map")
+local Config = require("config")
 
 Network.socket = nil
 Network.server = nil
@@ -38,7 +39,7 @@ end
 
 -- Start hosting a game (server mode)
 function Network.host(port)
-    port = port or 12345
+    port = port or Config.network.defaultPort
     
     if not Network.socket then
         print("ERROR: Socket not available")
@@ -69,7 +70,7 @@ end
 -- Join a game (client mode)
 function Network.join(host, port)
     host = host or "localhost"
-    port = port or 12345
+    port = port or Config.network.defaultPort
     
     if not Network.socket then
         print("ERROR: Socket not available")

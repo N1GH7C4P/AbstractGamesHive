@@ -28,6 +28,11 @@ Config.rules = {
     queenMustBePlacedByTurn = 4,
 }
 
+-- Network settings
+Config.network = {
+    defaultPort = 12345,
+}
+
 -- Visual style and colors
 Config.style = {
     -- Board colors

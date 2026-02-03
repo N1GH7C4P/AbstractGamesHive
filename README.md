@@ -181,6 +181,7 @@ brew install lua luarocks
 # Install development tools
 luarocks install --local busted      # Test framework
 luarocks install --local luacheck    # Static analyzer
+luarocks install --local luacov      # Code coverage
 ```
 
 ### Running Tests
@@ -194,6 +195,12 @@ busted tests/ --verbose
 
 # Run specific test file
 busted tests/camera_spec.lua
+
+# Run tests with code coverage
+busted --coverage
+
+# View coverage report (generated in luacov.report.out)
+cat luacov.report.out
 ```
 
 ### Static Analysis
@@ -207,11 +214,14 @@ A pre-commit hook runs both luacheck and tests automatically before each commit.
 
 ### Test Coverage
 
-**238 tests** covering core modules including:
+**358 tests** with **83.38% code coverage** across core modules including:
 - Piece movement logic (all 8 piece types)
 - Game state management
 - Coordinate systems
 - Camera controls
+- Animation system
+- Player management
+- Actions and input handling
 
 All tests pass with 0 failures.
 
